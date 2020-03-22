@@ -5,6 +5,7 @@
  */
 package testbv_v1;
 
+import controlleur.Controlleur;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -31,7 +32,11 @@ public class TestBV_V1 extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        Controlleur unControlleur = new Controlleur();
+       
         launch(args);
+        
     }
     
 }

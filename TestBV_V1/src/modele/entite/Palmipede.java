@@ -19,7 +19,7 @@ public class Palmipede {
     private Date dateEntree;
     private Date dateSortie;
 
-    public Palmipede(int idPalmipede, Enclos enclos, int numRFID, Date dateEntree, Date dateSortie) {
+    public Palmipede(int idPalmipede, int numRFID, Date dateEntree, Date dateSortie, Enclos enclos) {
         this.idPalmipede = idPalmipede;
         this.enclos = enclos;
         this.numRFID = numRFID;

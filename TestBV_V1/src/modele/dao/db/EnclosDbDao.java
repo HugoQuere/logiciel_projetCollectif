@@ -9,59 +9,60 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.BatimentDao;
-import modele.dao.CageDao;
 import modele.dao.EnclosDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
-import modele.entite.Cage;
+import modele.entite.Batiment;
 import modele.entite.Enclos;
 
 /**
  *
  * @author hugo
  */
-public class CageDbDao extends DbDao implements CageDao{
+public class EnclosDbDao extends DbDao implements EnclosDao{
+
+    private final BatimentDao batimentDao;
     
-    private final EnclosDao enclosDao;
-    
-    public CageDbDao(Properties props) {
+    public EnclosDbDao(Properties props) {
         super(props);
-        this.enclosDao = DbFactoryDao.getInstance().getEnclosDao();
+        this.batimentDao = DbFactoryDao.getInstance().getBatimentDao();
     }
 
     @Override
-    public Cage find(int idCage) {
+    public Enclos find(int idCage) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void insert(Cage uneCage) throws ErreurSauvegardeException {
+    public void insert(Enclos uneCage) throws ErreurSauvegardeException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Cage> findAll() {
+    public List<Enclos> findAll() {
         
-        List<Cage> lesCages = new ArrayList<>();
+        List<Enclos> lesEnclos = new ArrayList<>();
         try {
-            String sql = "select idCage, idEnclos from CAGE where idEnclos=?";
+            String sql = "select idEnclos, nomEnclos, idBatiment from ENCLOS where idBatiment=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            List<Enclos> lesEnclos = this.enclosDao.findAll();
-            for (Enclos unEnclos : lesEnclos) {
+            List<Batiment> lesBatiments = this.batimentDao.findAll();
+            for (Batiment unBatiment : lesBatiments) {
                 pstmt.clearParameters();
-                pstmt.setInt(1, unEnclos.getIdEnclos());
+                pstmt.setInt(1, unBatiment.getIdBatiment());
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    int idCage = rs.getInt("idCage");
-                    Cage uneCage = new Cage(idCage, unEnclos);
-                    lesCages.add(uneCage);
+                    int idEnclos = rs.getInt("idEnclos");
+                    String nomEnclos = rs.getString("nomEnclos");
+                    Enclos unEnclos = new Enclos(idEnclos, nomEnclos, unBatiment);
+                    lesEnclos.add(unEnclos);
                 }
                 rs.close();
             }
@@ -70,17 +71,16 @@ public class CageDbDao extends DbDao implements CageDao{
         } catch (SQLException ex) {
             System.out.println("Erreur SQL " + ex.getMessage());
         }
-        return lesCages;
-        
+        return lesEnclos;
     }
 
     @Override
-    public void update(Cage uneCage) throws ErreurMiseAjourException {
+    public void update(Enclos uneCage) throws ErreurMiseAjourException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Cage uneCage) throws ErreurSuppressionException {
+    public void delete(Enclos uneCage) throws ErreurSuppressionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

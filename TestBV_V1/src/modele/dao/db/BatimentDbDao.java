@@ -5,6 +5,11 @@
  */
 package modele.dao.db;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.BatimentDao;
@@ -35,7 +40,25 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
 
     @Override
     public List<Batiment> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        List<Batiment> lesBatiments = new ArrayList<>();
+        
+        try {
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            String sql = "select idBatiment, nomBatiment from BATIMENT";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                lesBatiments.add(new Batiment(rs.getInt("idBatiment"), rs.getString("nomBatiment") ));
+            }
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Exception SQL " + ex.getMessage());
+        }
+        
+        return lesBatiments;
     }
 
     @Override

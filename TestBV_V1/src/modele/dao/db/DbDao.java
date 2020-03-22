@@ -14,7 +14,7 @@ import java.util.Properties;
  *
  * @author hugo
  */
-public class DbDao {
+public abstract class DbDao {
     
     private static Properties myProperties = null;
 
