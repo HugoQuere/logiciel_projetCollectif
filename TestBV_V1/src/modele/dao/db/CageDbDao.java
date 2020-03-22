@@ -60,7 +60,37 @@ public class CageDbDao extends DbDao implements CageDao{
 
     @Override
     public void insert(Cage uneCage) throws ErreurSauvegardeException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Connection con = null;
+        try {
+            String sql = "insert into CAGE (idEnclos) values (?)";
+            con = this.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, uneCage.getEnclos().getIdEnclos());
+            int result = pstmt.executeUpdate();
+            if (result == 1) {
+                // ne pas oublier de récupérer l'id !
+                String sqlId = "select max(idCage) as maxId from CAGE";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sqlId);
+                if (rs.next()) {
+                    uneCage.setNumBox(rs.getInt("maxId"));
+                }
+                rs.close();
+                stmt.close();
+            }
+            pstmt.close();
+            con.commit();
+            con.close();
+        } catch (SQLException ex) {
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+            }
+            throw new ErreurSauvegardeException("La cage n'a pas pu être enregistré");
+        }
+        
     }
 
     @Override

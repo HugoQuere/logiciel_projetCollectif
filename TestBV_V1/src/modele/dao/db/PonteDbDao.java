@@ -69,7 +69,41 @@ public class PonteDbDao extends DbDao implements PonteDao{
 
     @Override
     public void insert(Ponte unePonte) throws ErreurSauvegardeException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Connection con = null;
+        try {
+            String sql = "insert into PONTE (idPalmipede, idCage, datePonte, precenseOeuf, oeufCollecte) values (?,?,?,?,?)";
+            con = this.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, unePonte.getPalmipede().getIdPalmipede());
+            pstmt.setInt(2, unePonte.getCage().getIdBox());
+            pstmt.setDate(3, (java.sql.Date) unePonte.getDatePonte());
+            pstmt.setBoolean(4, unePonte.isPresenceOeuf());
+            pstmt.setBoolean(5, unePonte.isOeufCollecte());
+            int result = pstmt.executeUpdate();
+            if (result == 1) {
+                // ne pas oublier de récupérer l'id !
+                String sqlId = "select max(idPonte) as maxId from PONTE";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sqlId);
+                if (rs.next()) {
+                    unePonte.setIdPonte(rs.getInt("maxId"));
+                }
+                rs.close();
+                stmt.close();
+            }
+            pstmt.close();
+            con.commit();
+            con.close();
+        } catch (SQLException ex) {
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+            }
+            throw new ErreurSauvegardeException("La ponte du palmipede: " + unePonte.getPalmipede().getIdPalmipede() + " n'a pas pu être enregistré");
+        }
+        
     }
 
     @Override

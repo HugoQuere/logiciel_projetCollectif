@@ -4,6 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/cours/PolytechTours/4A/ProjetCollectif/Logiciel/CodeLogiciel/testBD_V1/TestBV_V1/src/controlleur/Controlleur.java</file>
+            <file>file:/D:/cours/PolytechTours/4A/ProjetCollectif/Logiciel/CodeLogiciel/testBD_V1/TestBV_V1/src/modele/dao/db/BatimentDbDao.java</file>
+            <file>file:/D:/cours/PolytechTours/4A/ProjetCollectif/Logiciel/CodeLogiciel/testBD_V1/TestBV_V1/src/modele/dao/db/CageDbDao.java</file>
+            <file>file:/D:/cours/PolytechTours/4A/ProjetCollectif/Logiciel/CodeLogiciel/testBD_V1/TestBV_V1/src/modele/dao/db/EnclosDbDao.java</file>
+            <file>file:/D:/cours/PolytechTours/4A/ProjetCollectif/Logiciel/CodeLogiciel/testBD_V1/TestBV_V1/src/modele/dao/db/PalmipedeDbDao.java</file>
+            <file>file:/D:/cours/PolytechTours/4A/ProjetCollectif/Logiciel/CodeLogiciel/testBD_V1/TestBV_V1/src/modele/dao/db/PonteDbDao.java</file>
         </group>
     </open-files>
 </project-private>

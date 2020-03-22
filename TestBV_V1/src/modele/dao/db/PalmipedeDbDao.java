@@ -6,12 +6,12 @@
 package modele.dao.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.EnclosDao;
@@ -63,7 +63,40 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
 
     @Override
     public void insert(Palmipede unPalmipede) throws ErreurSauvegardeException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Connection con = null;
+        try {
+            String sql = "insert into PALMIPEDE (rfid, dateEntree, dateSortie, idEnclos) values (?,?,?,?)";
+            con = this.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, unPalmipede.getNumRFID());
+            pstmt.setDate(2, (java.sql.Date) unPalmipede.getDateEntree());
+            pstmt.setDate(3, (java.sql.Date) unPalmipede.getDateSortie());
+            pstmt.setInt(4, unPalmipede.getEnclos().getIdEnclos());
+            int result = pstmt.executeUpdate();
+            if (result == 1) {
+                // ne pas oublier de récupérer l'id !
+                String sqlId = "select max(idPalmipede) as maxId from PALMIPEDE";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sqlId);
+                if (rs.next()) {
+                    unPalmipede.setIdPalmipede(rs.getInt("maxId"));
+                }
+                rs.close();
+                stmt.close();
+            }
+            pstmt.close();
+            con.commit();
+            con.close();
+        } catch (SQLException ex) {
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+            }
+            throw new ErreurSauvegardeException("Le palmipede portant le num rfid:  " + unPalmipede.getNumRFID() + " n'a pas pu être enregistré");
+        }
+        
     }
 
     @Override

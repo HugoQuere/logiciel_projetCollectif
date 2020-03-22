@@ -60,7 +60,39 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
 
     @Override
     public void insert(Enclos unEnclos) throws ErreurSauvegardeException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Connection con = null;
+        try {
+            String sql = "insert into ENCLOS (nomEnclos, idBatiment) values (?,?)";
+            con = this.getConnection();
+            con.setAutoCommit(false);
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, unEnclos.getNomEnclos());
+            pstmt.setInt(2, unEnclos.getBatiment().getIdBatiment());
+            int result = pstmt.executeUpdate();
+            if (result == 1) {
+                // ne pas oublier de récupérer l'id !
+                String sqlId = "select max(idEnclos) as maxId from ENCLOS";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sqlId);
+                if (rs.next()) {
+                    unEnclos.setIdEnclos(rs.getInt("maxId"));
+                }
+                rs.close();
+                stmt.close();
+            }
+            pstmt.close();
+            con.commit();
+            con.close();
+        } catch (SQLException ex) {
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+            }
+            throw new ErreurSauvegardeException("L'enclos " + unEnclos.getNomEnclos() + " n'a pas pu être enregistré");
+        }
+
+        
     }
 
     @Override

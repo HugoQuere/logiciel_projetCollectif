@@ -52,7 +52,34 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
 
     @Override
     public void insert(Batiment unBatiment) throws ErreurSauvegardeException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Connection con = null;
+        try {
+            con = this.getConnection();
+            con.setAutoCommit(false);
+            Statement stmt = con.createStatement();
+            String sql = "insert into BATIMENT (nomBatiment) values ('" + unBatiment.getNomBatiment() + "')";
+            int nbInsert = stmt.executeUpdate(sql);
+            if (nbInsert == 1) {
+                sql = "select MAX(idBatiment) from BATIMENT";
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next()) {
+                    unBatiment.setIdBatiment(rs.getInt(1));
+                }
+                rs.close();
+            }
+            stmt.close();
+            con.commit();
+
+        } catch (SQLException ex) {
+            System.out.println("Exception SQL " + ex.getMessage());
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+            }
+            throw new ErreurSauvegardeException("Erreur lors de la sauvegarde de du batiment " + unBatiment);
+        }
+        
     }
 
     @Override

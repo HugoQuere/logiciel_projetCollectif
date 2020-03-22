@@ -5,7 +5,10 @@
  */
 package controlleur;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modele.dao.BatimentDao;
 import modele.dao.CageDao;
 import modele.dao.DaoFactory;
@@ -13,6 +16,7 @@ import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
 import modele.dao.PonteDao;
 import modele.dao.db.DbFactoryDao;
+import modele.dao.exception.ErreurSauvegardeException;
 import modele.entite.Batiment;
 import modele.entite.Cage;
 import modele.entite.Enclos;
@@ -41,7 +45,8 @@ public class Controlleur {
         this.monPalmipedeDAO = myFactory.getPalmipedeDao();
         this.maPonteDAO = myFactory.getPonteDao();
         
-        testFind();
+        //testFind();
+        testInsert();
         //testFindAll();
     }
     
@@ -53,6 +58,36 @@ public class Controlleur {
         System.out.println("RFID palmipede : "+this.monPalmipedeDAO.find(2).getNumRFID()+" , entree le: "+ this.monPalmipedeDAO.find(2).getDateEntree().toString() + ", vit dans l'enclos: "+ this.monPalmipedeDAO.find(2).getEnclos().getNomEnclos());
         System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la cage: "+ this.maPonteDAO.find(4).getCage().getIdBox());
         
+        
+    }
+    
+    private void testInsert(){
+        
+        try {
+
+            Batiment unBatiment = new Batiment(0, "BatimentTestInsert");
+            this.monBatimentDAO.insert(unBatiment);
+            
+            Enclos unEnclos = new Enclos(0, "EnclosTestInsert", unBatiment);
+            this.monEnclosDAO.insert(unEnclos);
+            
+            Cage uneCage = new Cage(0, unEnclos);
+            this.maCageDAO.insert(uneCage);
+            
+            
+            long millis=System.currentTimeMillis();  
+            Date dateEntree =new java.sql.Date(millis);  
+            Date dateSortie =new java.sql.Date(millis); 
+            Palmipede unPalmipede = new Palmipede(0, 999, dateEntree, dateSortie, unEnclos);
+            this.monPalmipedeDAO.insert(unPalmipede);
+            
+            Date datePonte =new java.sql.Date(millis); 
+            Ponte unePonte = new Ponte(0, unPalmipede, uneCage, datePonte, true, true);
+            this.maPonteDAO.insert(unePonte);
+            
+        } catch (ErreurSauvegardeException ex) {
+            Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
