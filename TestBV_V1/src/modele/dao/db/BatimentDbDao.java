@@ -6,6 +6,7 @@
 package modele.dao.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -107,7 +108,26 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
 
     @Override
     public void update(Batiment unBatiment) throws ErreurMiseAjourException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            String sql = "update BATIMENT set nomBatiment=? where idBatiment=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, unBatiment.getNomBatiment());
+            pstmt.setInt(2, unBatiment.getIdBatiment());
+            int result = pstmt.executeUpdate();
+            if (result == 0) {
+                pstmt.close();
+                con.close();
+                throw new ErreurMiseAjourException("Le batiment " + unBatiment.getNomBatiment() + " n'a pas pu être mis à jour");
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurMiseAjourException("Le batiment " + unBatiment.getNomBatiment() + " n'a pas pu être mis à jour");
+        }
+        
     }
 
     @Override

@@ -135,7 +135,29 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
 
     @Override
     public void update(Palmipede unPalmipede) throws ErreurMiseAjourException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            String sql = "update PALMIPEDE set rfid=?, dateEntree=?, dateSortie=?, idEnclos=? where idPalmipede=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, unPalmipede.getNumRFID());
+            pstmt.setDate(2, unPalmipede.getDateEntree());
+            pstmt.setDate(3, unPalmipede.getDateSortie());
+            pstmt.setInt(4, unPalmipede.getEnclos().getIdEnclos());
+            pstmt.setInt(5, unPalmipede.getIdPalmipede());
+            int result = pstmt.executeUpdate();
+            if (result == 0) {
+                pstmt.close();
+                con.close();
+                throw new ErreurMiseAjourException("Le palmipede portant le numéro RFID; " + unPalmipede.getNumRFID() + " n'a pas pu être mis à jour");
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurMiseAjourException("Le palmipede portant le numéro RFID; " + unPalmipede.getNumRFID() + " n'a pas pu être mis à jour");
+        }
+        
     }
 
     @Override

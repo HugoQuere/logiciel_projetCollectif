@@ -127,7 +127,27 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
 
     @Override
     public void update(Enclos unEnclos) throws ErreurMiseAjourException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            String sql = "update ENCLOS set nomEnclos=?, idBatiment=? where idEnclos=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, unEnclos.getNomEnclos());
+            pstmt.setInt(2, unEnclos.getBatiment().getIdBatiment());
+            pstmt.setInt(3, unEnclos.getIdEnclos());
+            int result = pstmt.executeUpdate();
+            if (result == 0) {
+                pstmt.close();
+                con.close();
+                throw new ErreurMiseAjourException("L'enclos " + unEnclos.getNomEnclos() + " n'a pas pu être mis à jour");
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurMiseAjourException("L'enclos " + unEnclos.getNomEnclos() + " n'a pas pu être mis à jour");
+        }
+        
     }
 
     @Override

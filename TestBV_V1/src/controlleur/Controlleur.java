@@ -16,6 +16,7 @@ import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
 import modele.dao.PonteDao;
 import modele.dao.db.DbFactoryDao;
+import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.entite.Batiment;
 import modele.entite.Cage;
@@ -46,8 +47,9 @@ public class Controlleur {
         this.maPonteDAO = myFactory.getPonteDao();
         
         //testFind();
-        testInsert();
+        //testInsert();
         //testFindAll();
+        testUpdate();
     }
     
     private void testFind(){
@@ -144,4 +146,39 @@ public class Controlleur {
         }
     }
     
+    
+    private void testUpdate(){
+        
+        try {
+            Batiment unBatiment = this.monBatimentDAO.find(2);
+            unBatiment.setNomBatiment("TestUpdate");
+            this.monBatimentDAO.update(unBatiment);
+            
+            
+            Enclos unEnclosUpdate = new Enclos(0, "EnclosTestInsert", unBatiment);
+            this.monEnclosDAO.insert(unEnclosUpdate);
+            Cage uneCage = this.maCageDAO.find(1);
+            uneCage.setEnclos(unEnclosUpdate);
+            this.maCageDAO.update(uneCage);
+            
+            Enclos unEnclos = this.monEnclosDAO.find(3);
+            unEnclos.setNomEnclos("TestUpdate");
+            this.monEnclosDAO.update(unEnclos);
+            
+            Palmipede unPalmipede = this.monPalmipedeDAO.find(2);
+            unPalmipede.setEnclos(unEnclos);
+            this.monPalmipedeDAO.update(unPalmipede);
+            
+            Ponte unePonte = this.maPonteDAO.find(4);
+            unePonte.setCage(uneCage);
+            this.maPonteDAO.update(unePonte);
+            
+        } catch (ErreurMiseAjourException ex) {
+            Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ErreurSauvegardeException ex) {
+            Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
 }

@@ -6,12 +6,12 @@
 package modele.dao.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.CageDao;
@@ -146,7 +146,30 @@ public class PonteDbDao extends DbDao implements PonteDao{
 
     @Override
     public void update(Ponte unePonte) throws ErreurMiseAjourException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            String sql = "update PONTE set idPalmipede=?, idCage=?, datePonte=?, precenseOeuf=?, oeufCollecte=? where idPonte=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, unePonte.getPalmipede().getIdPalmipede());
+            pstmt.setInt(2, unePonte.getCage().getIdBox());
+            pstmt.setDate(3, unePonte.getDatePonte());
+            pstmt.setBoolean(4, unePonte.isPresenceOeuf());
+            pstmt.setBoolean(5, unePonte.isOeufCollecte());
+            pstmt.setInt(6, unePonte.getIdPonte());
+            int result = pstmt.executeUpdate();
+            if (result == 0) {
+                pstmt.close();
+                con.close();
+                throw new ErreurMiseAjourException("La ponte " + unePonte.getIdPonte() + " n'a pas pu être mis à jour");
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurMiseAjourException("La ponte " + unePonte.getIdPonte() + " n'a pas pu être mis à jour");
+        }
+        
     }
 
     @Override

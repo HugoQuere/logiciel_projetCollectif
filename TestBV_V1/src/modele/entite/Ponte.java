@@ -5,7 +5,8 @@
  */
 package modele.entite;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 /**
  *

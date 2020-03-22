@@ -125,7 +125,26 @@ public class CageDbDao extends DbDao implements CageDao{
 
     @Override
     public void update(Cage uneCage) throws ErreurMiseAjourException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            String sql = "update CAGE set idEnclos=? where idCage=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, uneCage.getEnclos().getIdEnclos());
+            pstmt.setInt(2, uneCage.getIdBox());
+            int result = pstmt.executeUpdate();
+            if (result == 0) {
+                pstmt.close();
+                con.close();
+                throw new ErreurMiseAjourException("La cage n'a pas pu être mis à jour");
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurMiseAjourException("La cage n'a pas pu être mis à jour");
+        }
+        
     }
 
     @Override
