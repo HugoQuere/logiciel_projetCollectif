@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,12 +40,35 @@ public class PonteDbDao extends DbDao implements PonteDao{
     }
 
     @Override
-    public Ponte find(int idCage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Ponte find(int idPonte) {
+        
+        Ponte laPonte = null;
+        try {
+            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, oeufCollecte from PONTE where idPonte=" + idPonte;
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                Palmipede lePalmipede = this.palmipedeDao.find(rs.getInt("idPalmipede"));
+                Cage laCage = this.cageDao.find(rs.getInt("idCage"));
+                Date datePonte = rs.getDate("datePonte");
+                boolean precenseOeuf = rs.getBoolean("precenseOeuf");
+                boolean oeufCollecte = rs.getBoolean("OeufCollecte");
+
+                laPonte = new Ponte(idPonte, lePalmipede, laCage, datePonte, precenseOeuf, oeufCollecte);
+            }
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return laPonte;
+        
     }
 
     @Override
-    public void insert(Ponte uneCage) throws ErreurSauvegardeException {
+    public void insert(Ponte unePonte) throws ErreurSauvegardeException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -87,12 +111,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
     }
 
     @Override
-    public void update(Ponte uneCage) throws ErreurMiseAjourException {
+    public void update(Ponte unePonte) throws ErreurMiseAjourException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Ponte uneCage) throws ErreurSuppressionException {
+    public void delete(Ponte unePonte) throws ErreurSuppressionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

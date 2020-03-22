@@ -17,14 +17,14 @@ import modele.entite.Palmipede;
  */
 public interface PalmipedeDao {
     
-    Palmipede find(int idCage);
+    Palmipede find(int idPalmipede);
     
-    void insert(Palmipede uneCage) throws ErreurSauvegardeException;
+    void insert(Palmipede unPalmipede) throws ErreurSauvegardeException;
 
     List<Palmipede> findAll();
 
-    void update(Palmipede uneCage) throws ErreurMiseAjourException;
+    void update(Palmipede unPalmipede) throws ErreurMiseAjourException;
 
-    void delete(Palmipede uneCage) throws ErreurSuppressionException;
+    void delete(Palmipede unPalmipede) throws ErreurSuppressionException;
     
 }

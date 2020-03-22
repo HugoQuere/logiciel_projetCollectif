@@ -17,15 +17,15 @@ import modele.entite.Enclos;
  */
 public interface EnclosDao {
     
-    Enclos find(int idCage);
+    Enclos find(int idEnclos);
     
-    void insert(Enclos uneCage) throws ErreurSauvegardeException;
+    void insert(Enclos unEnclos) throws ErreurSauvegardeException;
 
     List<Enclos> findAll();
 
-    void update(Enclos uneCage) throws ErreurMiseAjourException;
+    void update(Enclos unEnclos) throws ErreurMiseAjourException;
 
-    void delete(Enclos uneCage) throws ErreurSuppressionException;
+    void delete(Enclos unEnclos) throws ErreurSuppressionException;
     
     
 }

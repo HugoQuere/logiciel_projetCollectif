@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,12 +36,33 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
     }
 
     @Override
-    public Palmipede find(int idCage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Palmipede find(int idPalmipede) {
+        
+        Palmipede lePalmipede = null;
+        try {
+            String sql = "select idPalmipede, rfid, dateEntree, dateSortie, idEnclos from PALMIPEDE where idPalmipede=" + idPalmipede;
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                int rfid = rs.getInt("rfid");
+                Enclos lEnclos = this.enclosDao.find(rs.getInt("idEnclos"));
+                Date dateEntree = rs.getDate("dateEntree");
+                Date dateSortie = rs.getDate("dateSortie");
+                lePalmipede = new Palmipede(idPalmipede, rfid, dateEntree, dateSortie, lEnclos);
+            }
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lePalmipede;
+        
     }
 
     @Override
-    public void insert(Palmipede uneCage) throws ErreurSauvegardeException {
+    public void insert(Palmipede unPalmipede) throws ErreurSauvegardeException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -79,12 +101,12 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
     }
 
     @Override
-    public void update(Palmipede uneCage) throws ErreurMiseAjourException {
+    public void update(Palmipede unPalmipede) throws ErreurMiseAjourException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Palmipede uneCage) throws ErreurSuppressionException {
+    public void delete(Palmipede unPalmipede) throws ErreurSuppressionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

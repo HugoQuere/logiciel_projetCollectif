@@ -29,12 +29,29 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
     }
 
     @Override
-    public Batiment find(int idCage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Batiment find(int idBatiment) {
+        
+        Batiment result = null;
+        try {
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            String sql = "select idBatiment, nomBatiment from BATIMENT where idBatiment=" + idBatiment;
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                result = new Batiment(idBatiment, rs.getString("nomBatiment"));
+            }
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Exception SQL " + ex.getMessage());
+        }
+        return result;
+        
     }
 
     @Override
-    public void insert(Batiment uneCage) throws ErreurSauvegardeException {
+    public void insert(Batiment unBatiment) throws ErreurSauvegardeException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -62,12 +79,12 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
     }
 
     @Override
-    public void update(Batiment uneCage) throws ErreurMiseAjourException {
+    public void update(Batiment unBatiment) throws ErreurMiseAjourException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Batiment uneCage) throws ErreurSuppressionException {
+    public void delete(Batiment unBatiment) throws ErreurSuppressionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

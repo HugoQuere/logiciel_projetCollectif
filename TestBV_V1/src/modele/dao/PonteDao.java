@@ -17,14 +17,14 @@ import modele.entite.Ponte;
  */
 public interface PonteDao {
     
-    Ponte find(int idCage);
+    Ponte find(int idPonte);
     
-    void insert(Ponte uneCage) throws ErreurSauvegardeException;
+    void insert(Ponte unePonte) throws ErreurSauvegardeException;
 
     List<Ponte> findAll();
 
-    void update(Ponte uneCage) throws ErreurMiseAjourException;
+    void update(Ponte unePonte) throws ErreurMiseAjourException;
 
-    void delete(Ponte uneCage) throws ErreurSuppressionException;
+    void delete(Ponte unePonte) throws ErreurSuppressionException;
     
 }

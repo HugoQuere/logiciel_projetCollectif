@@ -41,7 +41,19 @@ public class Controlleur {
         this.monPalmipedeDAO = myFactory.getPalmipedeDao();
         this.maPonteDAO = myFactory.getPonteDao();
         
-        testFindAll();
+        testFind();
+        //testFindAll();
+    }
+    
+    private void testFind(){
+        
+        System.out.println("Nom Batiment : "+ this.monBatimentDAO.find(2).getNomBatiment() );
+        System.out.println("Id Cage : "+this.maCageDAO.find(1).getIdBox()+" , dans l'enclos: "+this.maCageDAO.find(1).getEnclos().getNomEnclos());
+        System.out.println("Nom Enclos : "+this.monEnclosDAO.find(3).getNomEnclos()+" , dans le batiment: "+this.monEnclosDAO.find(3).getBatiment().getNomBatiment());
+        System.out.println("RFID palmipede : "+this.monPalmipedeDAO.find(2).getNumRFID()+" , entree le: "+ this.monPalmipedeDAO.find(2).getDateEntree().toString() + ", vit dans l'enclos: "+ this.monPalmipedeDAO.find(2).getEnclos().getNomEnclos());
+        System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la cage: "+ this.maPonteDAO.find(4).getCage().getIdBox());
+        
+        
     }
     
     private void testFindAll(){
@@ -71,7 +83,7 @@ public class Controlleur {
         List<Cage> mesCages = this.maCageDAO.findAll();
         for(int i=0; i<mesCages.size(); i++){
             Cage uneCage = mesCages.get(i);
-            System.out.println("Id Cage : "+uneCage.getIdBox()+" , dans le batiment: "+uneCage.getEnclos().getNomEnclos());
+            System.out.println("Id Cage : "+uneCage.getIdBox()+" , dans l'enclos: "+uneCage.getEnclos().getNomEnclos());
         }
         if(mesCages.size()==0){
             System.out.println("Liste de cages vides\n");

@@ -16,13 +16,13 @@ import modele.entite.Batiment;
  * @author hugo
  */
 public interface BatimentDao {
-    Batiment find(int idCage);
+    Batiment find(int idBatiment);
     
-    void insert(Batiment uneCage) throws ErreurSauvegardeException;
+    void insert(Batiment unBatiment) throws ErreurSauvegardeException;
 
     List<Batiment> findAll();
 
-    void update(Batiment uneCage) throws ErreurMiseAjourException;
+    void update(Batiment unBatiment) throws ErreurMiseAjourException;
 
-    void delete(Batiment uneCage) throws ErreurSuppressionException;
+    void delete(Batiment unBatiment) throws ErreurSuppressionException;
 }

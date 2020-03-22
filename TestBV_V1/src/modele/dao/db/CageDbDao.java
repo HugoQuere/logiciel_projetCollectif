@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -36,7 +37,25 @@ public class CageDbDao extends DbDao implements CageDao{
 
     @Override
     public Cage find(int idCage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Cage laCage = null;
+        try {
+            String sql = "select idCage, idEnclos from Cage where idCage=" + idCage;
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                Enclos lEnclos = this.enclosDao.find(rs.getInt("idEnclos"));
+                laCage = new Cage(idCage, lEnclos);
+            }
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return laCage;
+        
     }
 
     @Override

@@ -35,12 +35,31 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
     }
 
     @Override
-    public Enclos find(int idCage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Enclos find(int idEnclos) {
+        
+        Enclos lEnclos = null;
+        try {
+            String sql = "select idEnclos, nomEnclos, idBatiment from ENCLOS where idEnclos=" + idEnclos;
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                String nomEnclos = rs.getString("nomEnclos");
+                Batiment leBatiment = this.batimentDao.find(rs.getInt("idBatiment"));
+                lEnclos = new Enclos(idEnclos, nomEnclos, leBatiment);
+            }
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lEnclos;
+        
     }
 
     @Override
-    public void insert(Enclos uneCage) throws ErreurSauvegardeException {
+    public void insert(Enclos unEnclos) throws ErreurSauvegardeException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -75,12 +94,12 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
     }
 
     @Override
-    public void update(Enclos uneCage) throws ErreurMiseAjourException {
+    public void update(Enclos unEnclos) throws ErreurMiseAjourException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Enclos uneCage) throws ErreurSuppressionException {
+    public void delete(Enclos unEnclos) throws ErreurSuppressionException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
