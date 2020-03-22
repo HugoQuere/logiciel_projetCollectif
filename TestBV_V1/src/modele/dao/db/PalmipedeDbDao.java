@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Properties;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
+import modele.dao.PonteDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
@@ -102,7 +103,6 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
     @Override
     public List<Palmipede> findAll() {
         
-        
         List<Palmipede> lesPalmipedes = new ArrayList<>();
         try {
             String sql = "select idPalmipede, rfid, dateEntree, dateSortie, idEnclos from PALMIPEDE where idEnclos=?";
@@ -133,6 +133,41 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
         
     }
 
+    
+    @Override
+    public List<Palmipede> findByEnclos(Enclos unEnclos) {
+        
+        List<Palmipede> lesPalmipedes = new ArrayList<>();
+        try {
+            String sql = "select idPalmipede, rfid, dateEntree, dateSortie, idEnclos from PALMIPEDE where idEnclos=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            
+            pstmt.clearParameters();
+            pstmt.setInt(1, unEnclos.getIdEnclos());
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int idPalmipede = rs.getInt("idPalmipede");
+                int rfid = rs.getInt("rfid");
+                Date dateEntree = rs.getDate("dateEntree");
+                Date dateSortie = rs.getDate("dateSortie");
+                Palmipede unPalmipede = new Palmipede(idPalmipede, rfid, dateEntree, dateSortie, unEnclos);
+                lesPalmipedes.add(unPalmipede);
+            }
+            rs.close();
+                
+            
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesPalmipedes;
+        
+    }
+    
+    
     @Override
     public void update(Palmipede unPalmipede) throws ErreurMiseAjourException {
         
@@ -162,7 +197,63 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
 
     @Override
     public void delete(Palmipede unPalmipede) throws ErreurSuppressionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PonteDao daoPontes = DbFactoryDao.getInstance().getPonteDao();
+        try {
+            //Attention si on supprime un palmipede, il faut aussi supprimer ces pontes
+            daoPontes.deleteByPalmipede(unPalmipede);
+            String sql = "delete from PALMIPEDE where idPalmipede=" + unPalmipede.getIdPalmipede();
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            int result = stmt.executeUpdate(sql);
+            if (result == 0) {
+                stmt.close();
+                con.close();
+                throw new ErreurSuppressionException("Le palmipede " + unPalmipede + " n'a pas pu être supprimé");
+            }
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("Le palmipede " + unPalmipede + " n'a pas pu être supprimé");
+        }
     }
+
+    @Override
+    public void deleteByEnclos(Enclos unEnclos) throws ErreurSuppressionException {
+        
+        
+        
+        PonteDao daoPontes = DbFactoryDao.getInstance().getPonteDao();
+        try {
+            //Attention si on supprime un enclos, il faut aussi supprimer toutes les pontes de ces palmipédes
+            List<Palmipede> listePalmipede = this.findByEnclos(unEnclos);
+            if(listePalmipede.size()>0){
+                for(Palmipede unPalmipede : listePalmipede){
+                    daoPontes.deleteByPalmipede(unPalmipede);
+                }
+
+                String sql = "delete from PALMIPEDE where idEnclos=" + unEnclos.getIdEnclos();
+                Connection con = this.getConnection();
+                Statement stmt = con.createStatement();
+                int result = stmt.executeUpdate(sql);
+                if (result == 0) {
+                    stmt.close();
+                    con.close();
+                    throw new ErreurSuppressionException("Les palmipedes de l'enclos: " + unEnclos + " n'ont pas pu être supprimés");
+                }
+                stmt.close();
+                con.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("Les palmipedes de l'enclos: " + unEnclos + " n'ont pas pu être supprimés");
+        }
+            
+        
+    }
+
+    
+    
     
 }

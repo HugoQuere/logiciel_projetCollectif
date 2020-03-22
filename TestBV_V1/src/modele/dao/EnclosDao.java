@@ -9,6 +9,7 @@ import java.util.List;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
+import modele.entite.Batiment;
 import modele.entite.Enclos;
 
 /**
@@ -22,10 +23,13 @@ public interface EnclosDao {
     void insert(Enclos unEnclos) throws ErreurSauvegardeException;
 
     List<Enclos> findAll();
+    
+    List<Enclos> findByBatiment(Batiment unBatiment);
 
     void update(Enclos unEnclos) throws ErreurMiseAjourException;
 
     void delete(Enclos unEnclos) throws ErreurSuppressionException;
     
+    void deleteByBatiment(Batiment unBatiment) throws ErreurSuppressionException;
     
 }

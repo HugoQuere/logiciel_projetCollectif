@@ -16,6 +16,7 @@ import java.util.Properties;
 import modele.dao.BatimentDao;
 import modele.dao.CageDao;
 import modele.dao.EnclosDao;
+import modele.dao.PonteDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
@@ -122,6 +123,36 @@ public class CageDbDao extends DbDao implements CageDao{
         return lesCages;
         
     }
+    
+    @Override
+    public List<Cage> findByEnclos(Enclos unEnclos) {
+        
+        List<Cage> lesCages = new ArrayList<>();
+        try {
+            String sql = "select idCage, idEnclos from CAGE where idEnclos=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            
+            pstmt.clearParameters();
+            pstmt.setInt(1, unEnclos.getIdEnclos());
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int idCage = rs.getInt("idCage");
+                Cage uneCage = new Cage(idCage, unEnclos);
+                lesCages.add(uneCage);
+            }
+            rs.close();
+                
+                
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesCages;
+        
+    }
 
     @Override
     public void update(Cage uneCage) throws ErreurMiseAjourException {
@@ -149,7 +180,59 @@ public class CageDbDao extends DbDao implements CageDao{
 
     @Override
     public void delete(Cage uneCage) throws ErreurSuppressionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PonteDao daoPontes = DbFactoryDao.getInstance().getPonteDao();
+        try {
+            //Attention si on supprime une cage, il faut aussi supprimer les pontes qu'il y a eu dedans
+            daoPontes.deleteByCage(uneCage);
+            String sql = "delete from CAGE where idCage=" + uneCage.getIdBox();
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            int result = stmt.executeUpdate(sql);
+            if (result == 0) {
+                stmt.close();
+                con.close();
+                throw new ErreurSuppressionException("La cage " + uneCage.getIdBox() + " n'a pas pu être supprimé");
+            }
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("La cage " + uneCage.getIdBox() + " n'a pas pu être supprimé");
+        }
+        
+    }
+      
+
+    @Override
+    public void deleteByEnclos(Enclos unEnclos) throws ErreurSuppressionException {
+        
+        PonteDao daoPontes = DbFactoryDao.getInstance().getPonteDao();
+        try {
+            //Attention si on supprime une cage, il faut aussi supprimer les pontes qu'il y a eu dedans
+            List<Cage> listeCages = this.findByEnclos(unEnclos);
+            if(listeCages.size()>0){
+                for(Cage uneCage : listeCages){
+                    daoPontes.deleteByCage(uneCage);
+                }
+
+                String sql = "delete from CAGE where idEnclos=" + unEnclos.getIdEnclos();
+                Connection con = this.getConnection();
+                Statement stmt = con.createStatement();
+                int result = stmt.executeUpdate(sql);
+                if (result == 0) {
+                    stmt.close();
+                    con.close();
+                    throw new ErreurSuppressionException("Les cages de l'enclos" + unEnclos + " n'ont pas pu être supprimés");
+                }
+                stmt.close();
+                con.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("Les cages de l'enclos" + unEnclos + " n'ont pas pu être supprimés");
+        }
+        
     }
     
 }

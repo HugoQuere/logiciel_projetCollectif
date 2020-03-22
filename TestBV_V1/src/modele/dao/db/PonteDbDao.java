@@ -117,10 +117,10 @@ public class PonteDbDao extends DbDao implements PonteDao{
 
             List<Cage> lesCages = this.cageDao.findAll();
             List<Palmipede> lesPalmipedes = this.palmipedeDao.findAll();
-            for (Palmipede unPalmide : lesPalmipedes) {
+            for (Palmipede unPalmipede : lesPalmipedes) {
                 for (Cage uneCage : lesCages){
                     pstmt.clearParameters();
-                    pstmt.setInt(1, unPalmide.getIdPalmipede());
+                    pstmt.setInt(1, unPalmipede.getIdPalmipede());
                     pstmt.setInt(2, uneCage.getIdBox());
                     ResultSet rs = pstmt.executeQuery();
                     while (rs.next()) {
@@ -129,7 +129,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
                         boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                         boolean oeufCollecte = rs.getBoolean("OeufCollecte");
                       
-                        Ponte unePonte = new Ponte(idPonte, unPalmide, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                        Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
                         lesPontes.add(unePonte);
                     }
                     rs.close();
@@ -143,6 +143,77 @@ public class PonteDbDao extends DbDao implements PonteDao{
         return lesPontes;
         
     }
+    
+    @Override
+    public List<Ponte> findByPalmipede(Palmipede unPalmipede) throws ErreurSuppressionException {
+        
+        List<Ponte> lesPontes = new ArrayList<>();
+        try {
+            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idCage=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            List<Cage> lesCages = this.cageDao.findAll();
+            for (Cage uneCage : lesCages){
+                pstmt.clearParameters();
+                pstmt.setInt(1, unPalmipede.getIdPalmipede());
+                pstmt.setInt(2, uneCage.getIdBox());
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int idPonte = rs.getInt("idPonte");
+                    Date datePonte = rs.getDate("datePonte");
+                    boolean precenseOeuf = rs.getBoolean("precenseOeuf");
+                    boolean oeufCollecte = rs.getBoolean("OeufCollecte");
+
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    lesPontes.add(unePonte);
+                }
+                rs.close();
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesPontes;
+        
+    }
+
+    @Override
+    public List<Ponte> findByCage(Cage uneCage) throws ErreurSuppressionException {
+        
+        List<Ponte> lesPontes = new ArrayList<>();
+        try {
+            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idCage=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            List<Palmipede> lesPalmipedes = this.palmipedeDao.findAll();
+            for (Palmipede unPalmipede : lesPalmipedes) {
+                pstmt.clearParameters();
+                pstmt.setInt(1, unPalmipede.getIdPalmipede());
+                pstmt.setInt(2, uneCage.getIdBox());
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int idPonte = rs.getInt("idPonte");
+                    Date datePonte = rs.getDate("datePonte");
+                    boolean precenseOeuf = rs.getBoolean("precenseOeuf");
+                    boolean oeufCollecte = rs.getBoolean("OeufCollecte");
+
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    lesPontes.add(unePonte);
+                }
+                rs.close();
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesPontes;
+        
+    }
+    
 
     @Override
     public void update(Ponte unePonte) throws ErreurMiseAjourException {
@@ -174,7 +245,73 @@ public class PonteDbDao extends DbDao implements PonteDao{
 
     @Override
     public void delete(Ponte unePonte) throws ErreurSuppressionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            String sql = "delete from PONTE where idPonte=" + unePonte.getIdPonte();
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            int result = stmt.executeUpdate(sql);
+            if (result == 0) {
+                stmt.close();
+                con.close();
+                throw new ErreurSuppressionException("La ponte avec l'id: " + unePonte.getIdPonte() + " n'a pas pu être supprimé");
+            }
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("La ponte avec l'id: " + unePonte.getIdPonte() + " n'a pas pu être supprimé");
+        }
+        
     }
+
+    @Override
+    public void deleteByPalmipede(Palmipede unPalmipede) throws ErreurSuppressionException {
+        
+        List<Ponte> listePontes = this.findByPalmipede(unPalmipede);
+        if(listePontes.size()>0){
+            try {
+                String sql = "delete from PONTE where idPalmipede=" + unPalmipede.getIdPalmipede();
+                Connection con = this.getConnection();
+                Statement stmt = con.createStatement();
+                int result = stmt.executeUpdate(sql);
+                if (result == 0) {
+                    stmt.close();
+                    con.close();
+                    throw new ErreurSuppressionException("Les pontes du palmipéde" + unPalmipede + " n'ont pas pu être supprimés");
+                }
+                stmt.close();
+                con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                throw new ErreurSuppressionException("Les pontes du palmipéde" + unPalmipede + " n'ont pas pu être supprimés");
+            }
+        }
+    }
+
+    @Override
+    public void deleteByCage(Cage uneCage) throws ErreurSuppressionException {
+        
+        List<Ponte> listePontes = this.findByCage(uneCage);
+        if(listePontes.size()>0){
+            try {
+                String sql = "delete from PONTE where idCage=" + uneCage.getIdBox();
+                Connection con = this.getConnection();
+                Statement stmt = con.createStatement();
+                int result = stmt.executeUpdate(sql);
+                if (result == 0) {
+                    stmt.close();
+                    con.close();
+                    throw new ErreurSuppressionException("Les pontes de la cage" + uneCage + " n'ont pas pu être supprimés");
+                }
+                stmt.close();
+                con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                throw new ErreurSuppressionException("Les pontes de la cage" + uneCage + " n'ont pas pu être supprimés");
+            }
+        }
+    }
+    
     
 }

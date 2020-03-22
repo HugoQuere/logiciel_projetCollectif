@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.BatimentDao;
+import modele.dao.EnclosDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
@@ -132,7 +133,27 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
 
     @Override
     public void delete(Batiment unBatiment) throws ErreurSuppressionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        EnclosDao daoEnclos = DbFactoryDao.getInstance().getEnclosDao();
+        try {
+            // attention, si on supprime un batiment ,il faut supprimer ces enclos
+            daoEnclos.deleteByBatiment(unBatiment);
+            
+            String sql = "delete from BATIMENT where idBatiment=" + unBatiment.getIdBatiment();
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            int result = stmt.executeUpdate(sql);
+            if (result == 0) {
+                stmt.close();
+                con.close();
+                throw new ErreurSuppressionException("Le batiment " + unBatiment + " n'a pas pu être supprimé");
+            }
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("Le batiment " + unBatiment + " n'a pas pu être supprimé");
+        }
     }
     
 }

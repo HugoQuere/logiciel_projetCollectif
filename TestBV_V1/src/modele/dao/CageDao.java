@@ -10,6 +10,7 @@ import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
 import modele.entite.Cage;
+import modele.entite.Enclos;
 
 /**
  *
@@ -22,9 +23,13 @@ public interface CageDao {
     void insert(Cage uneCage) throws ErreurSauvegardeException;
 
     List<Cage> findAll();
+    
+    List<Cage> findByEnclos(Enclos unEnclos);
 
     void update(Cage uneCage) throws ErreurMiseAjourException;
 
     void delete(Cage uneCage) throws ErreurSuppressionException;
+    
+    void deleteByEnclos(Enclos unEnclos) throws ErreurSuppressionException;
     
 }

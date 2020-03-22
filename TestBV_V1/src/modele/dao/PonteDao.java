@@ -9,6 +9,8 @@ import java.util.List;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
+import modele.entite.Cage;
+import modele.entite.Palmipede;
 import modele.entite.Ponte;
 
 /**
@@ -22,9 +24,17 @@ public interface PonteDao {
     void insert(Ponte unePonte) throws ErreurSauvegardeException;
 
     List<Ponte> findAll();
+    
+    List<Ponte> findByPalmipede(Palmipede unPalmipede) throws ErreurSuppressionException;
+    
+    List<Ponte> findByCage(Cage uneCage) throws ErreurSuppressionException;
 
     void update(Ponte unePonte) throws ErreurMiseAjourException;
 
     void delete(Ponte unePonte) throws ErreurSuppressionException;
+    
+    void deleteByPalmipede(Palmipede unPalmipede) throws ErreurSuppressionException;
+    
+    void deleteByCage(Cage uneCage) throws ErreurSuppressionException;
     
 }

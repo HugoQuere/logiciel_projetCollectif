@@ -18,6 +18,7 @@ import modele.dao.PonteDao;
 import modele.dao.db.DbFactoryDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
+import modele.dao.exception.ErreurSuppressionException;
 import modele.entite.Batiment;
 import modele.entite.Cage;
 import modele.entite.Enclos;
@@ -49,7 +50,8 @@ public class Controlleur {
         //testFind();
         //testInsert();
         //testFindAll();
-        testUpdate();
+        //testUpdate();
+        testSuppression();
     }
     
     private void testFind(){
@@ -179,6 +181,30 @@ public class Controlleur {
             Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
+    }
+    
+    private void testSuppression(){
+        //Devrait théoriquement tout supprimé de toutes les tables
+        
+        List<Batiment> listeBatiment = this.monBatimentDAO.findAll();
+        for(Batiment unBatiment : listeBatiment){
+            try {
+                this.monBatimentDAO.delete(unBatiment);
+            } catch (ErreurSuppressionException ex) {
+                Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        /*
+        List<Palmipede> listePalmipede = this.monPalmipedeDAO.findAll();
+        for(Palmipede unPalmipede : listePalmipede){
+            try {
+                this.monPalmipedeDAO.delete(unPalmipede);
+            } catch (ErreurSuppressionException ex) {
+                Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }*/
         
     }
 }

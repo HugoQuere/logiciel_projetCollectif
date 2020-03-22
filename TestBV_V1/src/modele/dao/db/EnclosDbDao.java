@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.BatimentDao;
+import modele.dao.CageDao;
 import modele.dao.EnclosDao;
+import modele.dao.PalmipedeDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
@@ -124,6 +126,38 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
         }
         return lesEnclos;
     }
+    
+    
+    @Override
+    public List<Enclos> findByBatiment(Batiment unBatiment) {
+        
+        List<Enclos> lesEnclos = new ArrayList<>();
+        try {
+            String sql = "select idEnclos, nomEnclos, idBatiment from ENCLOS where idBatiment=?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            
+            pstmt.clearParameters();
+            pstmt.setInt(1, unBatiment.getIdBatiment());
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int idEnclos = rs.getInt("idEnclos");
+                String nomEnclos = rs.getString("nomEnclos");
+                Enclos unEnclos = new Enclos(idEnclos, nomEnclos, unBatiment);
+                lesEnclos.add(unEnclos);
+            }
+            rs.close();
+                
+                
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesEnclos;
+        
+    }
 
     @Override
     public void update(Enclos unEnclos) throws ErreurMiseAjourException {
@@ -152,7 +186,65 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
 
     @Override
     public void delete(Enclos unEnclos) throws ErreurSuppressionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        PalmipedeDao daoPalmipede = DbFactoryDao.getInstance().getPalmipedeDao();
+        CageDao daoCage = DbFactoryDao.getInstance().getCageDao();
+        try {
+            // attention, si on supprime un enclos ,il faut supprimer ces palmipédes et ces cages!!!
+            daoPalmipede.deleteByEnclos(unEnclos);
+            daoCage.deleteByEnclos(unEnclos);
+            String sql = "delete from ENCLOS where idEnclos=" + unEnclos.getIdEnclos();
+            Connection con = this.getConnection();
+            Statement stmt = con.createStatement();
+            int result = stmt.executeUpdate(sql);
+            if (result == 0) {
+                stmt.close();
+                con.close();
+                throw new ErreurSuppressionException("L'enclos " + unEnclos + " n'a pas pu être supprimé");
+            }
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("L'enclos " + unEnclos + " n'a pas pu être supprimé");
+        }
+        
     }
+
+    @Override
+    public void deleteByBatiment(Batiment unBatiment) throws ErreurSuppressionException {
+        
+        
+        PalmipedeDao daoPalmipede = DbFactoryDao.getInstance().getPalmipedeDao();
+        CageDao daoCage = DbFactoryDao.getInstance().getCageDao();
+        try {
+            // attention, si on supprime un enclos ,il faut supprimer ces palmipédes et ces cages!!!
+            List<Enclos> listeEnclos = this.findByBatiment(unBatiment);
+            if(listeEnclos.size()>0){
+                for(Enclos unEnclos : listeEnclos){
+                    daoPalmipede.deleteByEnclos(unEnclos);
+                    daoCage.deleteByEnclos(unEnclos);
+                }
+
+                String sql = "delete from ENCLOS where idBatiment=" + unBatiment.getIdBatiment();
+                Connection con = this.getConnection();
+                Statement stmt = con.createStatement();
+                int result = stmt.executeUpdate(sql);
+                if (result == 0) {
+                    stmt.close();
+                    con.close();
+                    throw new ErreurSuppressionException("Les enclos du batiment " + unBatiment + " n'a pas pu être supprimé");
+                }
+                stmt.close();
+                con.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ErreurSuppressionException("Les enclos du batiment " + unBatiment + " n'a pas pu être supprimé");
+        }
+        
+        
+    }
+
     
 }
