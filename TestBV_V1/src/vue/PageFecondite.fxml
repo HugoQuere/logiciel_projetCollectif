@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleur.PageFeconditeController">
+    <children>
+        <Button fx:id="button" layoutX="1091.0" layoutY="103.0" onAction="#handleButtonAction" text="Click Me!" />
+        <Label fx:id="label" layoutX="1094.0" layoutY="129.0" minHeight="16" minWidth="69" text="filling text" />
+      <HBox prefHeight="70.0" prefWidth="1200.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="400.0" text="Fécondité">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#Page2ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Visualisation">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#Page3ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Problèmes">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <Label layoutX="60.0" layoutY="115.0" text="Du 06/04/2020 au 12/04/2020">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <TableView layoutX="60.0" layoutY="178.0" prefHeight="572.0" prefWidth="1096.0">
+        <columns>
+          <TableColumn prefWidth="156.0" text="RFID Palmipède" />
+          <TableColumn minWidth="7.0" prefWidth="164.0" text="Ponte / jour" />
+            <TableColumn prefWidth="144.0" text="Bâtiment" />
+            <TableColumn prefWidth="150.0" text="Enclos" />
+            <TableColumn prefWidth="149.0" text="Pontes" />
+            <TableColumn prefWidth="165.0" text="Date arivée" />
+            <TableColumn prefWidth="167.0" text="Date départ" />
+        </columns>
+      </TableView>
+      <VBox layoutX="546.0" layoutY="93.0" prefHeight="70.0" prefWidth="233.0" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" prefWidth="150.0" text="Ajouter palmipède" />
+            <Button mnemonicParsing="false" prefWidth="150.0" text="Supprimer palmpiède" />
+         </children>
+      </VBox>
+      <DatePicker layoutX="351.0" layoutY="116.0" />
+    </children>
+</AnchorPane>

@@ -1,26 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package testbv_v1;
+package controlleur;
 
-import controlleur.Controlleur;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- *
- * @author hugo
- */
-public class TestBV_V1 extends Application {
+
+public class start extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/vue/PageProbleme.fxml"));
         
         Scene scene = new Scene(root);
         
@@ -33,10 +25,9 @@ public class TestBV_V1 extends Application {
      */
     public static void main(String[] args) {
         
-        Controlleur unControlleur = new Controlleur();
-       
-        launch(args);
+        TestControlleur unControlleur = new TestControlleur(); //Controlleur pour tester le modéle
         
+        launch(args);
     }
     
 }

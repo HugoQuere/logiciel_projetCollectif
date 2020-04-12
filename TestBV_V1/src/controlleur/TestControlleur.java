@@ -27,9 +27,8 @@ import modele.entite.Ponte;
 
 /**
  *
- * @author hugo
  */
-public class Controlleur {
+public class TestControlleur {
     
     private final BatimentDao monBatimentDAO;
     private final CageDao maCageDAO;
@@ -37,7 +36,7 @@ public class Controlleur {
     private final PalmipedeDao monPalmipedeDAO;
     private final PonteDao maPonteDAO;
 
-    public Controlleur() {
+    public TestControlleur() {
         
         DaoFactory myFactory = DbFactoryDao.getInstance();
         
@@ -49,9 +48,9 @@ public class Controlleur {
         
         //testFind();
         //testInsert();
-        //testFindAll();
+        testFindAll();
         //testUpdate();
-        testSuppression();
+        //testSuppression();
     }
     
     private void testFind(){
@@ -90,7 +89,7 @@ public class Controlleur {
             this.maPonteDAO.insert(unePonte);
             
         } catch (ErreurSauvegardeException ex) {
-            Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -176,9 +175,9 @@ public class Controlleur {
             this.maPonteDAO.update(unePonte);
             
         } catch (ErreurMiseAjourException ex) {
-            Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ErreurSauvegardeException ex) {
-            Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
@@ -192,7 +191,7 @@ public class Controlleur {
             try {
                 this.monBatimentDAO.delete(unBatiment);
             } catch (ErreurSuppressionException ex) {
-                Logger.getLogger(Controlleur.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

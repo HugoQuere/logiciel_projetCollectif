@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleur.PageProblemeController">
+   <children>
+      <HBox prefHeight="70.0" prefWidth="1200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#Page1ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Fécondité">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#Page2ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Visualisation">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="400.0" text="Problèmes">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutY="70.0" prefHeight="730.0" prefWidth="1200.0" spacing="40.0">
+         <children>
+            <VBox prefHeight="650.0" prefWidth="240.0" spacing="20.0">
+               <children>
+                  <Label prefHeight="100.0" text="Cages pleines">
+                     <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <ListView prefHeight="614.0" prefWidth="240.0" />
+               </children>
+            </VBox>
+            <VBox prefHeight="240.0" prefWidth="240.0" spacing="20.0">
+               <children>
+                  <Label prefHeight="100.0" text="Problèmes de détection">
+                     <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <ListView prefHeight="616.0" prefWidth="240.0" />
+               </children>
+            </VBox>
+            <VBox prefHeight="240.0" prefWidth="240.0" spacing="20.0">
+               <children>
+                  <Label prefHeight="100.0" prefWidth="197.0" text="Palmpièdes à surveiller">
+                     <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <ListView prefHeight="621.0" prefWidth="240.0" />
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="240.0" spacing="20.0">
+               <children>
+                  <Label prefHeight="100.0" prefWidth="240.0" text="Cages nécessitant une maintenance" wrapText="true">
+                     <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <ListView prefHeight="614.0" prefWidth="240.0" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>
