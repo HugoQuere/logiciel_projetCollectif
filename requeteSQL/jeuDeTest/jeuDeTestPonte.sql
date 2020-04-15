@@ -13,4 +13,5 @@ INSERT INTO PONTE (idPalmipede, idCage, datePonte, precenseOeuf, oeufCollecte)
             (2, 1, '2020-03-22', TRUE, FALSE),
             (2, 1, '2020-03-22', FALSE, FALSE),
             (2, 2, '2020-03-22', TRUE, FALSE),
-            (3, 1, '2020-03-22', FALSE, FALSE);
+            (3, 1, '2020-03-22', FALSE, FALSE),
+            (3, 1, '2020-04-12', TRUE, FALSE);
