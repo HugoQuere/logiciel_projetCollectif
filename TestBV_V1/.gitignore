@@ -4,9 +4,10 @@
 
 #netbeans specific
 core
-nbproject/*
-!nbproject/project.properties
-!nbproject/project.xml
+nbproject/
 
 #java specific
 *.class
+build.xml
+derby.log
+manifest.mf
