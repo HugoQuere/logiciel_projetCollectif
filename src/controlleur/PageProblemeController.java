@@ -19,7 +19,7 @@ public class PageProblemeController implements Initializable {
 
     public void Page1ButtonPushed(ActionEvent event) throws IOException
     {
-        Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PageProbleme.fxml"));
+        Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PageFecondite.fxml"));
         Scene tableViewScene = new Scene(tableViewParent);        
         //Stage information
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();        

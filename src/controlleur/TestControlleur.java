@@ -6,6 +6,7 @@
 package controlleur;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,9 +49,12 @@ public class TestControlleur {
         
         //testFind();
         //testInsert();
-        testFindAll();
+        //testFindAll();
         //testUpdate();
         //testSuppression();
+        
+        //pontesfindByPalmipedeAndPeriod();
+        testFindByPalmipedeAndPeriod();
     }
     
     private void testFind(){
@@ -205,5 +209,51 @@ public class TestControlleur {
             }
         }*/
         
+    }
+    
+    private void pontesfindByPalmipedeAndPeriod(){
+        
+        Date uneDate = new Date(0);
+        Batiment unBatiment = new Batiment(1, "batiment");
+        Enclos unEnclos = new Enclos(1, "blabla", unBatiment);
+        Palmipede unPalmipede = new Palmipede(2, 0, uneDate, uneDate, unEnclos);
+        
+        
+        LocalDate dateDebut = LocalDate.now().minusDays(7);
+        LocalDate dateFin = LocalDate.now();
+        List<Ponte> listePontes = this.maPonteDAO.findByPalmipedeAndPeriod(unPalmipede, dateDebut, dateFin );
+        
+        for(int i=0; i<listePontes.size(); i++){
+            Ponte unePonte = listePontes.get(i);
+            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans la cage: "+ unePonte.getCage().getIdBox());
+        }
+        if(listePontes.size()==0){
+            System.out.println("Liste de pontes vides\n");
+        }
+    }
+    
+    private void testFindByPalmipedeAndPeriod(){
+        
+        List<Palmipede> mesPalmipedes = this.monPalmipedeDAO.findAll();
+        for(int i=0; i<mesPalmipedes.size(); i++){
+            Palmipede unPalmipede = mesPalmipedes.get(i);
+            System.out.println("RFID palmipede : "+unPalmipede.getNumRFID()+" , entree le: "+ unPalmipede.getDateEntree().toString() + ", vit dans l'enclos: "+ unPalmipede.getEnclos().getNomEnclos());
+        }
+        if(mesPalmipedes.size()==0){
+            System.out.println("Liste de cages vides\n");
+        }
+        
+        
+        
+        LocalDate date = LocalDate.now();
+        List<Palmipede> listePalmipedes = this.monPalmipedeDAO.findByDateSortie(date);
+        
+        for(int i=0; i<listePalmipedes.size(); i++){
+            Palmipede unPalmipede = listePalmipedes.get(i);
+            System.out.println("RFID palmipede : "+unPalmipede.getNumRFID()+" , entree le: "+ unPalmipede.getDateEntree().toString() + ", vit dans l'enclos: "+ unPalmipede.getEnclos().getNomEnclos());
+        }
+        if(listePalmipedes.size()==0){
+            System.out.println("Liste  palmipede vides\n");
+        }
     }
 }

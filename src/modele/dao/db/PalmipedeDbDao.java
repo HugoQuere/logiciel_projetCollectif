@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -113,6 +114,45 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
             for (Enclos unEnclos : lesEnclos) {
                 pstmt.clearParameters();
                 pstmt.setInt(1, unEnclos.getIdEnclos());
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int idPalmipede = rs.getInt("idPalmipede");
+                    int rfid = rs.getInt("rfid");
+                    Date dateEntree = rs.getDate("dateEntree");
+                    Date dateSortie = rs.getDate("dateSortie");
+                    Palmipede unPalmipede = new Palmipede(idPalmipede, rfid, dateEntree, dateSortie, unEnclos);
+                    lesPalmipedes.add(unPalmipede);
+                }
+                rs.close();
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesPalmipedes;
+        
+    }
+    
+    
+    @Override
+    public List<Palmipede> findByDateSortie(LocalDate dateSortieMax){
+        
+        List<Palmipede> lesPalmipedes = new ArrayList<>();
+        try {
+            String sql = "select idPalmipede, rfid, dateEntree, dateSortie, idEnclos "
+                        + "from PALMIPEDE "
+                        + "where idEnclos=? and (dateSortie IS NULL or dateSortie>?)";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            Date dateSortieMaxConvertie = Date.valueOf(dateSortieMax);
+            List<Enclos> lesEnclos = this.enclosDao.findAll();
+            for (Enclos unEnclos : lesEnclos) {
+                pstmt.clearParameters();
+                pstmt.setInt(1, unEnclos.getIdEnclos());
+                pstmt.setDate(2, dateSortieMaxConvertie);
+                
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int idPalmipede = rs.getInt("idPalmipede");

@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -145,7 +146,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
     }
     
     @Override
-    public List<Ponte> findByPalmipede(Palmipede unPalmipede) throws ErreurSuppressionException {
+    public List<Ponte> findByPalmipede(Palmipede unPalmipede) {
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
@@ -178,9 +179,52 @@ public class PonteDbDao extends DbDao implements PonteDao{
         return lesPontes;
         
     }
+    
+    @Override
+    public List<Ponte> findByPalmipedeAndPeriod(Palmipede unPalmipede, LocalDate dateDebut, LocalDate dateFin){
+        
+        List<Ponte> lesPontes = new ArrayList<>();
+        try {
+            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte "
+                        + "from PONTE "
+                        + "where idPalmipede=? and idCage=? and datePonte>? and datePonte<?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            
+            Date dateDebutConvert = Date.valueOf(dateDebut);
+            Date dateFinConvert = Date.valueOf(dateFin);
+            
+            List<Cage> lesCages = this.cageDao.findAll();
+            for (Cage uneCage : lesCages){
+                pstmt.clearParameters();
+                pstmt.setInt(1, unPalmipede.getIdPalmipede());
+                pstmt.setInt(2, uneCage.getIdBox());
+                pstmt.setDate(3, dateDebutConvert);
+                pstmt.setDate(4, dateFinConvert);
+                
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int idPonte = rs.getInt("idPonte");
+                    Date datePonte = rs.getDate("datePonte");
+                    boolean precenseOeuf = rs.getBoolean("precenseOeuf");
+                    boolean oeufCollecte = rs.getBoolean("OeufCollecte");
+
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    lesPontes.add(unePonte);
+                }
+                rs.close();
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesPontes;
+    }
 
     @Override
-    public List<Ponte> findByCage(Cage uneCage) throws ErreurSuppressionException {
+    public List<Ponte> findByCage(Cage uneCage){
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {

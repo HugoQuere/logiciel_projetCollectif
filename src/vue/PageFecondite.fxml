@@ -13,8 +13,6 @@
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleur.PageFeconditeController">
     <children>
-        <Button fx:id="button" layoutX="1091.0" layoutY="103.0" onAction="#handleButtonAction" text="Click Me!" />
-        <Label fx:id="label" layoutX="1094.0" layoutY="129.0" minHeight="16" minWidth="69" text="filling text" />
       <HBox prefHeight="70.0" prefWidth="1200.0">
          <children>
             <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="400.0" text="Fécondité">
@@ -25,40 +23,37 @@
                   <Insets />
                </opaqueInsets>
             </Button>
-            <Button mnemonicParsing="false" onAction="#Page2ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Visualisation">
+            <Button mnemonicParsing="false" onAction="#PageVisualisationButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Visualisation">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#Page3ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Problèmes">
+            <Button mnemonicParsing="false" onAction="#PageProblemeButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Problèmes">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
          </children>
       </HBox>
-      <Label layoutX="60.0" layoutY="115.0" text="Du 06/04/2020 au 12/04/2020">
-         <font>
-            <Font name="System Bold Italic" size="18.0" />
-         </font>
-      </Label>
-      <TableView layoutX="60.0" layoutY="178.0" prefHeight="572.0" prefWidth="1096.0">
+      <TableView fx:id="tableauFecondite" layoutX="60.0" layoutY="178.0" prefHeight="572.0" prefWidth="1096.0">
         <columns>
-          <TableColumn prefWidth="156.0" text="RFID Palmipède" />
-          <TableColumn minWidth="7.0" prefWidth="164.0" text="Ponte / jour" />
-            <TableColumn prefWidth="144.0" text="Bâtiment" />
-            <TableColumn prefWidth="150.0" text="Enclos" />
-            <TableColumn prefWidth="149.0" text="Pontes" />
-            <TableColumn prefWidth="165.0" text="Date arivée" />
-            <TableColumn prefWidth="167.0" text="Date départ" />
+          <TableColumn fx:id="RFID_Collumn" prefWidth="156.0" text="RFID Palmipède" />
+            <TableColumn fx:id="Batiment_Collumn" prefWidth="144.0" text="Bâtiment" />
+            <TableColumn fx:id="Enclos_Collumn" prefWidth="150.0" text="Enclos" />
+            <TableColumn fx:id="NbPontes_Collumn" prefWidth="149.0" text="Pontes" />
+            <TableColumn fx:id="DateArrive_Collumn" prefWidth="165.0" text="Date arivée" />
+            <TableColumn fx:id="DateSortie_Collumn" prefWidth="167.0" text="Date départ" />
         </columns>
       </TableView>
-      <VBox layoutX="546.0" layoutY="93.0" prefHeight="70.0" prefWidth="233.0" spacing="10.0">
+      <VBox layoutX="922.0" layoutY="93.0" prefHeight="70.0" prefWidth="233.0" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" prefWidth="150.0" text="Ajouter palmipède" />
             <Button mnemonicParsing="false" prefWidth="150.0" text="Supprimer palmpiède" />
          </children>
       </VBox>
-      <DatePicker layoutX="351.0" layoutY="116.0" />
+      <DatePicker fx:id="DatePickerDebut" layoutX="60.0" layoutY="115.0" onAction="#changementPeriodeDatePicker" promptText="Date début" />
+      <DatePicker fx:id="DatePickerFin" layoutX="279.0" layoutY="116.0" onAction="#changementPeriodeDatePicker" promptText="Date fin" />
+      <Button fx:id="refreshBouton" layoutX="503.0" layoutY="115.0" mnemonicParsing="false" onAction="#refreshButtonPushed" text="Refresh " />
+      <Label fx:id="refreshLabel" layoutX="600.0" layoutY="120.0" prefHeight="18.0" prefWidth="174.0" text="Mis à jour à : " />
     </children>
 </AnchorPane>

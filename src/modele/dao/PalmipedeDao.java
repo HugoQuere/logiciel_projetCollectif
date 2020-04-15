@@ -5,6 +5,7 @@
  */
 package modele.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
@@ -23,6 +24,8 @@ public interface PalmipedeDao {
     void insert(Palmipede unPalmipede) throws ErreurSauvegardeException;
 
     List<Palmipede> findAll();
+    
+    List<Palmipede> findByDateSortie(LocalDate dateSortieMax);
     
     List<Palmipede> findByEnclos(Enclos unEnclos);
 

@@ -12,7 +12,7 @@ public class start extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/vue/PageProbleme.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/vue/PageFecondite.fxml"));
         
         Scene scene = new Scene(root);
         
