@@ -37,7 +37,7 @@ import modele.dao.db.DbFactoryDao;
 import modele.entite.Batiment;
 import modele.entite.Enclos;
 import modele.entite.Palmipede;
-import modele.entite.PalmipedeTableau;
+import modele.entiteAffichage.PalmipedeTableau;
 import modele.entite.Ponte;
 
 
