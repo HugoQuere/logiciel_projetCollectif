@@ -54,7 +54,7 @@
             </VBox>
             <VBox prefHeight="240.0" prefWidth="240.0" spacing="20.0">
                <children>
-                  <Label prefHeight="100.0" prefWidth="197.0" text="Palmpièdes à surveiller">
+                  <Label prefHeight="100.0" prefWidth="197.0" text="Palmipèdes à surveiller">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>

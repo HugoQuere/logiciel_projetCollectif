@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -51,7 +52,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="735.0" spacing="10.0">
                      <children>
-                        <HBox prefHeight="80.0" prefWidth="719.0" spacing="10.0">
+                        <HBox prefHeight="80.0" prefWidth="690.0" spacing="10.0">
                            <children>
                               <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                  <children>
@@ -75,15 +76,16 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Vider le box" />
+                              <Button mnemonicParsing="false" text="Rafraîchir affichage" />
                               <Button mnemonicParsing="false" text="Box pleins" />
                            </children>
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox prefHeight="610.0" prefWidth="908.0">
+                  <ScrollBar />
+                  <HBox prefHeight="600.0" prefWidth="908.0">
                      <children>
-                        <TableView prefHeight="610.0" prefWidth="151.0">
+                        <TableView prefHeight="550.0" prefWidth="151.0">
                           <columns>
                             <TableColumn prefWidth="75.0" text="Cage" />
                             <TableColumn prefWidth="75.0" text="Oeufs" />

@@ -41,14 +41,14 @@
             <TableColumn fx:id="Batiment_Collumn" prefWidth="144.0" text="Bâtiment" />
             <TableColumn fx:id="Enclos_Collumn" prefWidth="150.0" text="Enclos" />
             <TableColumn fx:id="NbPontes_Collumn" prefWidth="149.0" text="Pontes" />
-            <TableColumn fx:id="DateArrive_Collumn" prefWidth="165.0" text="Date arivée" />
+            <TableColumn fx:id="DateArrive_Collumn" prefWidth="165.0" text="Date arrivée" />
             <TableColumn fx:id="DateSortie_Collumn" prefWidth="167.0" text="Date départ" />
         </columns>
       </TableView>
       <VBox layoutX="922.0" layoutY="93.0" prefHeight="70.0" prefWidth="233.0" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" prefWidth="150.0" text="Ajouter palmipède" />
-            <Button mnemonicParsing="false" prefWidth="150.0" text="Supprimer palmpiède" />
+            <Button mnemonicParsing="false" prefWidth="150.0" text="Supprimer palmipiède" />
          </children>
       </VBox>
       <DatePicker fx:id="DatePickerDebut" layoutX="60.0" layoutY="115.0" onAction="#changementPeriodeDatePicker" promptText="Date début" />
