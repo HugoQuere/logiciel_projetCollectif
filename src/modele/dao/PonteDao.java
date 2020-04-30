@@ -26,6 +26,8 @@ public interface PonteDao {
 
     List<Ponte> findAll();
     
+    List<Ponte> findByPeriod(LocalDate dateDebut, LocalDate dateFin);
+    
     List<Ponte> findByPalmipede(Palmipede unPalmipede);
     
     List<Ponte> findByPalmipedeAndPeriod(Palmipede unPalmipede, LocalDate dateDebut, LocalDate dateFin);

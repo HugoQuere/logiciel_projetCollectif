@@ -145,6 +145,50 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
     }
     
+    
+    @Override
+    public List<Ponte> findByPeriod(LocalDate dateDebut, LocalDate dateFin){
+        List<Ponte> lesPontes = new ArrayList<>();
+        try {
+            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte "
+                        + "from PONTE "
+                        + "where idCage=? and datePonte>? and datePonte<?";
+            Connection con = this.getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            
+            Date dateDebutConvert = Date.valueOf(dateDebut);
+            Date dateFinConvert = Date.valueOf(dateFin);
+            
+            List<Cage> lesCages = this.cageDao.findAll();
+            for (Cage uneCage : lesCages){
+                pstmt.clearParameters();
+                pstmt.setInt(1, uneCage.getIdBox());
+                pstmt.setDate(2, dateDebutConvert);
+                pstmt.setDate(3, dateFinConvert);
+                
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int idPonte = rs.getInt("idPonte");
+                    Palmipede unPalmipede = this.palmipedeDao.find(rs.getInt("idPalmipede"));
+                    Date datePonte = rs.getDate("datePonte");
+                    boolean precenseOeuf = rs.getBoolean("precenseOeuf");
+                    boolean oeufCollecte = rs.getBoolean("OeufCollecte");
+
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    lesPontes.add(unePonte);
+                }
+                rs.close();
+            }
+            pstmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Erreur SQL " + ex.getMessage());
+        }
+        return lesPontes;
+    }
+    
+    
     @Override
     public List<Ponte> findByPalmipede(Palmipede unPalmipede) {
         

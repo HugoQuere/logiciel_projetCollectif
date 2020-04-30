@@ -163,8 +163,9 @@ public class PageVisualisationController implements Initializable {
         this.listeCages.setAll(listeC);
         
         //Remplissage liste ponte
-        List<Ponte> listeP = this.maPonteDAO.findAll();
+        List<Ponte> listeP = this.maPonteDAO.findByPeriod(LocalDate.now().minusDays(7), LocalDate.now());
         this.listePontes.setAll(listeP);
+        System.out.println("NbPontes dans la liste: "+ listePontes.size());
         // ------------------------- Fin Remplissage base de données temporaire  ----------------------------------------------
         
         
@@ -295,7 +296,7 @@ public class PageVisualisationController implements Initializable {
             for(Cage uneCage : listeCagesDeLEnclos){
                 
                 List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
-                for(Ponte unePonte : listesPontesDeLaCage){
+                for(Ponte unePonte : this.listePontes){
                     if(unePonte.getCage().getIdBox() == uneCage.getIdBox()){
                         listesPontesDeLaCage.add(unePonte);
                     }
@@ -323,8 +324,8 @@ public class PageVisualisationController implements Initializable {
         
         int numBatimentSelectionne = this.batimentComboBox.getSelectionModel().getSelectedIndex(); //on récupére l'index du batiment sélectionné
         int numEnclosSelectionne = this.enclosComboBox.getSelectionModel().getSelectedIndex(); //on récupére l'index de l'enclos sélectionné
-        System.out.println("numBatimentSelectionne : "+ numBatimentSelectionne);
-        System.out.println("numEnclosSelectionne : "+ numEnclosSelectionne);
+        //System.out.println("numBatimentSelectionne : "+ numBatimentSelectionne);
+        //System.out.println("numEnclosSelectionne : "+ numEnclosSelectionne);
         
         Enclos enclosSelectionne = null;
         
@@ -343,15 +344,12 @@ public class PageVisualisationController implements Initializable {
         
         
         List<Cage> listeCagesDeLEnclos = new ArrayList<>();
-        if(enclosSelectionne!=null){
+        if(enclosSelectionne!=null){ //Sécurité, ne doit jamais arrivé
             for(Cage uneCage : this.listeCages){ //Remplissage de la liste de cages
                 if(uneCage.getEnclos().getIdEnclos() == enclosSelectionne.getIdEnclos()){
                     listeCagesDeLEnclos.add(uneCage);
                 }
             }
-        }
-        else{
-            System.out.println("enclos selectionné vide");
         }
 
         for(Cage uneCage : listeCagesDeLEnclos){
@@ -361,7 +359,7 @@ public class PageVisualisationController implements Initializable {
             int nbOeufsNonRecolte=0;
             
             List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
-            for(Ponte unePonte : listesPontesDeLaCage){
+            for(Ponte unePonte : this.listePontes){
                 if(unePonte.getCage().getIdBox() == uneCage.getIdBox()){
                     listesPontesDeLaCage.add(unePonte);
                 }
@@ -414,7 +412,7 @@ public class PageVisualisationController implements Initializable {
         for(Enclos unEnclos : this.listeEnclos){
             if(unEnclos.getBatiment().getIdBatiment()==unBatiment.getIdBatiment()){ //Enclos dans le batiment
                 this.enclosComboBox.getItems().add(unEnclos.getNomEnclos());
-                System.out.println("Ajout d'un enclos dans la combobox"); //Ligne de débugage
+                //System.out.println("Ajout d'un enclos dans la combobox"); //Ligne de débugage
             }
         }
         
