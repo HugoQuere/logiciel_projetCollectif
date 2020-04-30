@@ -60,10 +60,37 @@ public class PageVisualisationController implements Initializable {
     
     
     //Tableau 2
-    @FXML private TableView<VisualisationTableau2> tableau2_Visualisation;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_Collumn_Cage;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_Collumn_nbOeufs;
-    private ObservableList<VisualisationTableau2> listeVisualisationTableau2;
+    //Zone 1
+    @FXML private TableView<VisualisationTableau2> tableau2_zone1_Visualisation;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone1_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone1_Collumn_nbOeufs;
+    private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone1;
+    //Zone 2
+    @FXML private TableView<VisualisationTableau2> tableau2_zone2_Visualisation;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone2_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone2_Collumn_nbOeufs;
+    private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone2;
+    //Zone 3
+    @FXML private TableView<VisualisationTableau2> tableau2_zone3_Visualisation;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone3_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone3_Collumn_nbOeufs;
+    private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone3;
+    //Zone 4
+    @FXML private TableView<VisualisationTableau2> tableau2_zone4_Visualisation;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone4_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone4_Collumn_nbOeufs;
+    private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone4;
+    //Zone 5
+    @FXML private TableView<VisualisationTableau2> tableau2_zone5_Visualisation;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone5_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone5_Collumn_nbOeufs;
+    private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone5;
+    //Zone 6
+    @FXML private TableView<VisualisationTableau2> tableau2_zone6_Visualisation;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone6_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone6_Collumn_nbOeufs;
+    private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone6;
+    
     
     
     
@@ -88,6 +115,7 @@ public class PageVisualisationController implements Initializable {
     private ObservableList<Cage> listeCages;
     private ObservableList<Ponte> listePontes;
     
+    
    
     
     
@@ -108,7 +136,12 @@ public class PageVisualisationController implements Initializable {
         this.listeVisualisationTableau1 = FXCollections.observableArrayList();
         
         //Liste tableau 2
-        this.listeVisualisationTableau2 = FXCollections.observableArrayList();
+        this.listeVisualisationTableau2_zone1 = FXCollections.observableArrayList();
+        this.listeVisualisationTableau2_zone2 = FXCollections.observableArrayList();
+        this.listeVisualisationTableau2_zone3 = FXCollections.observableArrayList();
+        this.listeVisualisationTableau2_zone4 = FXCollections.observableArrayList();
+        this.listeVisualisationTableau2_zone5 = FXCollections.observableArrayList();
+        this.listeVisualisationTableau2_zone6 = FXCollections.observableArrayList();
         
         //Copie locale de la base de données
         this.listeBatiment = FXCollections.observableArrayList();
@@ -207,12 +240,32 @@ public class PageVisualisationController implements Initializable {
         
         // ------------------------- Initialisation tableau 2 (tableau droite) ----------------------------------------------
         
-        tableau2_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
-        tableau2_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
+        //Zone 1
+        tableau2_zone1_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone1_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
+        tableau2_zone1_Visualisation.setItems(listeVisualisationTableau2_zone1);
+        //Zone 2
+        tableau2_zone2_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone2_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
+        tableau2_zone2_Visualisation.setItems(listeVisualisationTableau2_zone2);
+        //Zone 3
+        tableau2_zone3_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone3_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
+        tableau2_zone3_Visualisation.setItems(listeVisualisationTableau2_zone3);
+        //Zone 4
+        tableau2_zone4_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone4_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
+        tableau2_zone4_Visualisation.setItems(listeVisualisationTableau2_zone4);
+        //Zone 5
+        tableau2_zone5_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone5_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
+        tableau2_zone5_Visualisation.setItems(listeVisualisationTableau2_zone5);
+        //Zone 6
+        tableau2_zone6_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone6_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
+        tableau2_zone6_Visualisation.setItems(listeVisualisationTableau2_zone6);
         
         remplissageTableau2_Visualisation();
-        
-        tableau2_Visualisation.setItems(listeVisualisationTableau2);
         
         // ------------------------- Fin initialisation tableau 2 (tableau droite) ----------------------------------------------
         
@@ -320,7 +373,12 @@ public class PageVisualisationController implements Initializable {
      * Fonction qui rempli le tableau 2 (droite)
      */
     private void remplissageTableau2_Visualisation(){
-        listeVisualisationTableau2.clear();
+        listeVisualisationTableau2_zone1.clear();
+        listeVisualisationTableau2_zone2.clear();
+        listeVisualisationTableau2_zone3.clear();
+        listeVisualisationTableau2_zone4.clear();
+        listeVisualisationTableau2_zone5.clear();
+        listeVisualisationTableau2_zone6.clear();
         
         int numBatimentSelectionne = this.batimentComboBox.getSelectionModel().getSelectedIndex(); //on récupére l'index du batiment sélectionné
         int numEnclosSelectionne = this.enclosComboBox.getSelectionModel().getSelectedIndex(); //on récupére l'index de l'enclos sélectionné
@@ -371,11 +429,33 @@ public class PageVisualisationController implements Initializable {
                 }
             }
             
-            
             VisualisationTableau2 unElement = new VisualisationTableau2(numCage, nbOeufsNonRecolte);
-            listeVisualisationTableau2.add(unElement);
+            
+            int zone = uneCage.getZone();
+            switch(zone){
+                case 1:
+                    listeVisualisationTableau2_zone1.add(unElement);
+                    break;
+                case 2:
+                    listeVisualisationTableau2_zone2.add(unElement);
+                    break;
+                case 3:
+                    listeVisualisationTableau2_zone3.add(unElement);
+                    break;
+                case 4:
+                    listeVisualisationTableau2_zone4.add(unElement);
+                    break;
+                case 5:
+                    listeVisualisationTableau2_zone5.add(unElement);
+                    break;
+                case 6:
+                    listeVisualisationTableau2_zone6.add(unElement);
+                    break;    
+            }
 
         }
+        
+        whichTableau2Affiche();
     }
     
     
@@ -426,5 +506,50 @@ public class PageVisualisationController implements Initializable {
         
     }
 
-    
+    /**
+     * Fonction qui permet d'activer ou de désactiver les tableaux contenant les cages
+     */
+    public void whichTableau2Affiche(){
+        //Zone 1
+        if(listeVisualisationTableau2_zone1.isEmpty()){
+            tableau2_zone1_Visualisation.setVisible(false);
+        }else{
+            tableau2_zone1_Visualisation.setVisible(true);
+        }
+        
+        //Zone 2
+        if(listeVisualisationTableau2_zone2.isEmpty()){
+            tableau2_zone2_Visualisation.setVisible(false);
+        }else{
+            tableau2_zone2_Visualisation.setVisible(true);
+        }
+        
+        //Zone 3
+        if(listeVisualisationTableau2_zone3.isEmpty()){
+            tableau2_zone3_Visualisation.setVisible(false);
+        }else{
+            tableau2_zone3_Visualisation.setVisible(true);
+        }
+        
+        //Zone 4
+        if(listeVisualisationTableau2_zone4.isEmpty()){
+            tableau2_zone4_Visualisation.setVisible(false);
+        }else{
+            tableau2_zone4_Visualisation.setVisible(true);
+        }
+        
+        //Zone 5
+        if(listeVisualisationTableau2_zone5.isEmpty()){
+            tableau2_zone5_Visualisation.setVisible(false);
+        }else{
+            tableau2_zone5_Visualisation.setVisible(true);
+        }
+        
+        //Zone 6
+        if(listeVisualisationTableau2_zone6.isEmpty()){
+            tableau2_zone6_Visualisation.setVisible(false);
+        }else{
+            tableau2_zone6_Visualisation.setVisible(true);
+        }
+    }
 }

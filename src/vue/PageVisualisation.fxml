@@ -83,43 +83,43 @@
                   </HBox>
                   <HBox prefHeight="610.0" prefWidth="908.0">
                      <children>
-                        <TableView fx:id="tableau2_Visualisation" prefHeight="610.0" prefWidth="151.0">
+                        <TableView fx:id="tableau2_zone1_Visualisation" prefHeight="610.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn fx:id="tableau2_Collumn_Cage" prefWidth="75.0" text="Cage" />
-                            <TableColumn fx:id="tableau2_Collumn_nbOeufs" prefWidth="75.0" text="Oeufs" />
+                            <TableColumn fx:id="tableau2_zone1_Collumn_Cage" prefWidth="75.0" text="Cage" />
+                            <TableColumn fx:id="tableau2_zone1_Collumn_nbOeufs" prefWidth="75.0" text="Oeufs" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <TableView prefHeight="610.0" prefWidth="152.0">
+                        <TableView fx:id="tableau2_zone2_Visualisation" prefHeight="610.0" prefWidth="152.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
-                            <TableColumn prefWidth="75.0" text="Oeufs" />
+                            <TableColumn fx:id="tableau2_zone2_Collumn_Cage" prefWidth="75.0" text="Cage" />
+                            <TableColumn fx:id="tableau2_zone2_Collumn_nbOeufs" prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
-                        <TableView prefHeight="610.0" prefWidth="151.0">
+                        <TableView fx:id="tableau2_zone3_Visualisation" prefHeight="610.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
-                            <TableColumn prefWidth="75.0" text="Oeufs" />
+                            <TableColumn fx:id="tableau2_zone3_Collumn_Cage" prefWidth="75.0" text="Cage" />
+                            <TableColumn fx:id="tableau2_zone3_Collumn_nbOeufs" prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
-                        <TableView prefHeight="610.0" prefWidth="152.0">
+                        <TableView fx:id="tableau2_zone4_Visualisation" prefHeight="610.0" prefWidth="152.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
-                            <TableColumn prefWidth="75.0" text="Oeufs" />
+                            <TableColumn fx:id="tableau2_zone4_Collumn_Cage" prefWidth="75.0" text="Cage" />
+                            <TableColumn fx:id="tableau2_zone4_Collumn_nbOeufs" prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
-                        <TableView prefHeight="610.0" prefWidth="151.0">
+                        <TableView fx:id="tableau2_zone5_Visualisation" prefHeight="610.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
-                            <TableColumn prefWidth="75.0" text="Oeufs" />
+                            <TableColumn fx:id="tableau2_zone5_Collumn_Cage" prefWidth="75.0" text="Cage" />
+                            <TableColumn fx:id="tableau2_zone5_Collumn_nbOeufs" prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
-                        <TableView prefHeight="610.0" prefWidth="151.0">
+                        <TableView fx:id="tableau2_zone6_Visualisation" prefHeight="610.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
-                            <TableColumn prefWidth="75.0" text="Oeufs" />
+                            <TableColumn fx:id="tableau2_zone6_Collumn_Cage" prefWidth="75.0" text="Cage" />
+                            <TableColumn fx:id="tableau2_zone6_Collumn_nbOeufs" prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
                      </children>
