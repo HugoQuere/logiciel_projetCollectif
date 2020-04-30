@@ -10,7 +10,14 @@
 
 INSERT INTO ENCLOS (nomEnclos, idBatiment)
     VALUES
-            ('Enclos A', 1),
-            ('Enclos B', 1),
-            ('Enclos C', 3),
-            ('Enclos D', 3);
+            /* Batiment A */
+            ('A', 1),
+            ('B', 1),
+            /* Batiment B */
+            ('C', 2),
+            ('D', 2),
+            /* Batiment C */
+            ('E', 3),
+            ('F', 3);
+            /* Batiment D */
+            /* batiment D en construction =). La suite au prochaine épisode*/

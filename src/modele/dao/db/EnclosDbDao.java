@@ -63,6 +63,16 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
     @Override
     public void insert(Enclos unEnclos) throws ErreurSauvegardeException {
         
+        //Sécurité pour vérifier que le nom de l'enclos n'existe pas déja dans la liste des enclos
+        boolean nomAlreadyExist = false;
+        List<Enclos> listeEnclos  = this.findAll();
+        for(Enclos enclos : listeEnclos){
+            if(enclos.getNomEnclos().equals(unEnclos.getNomEnclos())){
+                nomAlreadyExist=true;
+                throw new ErreurSauvegardeException("Nom d'enclos déja existant " + enclos);
+            }
+        }
+        
         Connection con = null;
         try {
             String sql = "insert into ENCLOS (nomEnclos, idBatiment) values (?,?)";

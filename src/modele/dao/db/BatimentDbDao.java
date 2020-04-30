@@ -55,6 +55,14 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
     @Override
     public void insert(Batiment unBatiment) throws ErreurSauvegardeException {
         
+        //Sécurité pour vérifier que le nom du batiment n'existe pas déja dans la liste des batiments
+        List<Batiment> listeBatiment  = this.findAll();
+        for(Batiment batiment : listeBatiment){
+            if(batiment.getNomBatiment().equals(unBatiment.getNomBatiment())){
+                throw new ErreurSauvegardeException("Nom de batiment déja existant " + unBatiment);
+            }
+        }
+        
         Connection con = null;
         try {
             con = this.getConnection();
@@ -106,6 +114,10 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
         
         return lesBatiments;
     }
+    
+   
+    
+   
 
     @Override
     public void update(Batiment unBatiment) throws ErreurMiseAjourException {

@@ -10,7 +10,7 @@
 
 INSERT INTO BATIMENT (nomBatiment)
     VALUES
-            ('Batiment A'),
-            ('Batiment B'),
-            ('Batiment C'),
-            ('Batiment D');
+            ('A'),
+            ('B'),
+            ('C'),
+            ('D');

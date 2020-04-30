@@ -12,10 +12,12 @@ package modele.entite;
 public class Cage {
     
     private int idBox;
+    private int numBox;
     private Enclos enclos;
 
-    public Cage(int idBox, Enclos enclos) {
+    public Cage(int idBox, int numBox, Enclos enclos) {
         this.idBox = idBox;
+        this.numBox = numBox;
         this.enclos = enclos;
     }
 
@@ -23,8 +25,16 @@ public class Cage {
         return idBox;
     }
 
-    public void setNumBox(int idBox) {
+    public void setIdBox(int idBox) {
         this.idBox = idBox;
+    }
+
+    public int getNumBox() {
+        return numBox;
+    }
+
+    public void setNumBox(int numBox) {
+        this.numBox = numBox;
     }
 
     public Enclos getEnclos() {
@@ -34,7 +44,7 @@ public class Cage {
     public void setEnclos(Enclos enclos) {
         this.enclos = enclos;
     }
-  
+
     
     
 }

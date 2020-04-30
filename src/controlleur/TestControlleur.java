@@ -78,7 +78,7 @@ public class TestControlleur {
             Enclos unEnclos = new Enclos(0, "EnclosTestInsert", unBatiment);
             this.monEnclosDAO.insert(unEnclos);
             
-            Cage uneCage = new Cage(0, unEnclos);
+            Cage uneCage = new Cage(0, 1, unEnclos);
             this.maCageDAO.insert(uneCage);
             
             

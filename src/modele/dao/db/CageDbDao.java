@@ -41,13 +41,14 @@ public class CageDbDao extends DbDao implements CageDao{
         
         Cage laCage = null;
         try {
-            String sql = "select idCage, idEnclos from Cage where idCage=" + idCage;
+            String sql = "select idCage, numCage, idEnclos from Cage where idCage=" + idCage;
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
+                int numCage = rs.getInt("numCage");
                 Enclos lEnclos = this.enclosDao.find(rs.getInt("idEnclos"));
-                laCage = new Cage(idCage, lEnclos);
+                laCage = new Cage(idCage, numCage, lEnclos);
             }
             rs.close();
             stmt.close();
@@ -99,7 +100,7 @@ public class CageDbDao extends DbDao implements CageDao{
         
         List<Cage> lesCages = new ArrayList<>();
         try {
-            String sql = "select idCage, idEnclos from CAGE where idEnclos=?";
+            String sql = "select idCage, numCage, idEnclos from CAGE where idEnclos=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -110,7 +111,8 @@ public class CageDbDao extends DbDao implements CageDao{
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int idCage = rs.getInt("idCage");
-                    Cage uneCage = new Cage(idCage, unEnclos);
+                    int numCage = rs.getInt("numCage");
+                    Cage uneCage = new Cage(idCage, numCage,unEnclos);
                     lesCages.add(uneCage);
                 }
                 rs.close();
@@ -129,7 +131,7 @@ public class CageDbDao extends DbDao implements CageDao{
         
         List<Cage> lesCages = new ArrayList<>();
         try {
-            String sql = "select idCage, idEnclos from CAGE where idEnclos=?";
+            String sql = "select idCage, numCage, idEnclos from CAGE where idEnclos=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -139,7 +141,8 @@ public class CageDbDao extends DbDao implements CageDao{
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 int idCage = rs.getInt("idCage");
-                Cage uneCage = new Cage(idCage, unEnclos);
+                int numCage = rs.getInt("numCage");
+                Cage uneCage = new Cage(idCage, numCage, unEnclos);
                 lesCages.add(uneCage);
             }
             rs.close();

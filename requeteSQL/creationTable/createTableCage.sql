@@ -11,6 +11,7 @@
 CREATE TABLE CAGE(
 
     idCage int      NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    numCage  int    NOT NULL,
     idEnclos int    NOT NULL,
 
     PRIMARY KEY(idCage),

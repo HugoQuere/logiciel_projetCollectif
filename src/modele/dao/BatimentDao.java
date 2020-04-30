@@ -21,7 +21,7 @@ public interface BatimentDao {
     void insert(Batiment unBatiment) throws ErreurSauvegardeException;
 
     List<Batiment> findAll();
-
+    
     void update(Batiment unBatiment) throws ErreurMiseAjourException;
 
     void delete(Batiment unBatiment) throws ErreurSuppressionException;
