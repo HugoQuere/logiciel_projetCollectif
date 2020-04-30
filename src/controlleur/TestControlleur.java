@@ -60,10 +60,10 @@ public class TestControlleur {
     private void testFind(){
         
         System.out.println("Nom Batiment : "+ this.monBatimentDAO.find(2).getNomBatiment() );
-        System.out.println("Id Cage : "+this.maCageDAO.find(1).getIdBox()+" , dans l'enclos: "+this.maCageDAO.find(1).getEnclos().getNomEnclos());
+        System.out.println("Id Cage : "+this.maCageDAO.find(1).getIdCage()+" , dans l'enclos: "+this.maCageDAO.find(1).getEnclos().getNomEnclos());
         System.out.println("Nom Enclos : "+this.monEnclosDAO.find(3).getNomEnclos()+" , dans le batiment: "+this.monEnclosDAO.find(3).getBatiment().getNomBatiment());
         System.out.println("RFID palmipede : "+this.monPalmipedeDAO.find(2).getNumRFID()+" , entree le: "+ this.monPalmipedeDAO.find(2).getDateEntree().toString() + ", vit dans l'enclos: "+ this.monPalmipedeDAO.find(2).getEnclos().getNomEnclos());
-        System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la cage: "+ this.maPonteDAO.find(4).getCage().getIdBox());
+        System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la cage: "+ this.maPonteDAO.find(4).getCage().getIdCage());
         
         
     }
@@ -125,7 +125,7 @@ public class TestControlleur {
         List<Cage> mesCages = this.maCageDAO.findAll();
         for(int i=0; i<mesCages.size(); i++){
             Cage uneCage = mesCages.get(i);
-            System.out.println("Id Cage : "+uneCage.getIdBox()+" , dans l'enclos: "+uneCage.getEnclos().getNomEnclos());
+            System.out.println("Id Cage : "+uneCage.getIdCage()+" , dans l'enclos: "+uneCage.getEnclos().getNomEnclos());
         }
         if(mesCages.size()==0){
             System.out.println("Liste de cages vides\n");
@@ -144,7 +144,7 @@ public class TestControlleur {
         List<Ponte> mesPontes = this.maPonteDAO.findAll();
         for(int i=0; i<mesPontes.size(); i++){
             Ponte unePonte = mesPontes.get(i);
-            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans la cage: "+ unePonte.getCage().getIdBox());
+            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans la cage: "+ unePonte.getCage().getIdCage());
         }
         if(mesPontes.size()==0){
             System.out.println("Liste de cages vides\n");
@@ -225,7 +225,7 @@ public class TestControlleur {
         
         for(int i=0; i<listePontes.size(); i++){
             Ponte unePonte = listePontes.get(i);
-            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans la cage: "+ unePonte.getCage().getIdBox());
+            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans la cage: "+ unePonte.getCage().getIdCage());
         }
         if(listePontes.size()==0){
             System.out.println("Liste de pontes vides\n");

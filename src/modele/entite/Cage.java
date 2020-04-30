@@ -11,30 +11,30 @@ package modele.entite;
  */
 public class Cage {
     
-    private int idBox;
-    private int numBox;
+    private int idCage;
+    private int numCage;
     private Enclos enclos;
 
-    public Cage(int idBox, int numBox, Enclos enclos) {
-        this.idBox = idBox;
-        this.numBox = numBox;
+    public Cage(int idCage, int numCage, Enclos enclos) {
+        this.idCage = idCage;
+        this.numCage = numCage;
         this.enclos = enclos;
     }
 
-    public int getIdBox() {
-        return idBox;
+    public int getIdCage() {
+        return idCage;
     }
 
-    public void setIdBox(int idBox) {
-        this.idBox = idBox;
+    public void setIdCage(int idCage) {
+        this.idCage = idCage;
     }
 
-    public int getNumBox() {
-        return numBox;
+    public int getNumCage() {
+        return numCage;
     }
 
-    public void setNumBox(int numBox) {
-        this.numBox = numBox;
+    public void setNumCage(int numCage) {
+        this.numCage = numCage;
     }
 
     public Enclos getEnclos() {
@@ -45,6 +45,6 @@ public class Cage {
         this.enclos = enclos;
     }
 
-    
+   
     
 }

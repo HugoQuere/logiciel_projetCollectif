@@ -77,7 +77,7 @@ public class CageDbDao extends DbDao implements CageDao{
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sqlId);
                 if (rs.next()) {
-                    uneCage.setNumBox(rs.getInt("maxId"));
+                    uneCage.setNumCage(rs.getInt("maxId"));
                 }
                 rs.close();
                 stmt.close();
@@ -165,7 +165,7 @@ public class CageDbDao extends DbDao implements CageDao{
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, uneCage.getEnclos().getIdEnclos());
-            pstmt.setInt(2, uneCage.getIdBox());
+            pstmt.setInt(2, uneCage.getIdCage());
             int result = pstmt.executeUpdate();
             if (result == 0) {
                 pstmt.close();
@@ -188,20 +188,20 @@ public class CageDbDao extends DbDao implements CageDao{
         try {
             //Attention si on supprime une cage, il faut aussi supprimer les pontes qu'il y a eu dedans
             daoPontes.deleteByCage(uneCage);
-            String sql = "delete from CAGE where idCage=" + uneCage.getIdBox();
+            String sql = "delete from CAGE where idCage=" + uneCage.getIdCage();
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
             int result = stmt.executeUpdate(sql);
             if (result == 0) {
                 stmt.close();
                 con.close();
-                throw new ErreurSuppressionException("La cage " + uneCage.getIdBox() + " n'a pas pu être supprimé");
+                throw new ErreurSuppressionException("La cage " + uneCage.getIdCage() + " n'a pas pu être supprimé");
             }
             stmt.close();
             con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new ErreurSuppressionException("La cage " + uneCage.getIdBox() + " n'a pas pu être supprimé");
+            throw new ErreurSuppressionException("La cage " + uneCage.getIdCage() + " n'a pas pu être supprimé");
         }
         
     }

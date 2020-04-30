@@ -78,7 +78,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
             con.setAutoCommit(false);
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, unePonte.getPalmipede().getIdPalmipede());
-            pstmt.setInt(2, unePonte.getCage().getIdBox());
+            pstmt.setInt(2, unePonte.getCage().getIdCage());
             pstmt.setDate(3, (java.sql.Date) unePonte.getDatePonte());
             pstmt.setBoolean(4, unePonte.isPresenceOeuf());
             pstmt.setBoolean(5, unePonte.isOeufCollecte());
@@ -122,7 +122,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
                 for (Cage uneCage : lesCages){
                     pstmt.clearParameters();
                     pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                    pstmt.setInt(2, uneCage.getIdBox());
+                    pstmt.setInt(2, uneCage.getIdCage());
                     ResultSet rs = pstmt.executeQuery();
                     while (rs.next()) {
                         int idPonte = rs.getInt("idPonte");
@@ -163,7 +163,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
             List<Cage> lesCages = this.cageDao.findAll();
             for (Cage uneCage : lesCages){
                 pstmt.clearParameters();
-                pstmt.setInt(1, uneCage.getIdBox());
+                pstmt.setInt(1, uneCage.getIdCage());
                 pstmt.setDate(2, dateDebutConvert);
                 pstmt.setDate(3, dateFinConvert);
                 
@@ -202,7 +202,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
             for (Cage uneCage : lesCages){
                 pstmt.clearParameters();
                 pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                pstmt.setInt(2, uneCage.getIdBox());
+                pstmt.setInt(2, uneCage.getIdCage());
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int idPonte = rs.getInt("idPonte");
@@ -243,7 +243,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
             for (Cage uneCage : lesCages){
                 pstmt.clearParameters();
                 pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                pstmt.setInt(2, uneCage.getIdBox());
+                pstmt.setInt(2, uneCage.getIdCage());
                 pstmt.setDate(3, dateDebutConvert);
                 pstmt.setDate(4, dateFinConvert);
                 
@@ -280,7 +280,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
             for (Palmipede unPalmipede : lesPalmipedes) {
                 pstmt.clearParameters();
                 pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                pstmt.setInt(2, uneCage.getIdBox());
+                pstmt.setInt(2, uneCage.getIdCage());
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int idPonte = rs.getInt("idPonte");
@@ -311,7 +311,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, unePonte.getPalmipede().getIdPalmipede());
-            pstmt.setInt(2, unePonte.getCage().getIdBox());
+            pstmt.setInt(2, unePonte.getCage().getIdCage());
             pstmt.setDate(3, unePonte.getDatePonte());
             pstmt.setBoolean(4, unePonte.isPresenceOeuf());
             pstmt.setBoolean(5, unePonte.isOeufCollecte());
@@ -383,7 +383,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
         List<Ponte> listePontes = this.findByCage(uneCage);
         if(listePontes.size()>0){
             try {
-                String sql = "delete from PONTE where idCage=" + uneCage.getIdBox();
+                String sql = "delete from PONTE where idCage=" + uneCage.getIdCage();
                 Connection con = this.getConnection();
                 Statement stmt = con.createStatement();
                 int result = stmt.executeUpdate(sql);

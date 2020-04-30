@@ -297,7 +297,7 @@ public class PageVisualisationController implements Initializable {
                 
                 List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
                 for(Ponte unePonte : this.listePontes){
-                    if(unePonte.getCage().getIdBox() == uneCage.getIdBox()){
+                    if(unePonte.getCage().getIdCage() == uneCage.getIdCage()){
                         listesPontesDeLaCage.add(unePonte);
                     }
                 }        
@@ -354,13 +354,13 @@ public class PageVisualisationController implements Initializable {
 
         for(Cage uneCage : listeCagesDeLEnclos){
 
-            int numCage = uneCage.getNumBox();
+            int numCage = uneCage.getNumCage();
 
             int nbOeufsNonRecolte=0;
             
             List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
             for(Ponte unePonte : this.listePontes){
-                if(unePonte.getCage().getIdBox() == uneCage.getIdBox()){
+                if(unePonte.getCage().getIdCage() == uneCage.getIdCage()){
                     listesPontesDeLaCage.add(unePonte);
                 }
             }        
