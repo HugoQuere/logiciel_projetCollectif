@@ -14,11 +14,13 @@ public class Cage {
     private int idCage;
     private int numCage;
     private Enclos enclos;
+    private int zone;
 
-    public Cage(int idCage, int numCage, Enclos enclos) {
+    public Cage(int idCage, int numCage, Enclos enclos, int zone) {
         this.idCage = idCage;
         this.numCage = numCage;
         this.enclos = enclos;
+        this.zone = zone;
     }
 
     public int getIdCage() {
@@ -45,6 +47,15 @@ public class Cage {
         this.enclos = enclos;
     }
 
+    public int getZone() {
+        return zone;
+    }
+
+    public void setZone(int zone) {
+        this.zone = zone;
+    }
+
+    
    
     
 }
