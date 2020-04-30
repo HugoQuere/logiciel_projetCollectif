@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import javafx.collections.ObservableList;
 import modele.dao.BatimentDao;
 import modele.dao.EnclosDao;
 import modele.dao.exception.ErreurMiseAjourException;
@@ -114,6 +115,7 @@ public class BatimentDbDao extends DbDao implements BatimentDao{
         
         return lesBatiments;
     }
+    
     
    
     

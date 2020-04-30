@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -70,10 +71,6 @@ public class PageVisualisationController implements Initializable {
     //Combo box
     @FXML private ComboBox<String> batimentComboBox;
     @FXML private ComboBox<String> enclosComboBox;
-    private ObservableList<String> listeStringBatiment;
-    private ObservableList<String> listeStringEnclosParBatiment;
-    
-    
     
     
     //Accés base de données
@@ -82,6 +79,14 @@ public class PageVisualisationController implements Initializable {
     private final EnclosDao monEnclosDAO;
     private final PalmipedeDao monPalmipedeDAO;
     private final PonteDao maPonteDAO;
+    
+    
+    //Copie à un instant X de la base de données (au démarrage de la page ainsi qu'à l'appui du bouton refresh ?)
+    //Nécessaire de faire une copie local de la base de données car le nombre d'accés à la base de données était trop conséquent
+    private ObservableList<Batiment> listeBatiment;
+    private ObservableList<Enclos> listeEnclos;
+    private ObservableList<Cage> listeCages;
+    private ObservableList<Ponte> listePontes;
     
    
     
@@ -105,10 +110,11 @@ public class PageVisualisationController implements Initializable {
         //Liste tableau 2
         this.listeVisualisationTableau2 = FXCollections.observableArrayList();
         
-        //Liste combobox
-        this.listeStringBatiment = FXCollections.observableArrayList();
-        this.listeStringEnclosParBatiment = FXCollections.observableArrayList();
-                
+        //Copie locale de la base de données
+        this.listeBatiment = FXCollections.observableArrayList();
+        this.listeEnclos = FXCollections.observableArrayList();
+        this.listeCages = FXCollections.observableArrayList();
+        this.listePontes = FXCollections.observableArrayList();
     }
     
     
@@ -143,15 +149,37 @@ public class PageVisualisationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        // ------------------------- Remplissage base de données temporaire  ----------------------------------------------
+        //Remplissage liste batiment
+        List<Batiment> listeB = this.monBatimentDAO.findAll();
+        this.listeBatiment.setAll(listeB);
+        
+        //Remplissage liste enclos
+        List<Enclos> listeE = this.monEnclosDAO.findAll();
+        this.listeEnclos.setAll(listeE);
+        
+        //Remplissage liste cage
+        List<Cage> listeC = this.maCageDAO.findAll();
+        this.listeCages.setAll(listeC);
+        
+        //Remplissage liste ponte
+        List<Ponte> listeP = this.maPonteDAO.findAll();
+        this.listePontes.setAll(listeP);
+        // ------------------------- Fin Remplissage base de données temporaire  ----------------------------------------------
+        
+        
+        
+        
+        
         // ------------------------- Initialisation ComboBox  ----------------------------------------------
         
-        remplissageListeBatiment();
-        batimentComboBox.setItems(listeStringBatiment);
-        batimentComboBox.setValue(listeStringBatiment.get(0)); //Mise par défaut à la premiére valeur de la combo box
+        remplissageComboBoxBatiment();
+        this.batimentComboBox.setVisibleRowCount(10); //Affichage au maximum de 10 batiment avant de passer en mode liste déroulante
+        this.batimentComboBox.getSelectionModel().selectFirst(); //Mise par défaut à la premiére valeur de la combo box
         
-        remplissageListeEnclosParBatiment(listeStringBatiment.get(0)); //Remplissage avec le batiment par défaut
-        enclosComboBox.setItems(listeStringEnclosParBatiment);
-        enclosComboBox.setValue(listeStringEnclosParBatiment.get(0)); //Mise par défaut à la premiére valeur de la combo box
+        remplissageComboBoxEnclos(listeBatiment.get(0)); //Remplissage avec le batiment par défaut
+        this.enclosComboBox.setVisibleRowCount(10); //Affichage au maximum de 10 enclos avant de passer en mode liste déroulante
+        this.enclosComboBox.getSelectionModel().selectFirst();//Mise par défaut à la premiére valeur de la combo box
         
         // ------------------------- Fin initialisation ComboBox  ----------------------------------------------
         
@@ -190,51 +218,46 @@ public class PageVisualisationController implements Initializable {
     }   
     
 
-    @FXML
-    private void actionComboBoxBatiment(ActionEvent event) {
+    /**
+     * @brief Fonction appelé lors d'une action sur la combo box batiment (c'est à dire un changement de la valeur sélectionné)
+     * @param event 
+     */
+    @FXML private void actionComboBoxBatiment(ActionEvent event) {
         
-       String batimentSelectionne = batimentComboBox.getValue();
+       int numElementSelectionne = this.batimentComboBox.getSelectionModel().getSelectedIndex(); //on récupére l'index de l'élément sélectionné
        
-       remplissageListeEnclosParBatiment(batimentSelectionne); //Remplissage de la combobox enclos avec le batiment sélectionné
-       
-       remplissageTableau2_Visualisation(); //remplissage du deuxieme tableau en fonction des combobox
-        
+        remplissageComboBoxEnclos(this.listeBatiment.get(numElementSelectionne)); //Remplissage de la combobox enclos avec le batiment sélectionné
+                                                                                //Comme la liste de string de la combo box est une copie de la liste de batiment, on peut directement récupérer le batiment
+        this.enclosComboBox.getSelectionModel().selectFirst();//Mise par défaut à la premiére valeur de la combo box
     }
 
-    @FXML
-    private void actionComboBoxEnclos(ActionEvent event) {
+    /**
+     * Fonction appelé lors d'une action sur la combo box enclos (c'est à dire un changement de la valeur sélectionné)
+     * @param event 
+     */
+    @FXML private void actionComboBoxEnclos(ActionEvent event) {
         remplissageTableau2_Visualisation(); //remplissage du deuxieme tableau en fonction des combobox
     }
     
     
-    
-    @FXML
-    private void mouseClick_Tableau1(MouseEvent event) {
+    /**
+     * Fonction appelé lors d'un click sur une ligne du tableau 1
+     * @param event 
+     */
+    @FXML private void mouseClick_Tableau1(MouseEvent event) {
         TableViewSelectionModel<VisualisationTableau1> selectionModel = tableau1_Visualisation.getSelectionModel();
         
-        //ObservableList<Integer> selectedIndices = selectionModel.getSelectedIndices(); //get selected indices
-        //int elementSelectionne = selectedIndices.get(0);
+        ObservableList<Integer> selectedIndices = selectionModel.getSelectedIndices(); //get selected indices
+        int elementSelectionne = selectedIndices.get(0); //Correspond au numéro de l'enclos dans la liste des enclos
         //System.out.println("Element selectionne : " + elementSelectionne);
         
-        ObservableList<VisualisationTableau1> selectedItems = selectionModel.getSelectedItems(); //get selected element (un seul element par defaut
-        VisualisationTableau1 element = selectedItems.get(0);
+        Enclos unEnclos = this.listeEnclos.get(elementSelectionne);
+        Batiment batimentDeEnclosSelectionne = unEnclos.getBatiment();
+        batimentComboBox.setValue(unEnclos.getBatiment().getNomBatiment());
         
-        for (int i=0; i<listeStringBatiment.size(); i++){
-            String unNomBatiment = listeStringBatiment.get(i);
-            if(unNomBatiment.equals(element.getNomBatiment())){ //ne peut survenir qu'une seule fois
-                batimentComboBox.setValue(listeStringBatiment.get(i)); //Mise à la valeur sélectionné (combo box batiment)
-            }
-        }
-        
-        remplissageListeEnclosParBatiment(element.getNomBatiment());
-        for (int i=0; i<listeStringEnclosParBatiment.size(); i++){
-            String unNomEnclos = listeStringEnclosParBatiment.get(i);
-            if(unNomEnclos.equals(element.getNomEnclos())){ //ne peut survenir qu'une seule fois
-                enclosComboBox.setValue(listeStringEnclosParBatiment.get(i)); //Mise à la valeur sélectionné (combo box enclos)
-            }
-        }
-        
-        
+        remplissageComboBoxEnclos(batimentDeEnclosSelectionne);
+        enclosComboBox.setValue(unEnclos.getNomEnclos());
+     
     }
     
     
@@ -244,12 +267,11 @@ public class PageVisualisationController implements Initializable {
     
     
     
-    
-    public void remplissageTableau1_Visualisation(){
+    /**
+     * Fonction qui rempli le tableau 1 (gauche)
+     */
+    private void remplissageTableau1_Visualisation(){
         listeVisualisationTableau1.clear();
-        
-        List<Enclos> listeEnclos = this.monEnclosDAO.findAll();
-        
         
         for(Enclos unEnclos : listeEnclos){
             
@@ -261,12 +283,25 @@ public class PageVisualisationController implements Initializable {
             
             //Nombre d'oeufs dans un enclos
             int nbOeufs = 0;
-            List<Cage> listeCages = this.maCageDAO.findByEnclos(unEnclos);
             
-            for(Cage uneCage : listeCages){
+            
+            List<Cage> listeCagesDeLEnclos = new ArrayList<Cage>();
+            for(Cage uneCage : this.listeCages){
+                if(uneCage.getEnclos().getIdEnclos() == unEnclos.getIdEnclos()){
+                    listeCagesDeLEnclos.add(uneCage);
+                }
+            }
+            
+            for(Cage uneCage : listeCagesDeLEnclos){
                 
-                List<Ponte> listesPontes = this.maPonteDAO.findByCage(uneCage);
-                for(Ponte unePonte : listesPontes){
+                List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
+                for(Ponte unePonte : listesPontesDeLaCage){
+                    if(unePonte.getCage().getIdBox() == uneCage.getIdBox()){
+                        listesPontesDeLaCage.add(unePonte);
+                    }
+                }        
+                
+                for(Ponte unePonte : listesPontesDeLaCage){
                     if(unePonte.isOeufCollecte()==false && unePonte.isPresenceOeuf()==true){ //Oeuf non collecté
                         nbOeufs++;
                     }
@@ -280,80 +315,114 @@ public class PageVisualisationController implements Initializable {
     }
     
     
-    
-    public void remplissageTableau2_Visualisation(){
+    /**
+     * Fonction qui rempli le tableau 2 (droite)
+     */
+    private void remplissageTableau2_Visualisation(){
         listeVisualisationTableau2.clear();
         
-        String enclosSelectionne = enclosComboBox.getValue();
+        int numBatimentSelectionne = this.batimentComboBox.getSelectionModel().getSelectedIndex(); //on récupére l'index du batiment sélectionné
+        int numEnclosSelectionne = this.enclosComboBox.getSelectionModel().getSelectedIndex(); //on récupére l'index de l'enclos sélectionné
+        System.out.println("numBatimentSelectionne : "+ numBatimentSelectionne);
+        System.out.println("numEnclosSelectionne : "+ numEnclosSelectionne);
         
-        List<Enclos> listeEnclos = this.monEnclosDAO.findAll();
-        for(Enclos unEnclos : listeEnclos){
-            if(unEnclos.getNomEnclos().equals(enclosSelectionne)){ //enclos correspondant au paramétre (nom unique)
-                
-                List<Cage> listeCages = this.maCageDAO.findByEnclos(unEnclos);
-                
-                for(Cage uneCage : listeCages){
-                    
-                    int numCage = uneCage.getNumBox();
-                    
-                    int nbOeufsNonRecolte=0;
-                    List<Ponte> listePontes = this.maPonteDAO.findByCage(uneCage);
-                    for(Ponte unePonte : listePontes){
-                        if(unePonte.isOeufCollecte()==false && unePonte.isPresenceOeuf()==true){
-                            nbOeufsNonRecolte++;
-                        }
-                    }
-                    
-                    VisualisationTableau2 unElement = new VisualisationTableau2(numCage, nbOeufsNonRecolte);
-                    listeVisualisationTableau2.add(unElement);
-                    
+        Enclos enclosSelectionne = null;
+        
+        Batiment unBatiment = this.listeBatiment.get(numBatimentSelectionne);
+        int nbEnclosDansListe = 0;
+        for(Enclos unEnclos : this.listeEnclos){
+            if(unEnclos.getBatiment().getIdBatiment()==unBatiment.getIdBatiment()){ //Enclos dans le batiment
+                if(nbEnclosDansListe==numEnclosSelectionne){
+                    enclosSelectionne = unEnclos;
+                    break;
                 }
-                break;
+                nbEnclosDansListe++;   
             }
         }
         
-        //Ne semble pas petre fonctionnel
-        tableau2_Visualisation.getSortOrder().clear();
-        tableau2_Visualisation.getSortOrder().add(tableau2_Collumn_Cage); //Trie du tableau par rapport au numéro de la cage
-        tableau2_Visualisation.sort(); //Trie les cages dans l'ordre
         
+        
+        List<Cage> listeCagesDeLEnclos = new ArrayList<>();
+        if(enclosSelectionne!=null){
+            for(Cage uneCage : this.listeCages){ //Remplissage de la liste de cages
+                if(uneCage.getEnclos().getIdEnclos() == enclosSelectionne.getIdEnclos()){
+                    listeCagesDeLEnclos.add(uneCage);
+                }
+            }
+        }
+        else{
+            System.out.println("enclos selectionné vide");
+        }
+
+        for(Cage uneCage : listeCagesDeLEnclos){
+
+            int numCage = uneCage.getNumBox();
+
+            int nbOeufsNonRecolte=0;
+            
+            List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
+            for(Ponte unePonte : listesPontesDeLaCage){
+                if(unePonte.getCage().getIdBox() == uneCage.getIdBox()){
+                    listesPontesDeLaCage.add(unePonte);
+                }
+            }        
+
+            for(Ponte unePonte : listesPontesDeLaCage){
+                if(unePonte.isOeufCollecte()==false && unePonte.isPresenceOeuf()==true){
+                    nbOeufsNonRecolte++;
+                }
+            }
+            
+            
+            VisualisationTableau2 unElement = new VisualisationTableau2(numCage, nbOeufsNonRecolte);
+            listeVisualisationTableau2.add(unElement);
+
+        }
     }
     
     
     
-    
-    public void remplissageListeBatiment(){
+    /**
+     * @brief Fonction qui permet de remplir la combo boc avec l'ensemble des batiments dans la base de données
+     */
+    public void remplissageComboBoxBatiment(){
         
-        listeStringBatiment.clear();
+        //Note: Il faut désactiver le gestionnaire d'événements car on déclenche un événment lorsque l'on vide un combobox
+        EventDispatcher eventDispatch = this.batimentComboBox.getEventDispatcher();
+        this.batimentComboBox.setEventDispatcher(null);
+        this.batimentComboBox.getItems().clear(); //Vidage de la combobox
+        this.batimentComboBox.setEventDispatcher(eventDispatch);
         
-        List<Batiment> listeDesBatiment = this.monBatimentDAO.findAll();
-        for(Batiment unBatiment : listeDesBatiment){
+        for(Batiment unBatiment : this.listeBatiment){
             String nomBatiment = unBatiment.getNomBatiment();
-            this.listeStringBatiment.add(nomBatiment);
+            this.batimentComboBox.getItems().add(nomBatiment); //Ajout du nom du batiment dans la liste de la combobox
         }
-        
     }
     
-    public void remplissageListeEnclosParBatiment(String nomBatiment){
+    /**
+     * @brief Fonction qui permet de remplir la combo box avec les enclos d'un batiment
+     * @param unBatiment, batiment dont on veut afficher les enclos
+     */
+    public void remplissageComboBoxEnclos(Batiment unBatiment){
         
-        listeStringEnclosParBatiment.clear();
+        //Note: Il faut désactiver le gestionnaire d'événements car on déclenche un événment lorsque l'on vide un combobox
+        EventDispatcher eventDispatch = this.enclosComboBox.getEventDispatcher();
+        this.enclosComboBox.setEventDispatcher(null);
+        this.enclosComboBox.getItems().clear(); //Vidage de la combobox
+        this.enclosComboBox.setEventDispatcher(eventDispatch);
         
-        List<Batiment> listeBatiment = this.monBatimentDAO.findAll();
-        for(Batiment unBatiment : listeBatiment){
-            if(unBatiment.getNomBatiment().equals(nomBatiment)){ //batiment correspondant au paramétre (nom unique)
-                List <Enclos> listeEnclos = this.monEnclosDAO.findByBatiment(unBatiment);
-                for(Enclos unEnclos : listeEnclos){
-                    this.listeStringEnclosParBatiment.add(unEnclos.getNomEnclos());
-                }
+        for(Enclos unEnclos : this.listeEnclos){
+            if(unEnclos.getBatiment().getIdBatiment()==unBatiment.getIdBatiment()){ //Enclos dans le batiment
+                this.enclosComboBox.getItems().add(unEnclos.getNomEnclos());
+                System.out.println("Ajout d'un enclos dans la combobox"); //Ligne de débugage
             }
         }
         
-        if( listeStringEnclosParBatiment.size()==0 ){
+        if( this.enclosComboBox.getItems().isEmpty() ){ //On grise la combobox lorqu'il n'y a pas d'enclos dans le batiment
             enclosComboBox.setDisable(true); //Désactivation de la combo box 
         }
         else{
             enclosComboBox.setDisable(false);
-            enclosComboBox.setValue(listeStringEnclosParBatiment.get(0)); //Mise par défaut à la premiére valeur de la combo box
         }
         
         

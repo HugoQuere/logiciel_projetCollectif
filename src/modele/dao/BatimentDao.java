@@ -6,6 +6,7 @@
 package modele.dao;
 
 import java.util.List;
+import javafx.collections.ObservableList;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
