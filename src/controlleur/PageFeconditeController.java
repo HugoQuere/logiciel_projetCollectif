@@ -149,7 +149,7 @@ public class PageFeconditeController implements Initializable {
         
         listePalmipedesTableau.clear(); //Vidage du tableau
         
-        List<Palmipede> listePalmipede= this.monPalmipedeDAO.findByDateSortie(DatePickerFin.getValue());
+        List<Palmipede> listePalmipede= this.monPalmipedeDAO.findByDate(DatePickerDebut.getValue(), DatePickerFin.getValue());
         for(Palmipede unPalmipede : listePalmipede){
             
             int numRFID = unPalmipede.getNumRFID();

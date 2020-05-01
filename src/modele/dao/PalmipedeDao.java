@@ -25,7 +25,7 @@ public interface PalmipedeDao {
 
     List<Palmipede> findAll();
     
-    List<Palmipede> findByDateSortie(LocalDate dateSortieMax);
+    List<Palmipede> findByDate(LocalDate dateEntreeMax, LocalDate dateSortieMax);
     
     List<Palmipede> findByEnclos(Enclos unEnclos);
 

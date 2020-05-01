@@ -134,24 +134,31 @@ public class PalmipedeDbDao extends DbDao implements PalmipedeDao{
         
     }
     
-    
+    /**
+     * Fonction qui permet de récupérer les palmipédes qui sont arrivés avant la date d'entrée et qui ne sont pas encore sortie à la date de sortie transmise
+     * @param dateEntreeMax, date d'entrée avant laquelle doivent être arrivés pour être affichés
+     * @param dateSortieMax, date de sortie, les palmipédes doivent être sortie aprés pour être dans la liste
+     * @return 
+     */
     @Override
-    public List<Palmipede> findByDateSortie(LocalDate dateSortieMax){
+    public List<Palmipede> findByDate(LocalDate dateEntreeMax, LocalDate dateSortieMax){
         
         List<Palmipede> lesPalmipedes = new ArrayList<>();
         try {
             String sql = "select idPalmipede, rfid, dateEntree, dateSortie, idEnclos "
                         + "from PALMIPEDE "
-                        + "where idEnclos=? and (dateSortie IS NULL or dateSortie>?)";
+                        + "where idEnclos=? and (dateEntree < ?) and (dateSortie IS NULL or dateSortie>?)";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
+            Date dateEntreeMaxConvertie = Date.valueOf(dateEntreeMax);
             Date dateSortieMaxConvertie = Date.valueOf(dateSortieMax);
             List<Enclos> lesEnclos = this.enclosDao.findAll();
             for (Enclos unEnclos : lesEnclos) {
                 pstmt.clearParameters();
                 pstmt.setInt(1, unEnclos.getIdEnclos());
-                pstmt.setDate(2, dateSortieMaxConvertie);
+                pstmt.setDate(2, dateEntreeMaxConvertie);
+                pstmt.setDate(3, dateSortieMaxConvertie);
                 
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {

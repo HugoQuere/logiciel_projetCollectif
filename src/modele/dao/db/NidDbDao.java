@@ -14,42 +14,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.BatimentDao;
-import modele.dao.CageDao;
 import modele.dao.EnclosDao;
 import modele.dao.PonteDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
-import modele.entite.Cage;
+import modele.entite.Nid;
 import modele.entite.Enclos;
+import modele.dao.NidDao;
 
 /**
  *
  * @author hugo
  */
-public class CageDbDao extends DbDao implements CageDao{
+public class NidDbDao extends DbDao implements NidDao{
     
     private final EnclosDao enclosDao;
     
-    public CageDbDao(Properties props) {
+    public NidDbDao(Properties props) {
         super(props);
         this.enclosDao = DbFactoryDao.getInstance().getEnclosDao();
     }
 
     @Override
-    public Cage find(int idCage) {
+    public Nid find(int idNid) {
         
-        Cage laCage = null;
+        Nid leNid = null;
         try {
-            String sql = "select idCage, numCage, idEnclos, zone from Cage where idCage=" + idCage;
+            String sql = "select idNid, numNid, idEnclos, zone from NID where idNid=" + idNid;
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                int numCage = rs.getInt("numCage");
+                int numNid = rs.getInt("numNid");
                 Enclos lEnclos = this.enclosDao.find(rs.getInt("idEnclos"));
                 int zone = rs.getInt("zone");
-                laCage = new Cage(idCage, numCage, lEnclos, zone);
+                leNid = new Nid(idNid, numNid, lEnclos, zone);
             }
             rs.close();
             stmt.close();
@@ -57,28 +57,28 @@ public class CageDbDao extends DbDao implements CageDao{
         } catch (SQLException ex) {
             System.out.println("Erreur SQL " + ex.getMessage());
         }
-        return laCage;
+        return leNid;
         
     }
 
     @Override
-    public void insert(Cage uneCage) throws ErreurSauvegardeException {
+    public void insert(Nid unNid) throws ErreurSauvegardeException {
         
         Connection con = null;
         try {
-            String sql = "insert into CAGE (idEnclos) values (?)";
+            String sql = "insert into NID (idEnclos) values (?)";
             con = this.getConnection();
             con.setAutoCommit(false);
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, uneCage.getEnclos().getIdEnclos());
+            pstmt.setInt(1, unNid.getEnclos().getIdEnclos());
             int result = pstmt.executeUpdate();
             if (result == 1) {
                 // ne pas oublier de récupérer l'id !
-                String sqlId = "select max(idCage) as maxId from CAGE";
+                String sqlId = "select max(idNid) as maxId from NID";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(sqlId);
                 if (rs.next()) {
-                    uneCage.setNumCage(rs.getInt("maxId"));
+                    unNid.setNumNid(rs.getInt("maxId"));
                 }
                 rs.close();
                 stmt.close();
@@ -91,17 +91,17 @@ public class CageDbDao extends DbDao implements CageDao{
                 con.rollback();
             } catch (SQLException ex1) {
             }
-            throw new ErreurSauvegardeException("La cage n'a pas pu être enregistré");
+            throw new ErreurSauvegardeException("Le nid n'a pas pu être enregistré");
         }
         
     }
 
     @Override
-    public List<Cage> findAll() {
+    public List<Nid> findAll() {
         
-        List<Cage> lesCages = new ArrayList<>();
+        List<Nid> lesNids = new ArrayList<>();
         try {
-            String sql = "select idCage, numCage, idEnclos, zone from CAGE where idEnclos=?";
+            String sql = "select idNid, numNid, idEnclos, zone from NID where idEnclos=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -111,11 +111,11 @@ public class CageDbDao extends DbDao implements CageDao{
                 pstmt.setInt(1, unEnclos.getIdEnclos());
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    int idCage = rs.getInt("idCage");
-                    int numCage = rs.getInt("numCage");
+                    int idNid = rs.getInt("idNid");
+                    int numNid = rs.getInt("numNid");
                     int zone = rs.getInt("zone");
-                    Cage uneCage = new Cage(idCage, numCage,unEnclos, zone);
-                    lesCages.add(uneCage);
+                    Nid unNid = new Nid(idNid, numNid,unEnclos, zone);
+                    lesNids.add(unNid);
                 }
                 rs.close();
             }
@@ -124,16 +124,16 @@ public class CageDbDao extends DbDao implements CageDao{
         } catch (SQLException ex) {
             System.out.println("Erreur SQL " + ex.getMessage());
         }
-        return lesCages;
+        return lesNids;
         
     }
     
     @Override
-    public List<Cage> findByEnclos(Enclos unEnclos) {
+    public List<Nid> findByEnclos(Enclos unEnclos) {
         
-        List<Cage> lesCages = new ArrayList<>();
+        List<Nid> lesNids = new ArrayList<>();
         try {
-            String sql = "select idCage, numCage, idEnclos, zone from CAGE where idEnclos=?";
+            String sql = "select idNid, numNid, idEnclos, zone from NID where idEnclos=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -142,11 +142,11 @@ public class CageDbDao extends DbDao implements CageDao{
             pstmt.setInt(1, unEnclos.getIdEnclos());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                int idCage = rs.getInt("idCage");
-                int numCage = rs.getInt("numCage");
+                int idNid = rs.getInt("idNid");
+                int numNid = rs.getInt("numNid");
                 int zone = rs.getInt("zone");
-                Cage uneCage = new Cage(idCage, numCage, unEnclos, zone);
-                lesCages.add(uneCage);
+                Nid unNid = new Nid(idNid, numNid, unEnclos, zone);
+                lesNids.add(unNid);
             }
             rs.close();
                 
@@ -156,55 +156,55 @@ public class CageDbDao extends DbDao implements CageDao{
         } catch (SQLException ex) {
             System.out.println("Erreur SQL " + ex.getMessage());
         }
-        return lesCages;
+        return lesNids;
         
     }
 
     @Override
-    public void update(Cage uneCage) throws ErreurMiseAjourException {
+    public void update(Nid unNid) throws ErreurMiseAjourException {
         
         try {
-            String sql = "update CAGE set idEnclos=? where idCage=?";
+            String sql = "update NID set idEnclos=? where idNid=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, uneCage.getEnclos().getIdEnclos());
-            pstmt.setInt(2, uneCage.getIdCage());
+            pstmt.setInt(1, unNid.getEnclos().getIdEnclos());
+            pstmt.setInt(2, unNid.getIdNid());
             int result = pstmt.executeUpdate();
             if (result == 0) {
                 pstmt.close();
                 con.close();
-                throw new ErreurMiseAjourException("La cage n'a pas pu être mis à jour");
+                throw new ErreurMiseAjourException("Le nid n'a pas pu être mis à jour");
             }
             pstmt.close();
             con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new ErreurMiseAjourException("La cage n'a pas pu être mis à jour");
+            throw new ErreurMiseAjourException("Le nid n'a pas pu être mis à jour");
         }
         
     }
 
     @Override
-    public void delete(Cage uneCage) throws ErreurSuppressionException {
+    public void delete(Nid unNid) throws ErreurSuppressionException {
         
         PonteDao daoPontes = DbFactoryDao.getInstance().getPonteDao();
         try {
-            //Attention si on supprime une cage, il faut aussi supprimer les pontes qu'il y a eu dedans
-            daoPontes.deleteByCage(uneCage);
-            String sql = "delete from CAGE where idCage=" + uneCage.getIdCage();
+            //Attention si on supprime un nid, il faut aussi supprimer les pontes qu'il y a eu dedans
+            daoPontes.deleteByNid(unNid);
+            String sql = "delete from NID where idNid=" + unNid.getIdNid();
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
             int result = stmt.executeUpdate(sql);
             if (result == 0) {
                 stmt.close();
                 con.close();
-                throw new ErreurSuppressionException("La cage " + uneCage.getIdCage() + " n'a pas pu être supprimé");
+                throw new ErreurSuppressionException("Le nid " + unNid.getIdNid() + " n'a pas pu être supprimé");
             }
             stmt.close();
             con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new ErreurSuppressionException("La cage " + uneCage.getIdCage() + " n'a pas pu être supprimé");
+            throw new ErreurSuppressionException("Le nid " + unNid.getIdNid() + " n'a pas pu être supprimé");
         }
         
     }
@@ -215,28 +215,28 @@ public class CageDbDao extends DbDao implements CageDao{
         
         PonteDao daoPontes = DbFactoryDao.getInstance().getPonteDao();
         try {
-            //Attention si on supprime une cage, il faut aussi supprimer les pontes qu'il y a eu dedans
-            List<Cage> listeCages = this.findByEnclos(unEnclos);
-            if(listeCages.size()>0){
-                for(Cage uneCage : listeCages){
-                    daoPontes.deleteByCage(uneCage);
+            //Attention si on supprime un nid, il faut aussi supprimer les pontes qu'il y a eu dedans
+            List<Nid> listeNids = this.findByEnclos(unEnclos);
+            if(listeNids.size()>0){
+                for(Nid unNid : listeNids){
+                    daoPontes.deleteByNid(unNid);
                 }
 
-                String sql = "delete from CAGE where idEnclos=" + unEnclos.getIdEnclos();
+                String sql = "delete from NID where idEnclos=" + unEnclos.getIdEnclos();
                 Connection con = this.getConnection();
                 Statement stmt = con.createStatement();
                 int result = stmt.executeUpdate(sql);
                 if (result == 0) {
                     stmt.close();
                     con.close();
-                    throw new ErreurSuppressionException("Les cages de l'enclos" + unEnclos + " n'ont pas pu être supprimés");
+                    throw new ErreurSuppressionException("Les nids de l'enclos" + unEnclos + " n'ont pas pu être supprimés");
                 }
                 stmt.close();
                 con.close();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new ErreurSuppressionException("Les cages de l'enclos" + unEnclos + " n'ont pas pu être supprimés");
+            throw new ErreurSuppressionException("Les nids de l'enclos" + unEnclos + " n'ont pas pu être supprimés");
         }
         
     }

@@ -244,9 +244,9 @@ public class TestControlleur {
         }
         
         
-        
-        LocalDate date = LocalDate.now();
-        List<Palmipede> listePalmipedes = this.monPalmipedeDAO.findByDateSortie(date);
+        LocalDate dateDebut = LocalDate.now();
+        LocalDate dateFin = LocalDate.now();
+        List<Palmipede> listePalmipedes = this.monPalmipedeDAO.findByDate(dateDebut, dateFin);
         
         for(int i=0; i<listePalmipedes.size(); i++){
             Palmipede unPalmipede = listePalmipedes.get(i);
