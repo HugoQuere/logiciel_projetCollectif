@@ -16,15 +16,15 @@ public class Ponte {
     
     private int idPonte;
     private Palmipede palmipede;
-    private Cage cage;
+    private Nid nid;
     private Date datePonte;
     private boolean presenceOeuf;
     private boolean oeufCollecte;
 
-    public Ponte(int idPonte, Palmipede palmipede, Cage cage, Date datePonte, boolean presenceOeuf, boolean oeufCollecte) {
+    public Ponte(int idPonte, Palmipede palmipede, Nid nid, Date datePonte, boolean presenceOeuf, boolean oeufCollecte) {
         this.idPonte = idPonte;
         this.palmipede = palmipede;
-        this.cage = cage;
+        this.nid = nid;
         this.datePonte = datePonte;
         this.presenceOeuf = presenceOeuf;
         this.oeufCollecte = oeufCollecte;
@@ -46,12 +46,12 @@ public class Ponte {
         this.palmipede = palmipede;
     }
 
-    public Cage getCage() {
-        return cage;
+    public Nid getNid() {
+        return nid;
     }
 
-    public void setCage(Cage cage) {
-        this.cage = cage;
+    public void setNid(Nid nid) {
+        this.nid = nid;
     }
 
     public Date getDatePonte() {
@@ -78,7 +78,6 @@ public class Ponte {
         this.oeufCollecte = oeufCollecte;
     }
 
-    
     
     
 }

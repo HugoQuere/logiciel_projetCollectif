@@ -8,7 +8,7 @@
  * Created: 22 mars 2020
  */
 
-INSERT INTO PONTE (idPalmipede, idCage, datePonte, precenseOeuf, oeufCollecte)
+INSERT INTO PONTE (idPalmipede, idNid, datePonte, precenseOeuf, oeufCollecte)
     VALUES
             (2, 1, '2020-03-22', TRUE, FALSE),
             (2, 1, '2020-03-22', FALSE, FALSE),

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.BatimentDao;
-import modele.dao.CageDao;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
 import modele.dao.exception.ErreurMiseAjourException;
@@ -22,6 +21,7 @@ import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
 import modele.entite.Batiment;
 import modele.entite.Enclos;
+import modele.dao.NidDao;
 
 /**
  *
@@ -198,11 +198,11 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
     public void delete(Enclos unEnclos) throws ErreurSuppressionException {
         
         PalmipedeDao daoPalmipede = DbFactoryDao.getInstance().getPalmipedeDao();
-        CageDao daoCage = DbFactoryDao.getInstance().getCageDao();
+        NidDao daoNid = DbFactoryDao.getInstance().getNidDao();
         try {
-            // attention, si on supprime un enclos ,il faut supprimer ces palmipédes et ces cages!!!
+            // attention, si on supprime un enclos ,il faut supprimer ces palmipédes et ces nids!!!
             daoPalmipede.deleteByEnclos(unEnclos);
-            daoCage.deleteByEnclos(unEnclos);
+            daoNid.deleteByEnclos(unEnclos);
             String sql = "delete from ENCLOS where idEnclos=" + unEnclos.getIdEnclos();
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
@@ -226,14 +226,14 @@ public class EnclosDbDao extends DbDao implements EnclosDao{
         
         
         PalmipedeDao daoPalmipede = DbFactoryDao.getInstance().getPalmipedeDao();
-        CageDao daoCage = DbFactoryDao.getInstance().getCageDao();
+        NidDao daoNid = DbFactoryDao.getInstance().getNidDao();
         try {
-            // attention, si on supprime un enclos ,il faut supprimer ces palmipédes et ces cages!!!
+            // attention, si on supprime un enclos ,il faut supprimer ces palmipédes et ces nids!!!
             List<Enclos> listeEnclos = this.findByBatiment(unBatiment);
             if(listeEnclos.size()>0){
                 for(Enclos unEnclos : listeEnclos){
                     daoPalmipede.deleteByEnclos(unEnclos);
-                    daoCage.deleteByEnclos(unEnclos);
+                    daoNid.deleteByEnclos(unEnclos);
                 }
 
                 String sql = "delete from ENCLOS where idBatiment=" + unBatiment.getIdBatiment();

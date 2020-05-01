@@ -8,7 +8,7 @@
  * Created: 22 mars 2020
  */
 
-INSERT INTO CAGE (numCage, idEnclos, zone)
+INSERT INTO NID (numNid, idEnclos, zone)
     VALUES
             /* Enclos A */
             (1, 1, 1),

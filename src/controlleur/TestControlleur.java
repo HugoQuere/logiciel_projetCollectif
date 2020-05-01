@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modele.dao.BatimentDao;
-import modele.dao.CageDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
@@ -21,10 +20,11 @@ import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
 import modele.entite.Batiment;
-import modele.entite.Cage;
+import modele.entite.Nid;
 import modele.entite.Enclos;
 import modele.entite.Palmipede;
 import modele.entite.Ponte;
+import modele.dao.NidDao;
 
 /**
  *
@@ -32,7 +32,7 @@ import modele.entite.Ponte;
 public class TestControlleur {
     
     private final BatimentDao monBatimentDAO;
-    private final CageDao maCageDAO;
+    private final NidDao monNidDAO;
     private final EnclosDao monEnclosDAO;
     private final PalmipedeDao monPalmipedeDAO;
     private final PonteDao maPonteDAO;
@@ -42,7 +42,7 @@ public class TestControlleur {
         DaoFactory myFactory = DbFactoryDao.getInstance();
         
         this.monBatimentDAO = myFactory.getBatimentDao();
-        this.maCageDAO = myFactory.getCageDao();
+        this.monNidDAO = myFactory.getNidDao();
         this.monEnclosDAO = myFactory.getEnclosDao();
         this.monPalmipedeDAO = myFactory.getPalmipedeDao();
         this.maPonteDAO = myFactory.getPonteDao();
@@ -60,10 +60,10 @@ public class TestControlleur {
     private void testFind(){
         
         System.out.println("Nom Batiment : "+ this.monBatimentDAO.find(2).getNomBatiment() );
-        System.out.println("Id Cage : "+this.maCageDAO.find(1).getIdCage()+" , dans l'enclos: "+this.maCageDAO.find(1).getEnclos().getNomEnclos());
+        System.out.println("Id nid : "+this.monNidDAO.find(1).getIdNid()+" , dans l'enclos: "+this.monNidDAO.find(1).getEnclos().getNomEnclos());
         System.out.println("Nom Enclos : "+this.monEnclosDAO.find(3).getNomEnclos()+" , dans le batiment: "+this.monEnclosDAO.find(3).getBatiment().getNomBatiment());
         System.out.println("RFID palmipede : "+this.monPalmipedeDAO.find(2).getNumRFID()+" , entree le: "+ this.monPalmipedeDAO.find(2).getDateEntree().toString() + ", vit dans l'enclos: "+ this.monPalmipedeDAO.find(2).getEnclos().getNomEnclos());
-        System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la cage: "+ this.maPonteDAO.find(4).getCage().getIdCage());
+        System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la nid: "+ this.maPonteDAO.find(4).getNid().getIdNid());
         
         
     }
@@ -78,8 +78,8 @@ public class TestControlleur {
             Enclos unEnclos = new Enclos(0, "EnclosTestInsert", unBatiment);
             this.monEnclosDAO.insert(unEnclos);
             
-            Cage uneCage = new Cage(0, 1, unEnclos, 1);
-            this.maCageDAO.insert(uneCage);
+            Nid unNid = new Nid(0, 1, unEnclos, 1);
+            this.monNidDAO.insert(unNid);
             
             
             long millis=System.currentTimeMillis();  
@@ -89,7 +89,7 @@ public class TestControlleur {
             this.monPalmipedeDAO.insert(unPalmipede);
             
             Date datePonte =new java.sql.Date(millis); 
-            Ponte unePonte = new Ponte(0, unPalmipede, uneCage, datePonte, true, true);
+            Ponte unePonte = new Ponte(0, unPalmipede, unNid, datePonte, true, true);
             this.maPonteDAO.insert(unePonte);
             
         } catch (ErreurSauvegardeException ex) {
@@ -122,13 +122,13 @@ public class TestControlleur {
         
         
         
-        List<Cage> mesCages = this.maCageDAO.findAll();
-        for(int i=0; i<mesCages.size(); i++){
-            Cage uneCage = mesCages.get(i);
-            System.out.println("Id Cage : "+uneCage.getIdCage()+" , dans l'enclos: "+uneCage.getEnclos().getNomEnclos());
+        List<Nid> mesNids = this.monNidDAO.findAll();
+        for(int i=0; i<mesNids.size(); i++){
+            Nid unNid = mesNids.get(i);
+            System.out.println("Id nids : "+unNid.getIdNid()+" , dans l'enclos: "+unNid.getEnclos().getNomEnclos());
         }
-        if(mesCages.size()==0){
-            System.out.println("Liste de cages vides\n");
+        if(mesNids.size()==0){
+            System.out.println("Liste de nids vides\n");
         }
         
         
@@ -138,16 +138,16 @@ public class TestControlleur {
             System.out.println("RFID palmipede : "+unPalmipede.getNumRFID()+" , entree le: "+ unPalmipede.getDateEntree().toString() + ", vit dans l'enclos: "+ unPalmipede.getEnclos().getNomEnclos());
         }
         if(mesPalmipedes.size()==0){
-            System.out.println("Liste de cages vides\n");
+            System.out.println("Liste de nids vides\n");
         }
         
         List<Ponte> mesPontes = this.maPonteDAO.findAll();
         for(int i=0; i<mesPontes.size(); i++){
             Ponte unePonte = mesPontes.get(i);
-            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans la cage: "+ unePonte.getCage().getIdCage());
+            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans le nid: "+ unePonte.getNid().getIdNid());
         }
         if(mesPontes.size()==0){
-            System.out.println("Liste de cages vides\n");
+            System.out.println("Liste de nids vides\n");
         }
     }
     
@@ -162,9 +162,9 @@ public class TestControlleur {
             
             Enclos unEnclosUpdate = new Enclos(0, "EnclosTestInsert", unBatiment);
             this.monEnclosDAO.insert(unEnclosUpdate);
-            Cage uneCage = this.maCageDAO.find(1);
-            uneCage.setEnclos(unEnclosUpdate);
-            this.maCageDAO.update(uneCage);
+            Nid unNid = this.monNidDAO.find(1);
+            unNid.setEnclos(unEnclosUpdate);
+            this.monNidDAO.update(unNid);
             
             Enclos unEnclos = this.monEnclosDAO.find(3);
             unEnclos.setNomEnclos("TestUpdate");
@@ -175,7 +175,7 @@ public class TestControlleur {
             this.monPalmipedeDAO.update(unPalmipede);
             
             Ponte unePonte = this.maPonteDAO.find(4);
-            unePonte.setCage(uneCage);
+            unePonte.setNid(unNid);
             this.maPonteDAO.update(unePonte);
             
         } catch (ErreurMiseAjourException ex) {
@@ -225,7 +225,7 @@ public class TestControlleur {
         
         for(int i=0; i<listePontes.size(); i++){
             Ponte unePonte = listePontes.get(i);
-            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans la cage: "+ unePonte.getCage().getIdCage());
+            System.out.println("Date ponte : "+unePonte.getDatePonte().toString()+" , pondu par: "+ unePonte.getPalmipede().getIdPalmipede() + ", dans le nid: "+ unePonte.getNid().getIdNid());
         }
         if(listePontes.size()==0){
             System.out.println("Liste de pontes vides\n");
@@ -240,7 +240,7 @@ public class TestControlleur {
             System.out.println("RFID palmipede : "+unPalmipede.getNumRFID()+" , entree le: "+ unPalmipede.getDateEntree().toString() + ", vit dans l'enclos: "+ unPalmipede.getEnclos().getNomEnclos());
         }
         if(mesPalmipedes.size()==0){
-            System.out.println("Liste de cages vides\n");
+            System.out.println("Liste de nids vides\n");
         }
         
         

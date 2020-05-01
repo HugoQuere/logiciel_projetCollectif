@@ -29,18 +29,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import modele.dao.BatimentDao;
-import modele.dao.CageDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
 import modele.dao.PonteDao;
 import modele.dao.db.DbFactoryDao;
 import modele.entite.Batiment;
-import modele.entite.Cage;
+import modele.entite.Nid;
 import modele.entite.Enclos;
 import modele.entite.Ponte;
 import modele.entiteAffichage.VisualisationTableau1;
 import modele.entiteAffichage.VisualisationTableau2;
+import modele.dao.NidDao;
 
 /**
  * FXML Controller class
@@ -62,32 +62,32 @@ public class PageVisualisationController implements Initializable {
     //Tableau 2
     //Zone 1
     @FXML private TableView<VisualisationTableau2> tableau2_zone1_Visualisation;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone1_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone1_Collumn_Nids;
     @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone1_Collumn_nbOeufs;
     private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone1;
     //Zone 2
     @FXML private TableView<VisualisationTableau2> tableau2_zone2_Visualisation;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone2_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone2_Collumn_Nids;
     @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone2_Collumn_nbOeufs;
     private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone2;
     //Zone 3
     @FXML private TableView<VisualisationTableau2> tableau2_zone3_Visualisation;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone3_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone3_Collumn_Nids;
     @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone3_Collumn_nbOeufs;
     private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone3;
     //Zone 4
     @FXML private TableView<VisualisationTableau2> tableau2_zone4_Visualisation;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone4_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone4_Collumn_Nids;
     @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone4_Collumn_nbOeufs;
     private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone4;
     //Zone 5
     @FXML private TableView<VisualisationTableau2> tableau2_zone5_Visualisation;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone5_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone5_Collumn_Nids;
     @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone5_Collumn_nbOeufs;
     private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone5;
     //Zone 6
     @FXML private TableView<VisualisationTableau2> tableau2_zone6_Visualisation;
-    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone6_Collumn_Cage;
+    @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone6_Collumn_Nids;
     @FXML private TableColumn<VisualisationTableau2, Integer> tableau2_zone6_Collumn_nbOeufs;
     private ObservableList<VisualisationTableau2> listeVisualisationTableau2_zone6;
     
@@ -102,7 +102,7 @@ public class PageVisualisationController implements Initializable {
     
     //Accés base de données
     private final BatimentDao monBatimentDAO;
-    private final CageDao maCageDAO;
+    private final NidDao monNidDAO;
     private final EnclosDao monEnclosDAO;
     private final PalmipedeDao monPalmipedeDAO;
     private final PonteDao maPonteDAO;
@@ -112,12 +112,8 @@ public class PageVisualisationController implements Initializable {
     //Nécessaire de faire une copie local de la base de données car le nombre d'accés à la base de données était trop conséquent
     private ObservableList<Batiment> listeBatiment;
     private ObservableList<Enclos> listeEnclos;
-    private ObservableList<Cage> listeCages;
+    private ObservableList<Nid> listeNids;
     private ObservableList<Ponte> listePontes;
-    
-    
-   
-    
     
     
     
@@ -127,7 +123,7 @@ public class PageVisualisationController implements Initializable {
         DaoFactory myFactory = DbFactoryDao.getInstance();
         
         this.monBatimentDAO = myFactory.getBatimentDao();
-        this.maCageDAO = myFactory.getCageDao();
+        this.monNidDAO = myFactory.getNidDao();
         this.monEnclosDAO = myFactory.getEnclosDao();
         this.monPalmipedeDAO = myFactory.getPalmipedeDao();
         this.maPonteDAO = myFactory.getPonteDao();
@@ -146,7 +142,7 @@ public class PageVisualisationController implements Initializable {
         //Copie locale de la base de données
         this.listeBatiment = FXCollections.observableArrayList();
         this.listeEnclos = FXCollections.observableArrayList();
-        this.listeCages = FXCollections.observableArrayList();
+        this.listeNids = FXCollections.observableArrayList();
         this.listePontes = FXCollections.observableArrayList();
     }
     
@@ -191,9 +187,9 @@ public class PageVisualisationController implements Initializable {
         List<Enclos> listeE = this.monEnclosDAO.findAll();
         this.listeEnclos.setAll(listeE);
         
-        //Remplissage liste cage
-        List<Cage> listeC = this.maCageDAO.findAll();
-        this.listeCages.setAll(listeC);
+        //Remplissage liste nids
+        List<Nid> listeC = this.monNidDAO.findAll();
+        this.listeNids.setAll(listeC);
         
         //Remplissage liste ponte
         List<Ponte> listeP = this.maPonteDAO.findByPeriod(LocalDate.now().minusDays(7), LocalDate.now());
@@ -241,27 +237,27 @@ public class PageVisualisationController implements Initializable {
         // ------------------------- Initialisation tableau 2 (tableau droite) ----------------------------------------------
         
         //Zone 1
-        tableau2_zone1_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone1_Collumn_Nids.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numNid"));
         tableau2_zone1_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
         tableau2_zone1_Visualisation.setItems(listeVisualisationTableau2_zone1);
         //Zone 2
-        tableau2_zone2_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone2_Collumn_Nids.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numNid"));
         tableau2_zone2_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
         tableau2_zone2_Visualisation.setItems(listeVisualisationTableau2_zone2);
         //Zone 3
-        tableau2_zone3_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone3_Collumn_Nids.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numNid"));
         tableau2_zone3_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
         tableau2_zone3_Visualisation.setItems(listeVisualisationTableau2_zone3);
         //Zone 4
-        tableau2_zone4_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone4_Collumn_Nids.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numNid"));
         tableau2_zone4_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
         tableau2_zone4_Visualisation.setItems(listeVisualisationTableau2_zone4);
         //Zone 5
-        tableau2_zone5_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone5_Collumn_Nids.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numNid"));
         tableau2_zone5_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
         tableau2_zone5_Visualisation.setItems(listeVisualisationTableau2_zone5);
         //Zone 6
-        tableau2_zone6_Collumn_Cage.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numCage"));
+        tableau2_zone6_Collumn_Nids.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("numNid"));
         tableau2_zone6_Collumn_nbOeufs.setCellValueFactory(new PropertyValueFactory< VisualisationTableau2, Integer>("nbOeufs"));
         tableau2_zone6_Visualisation.setItems(listeVisualisationTableau2_zone6);
         
@@ -339,23 +335,23 @@ public class PageVisualisationController implements Initializable {
             int nbOeufs = 0;
             
             
-            List<Cage> listeCagesDeLEnclos = new ArrayList<Cage>();
-            for(Cage uneCage : this.listeCages){
-                if(uneCage.getEnclos().getIdEnclos() == unEnclos.getIdEnclos()){
-                    listeCagesDeLEnclos.add(uneCage);
+            List<Nid> listeNidsDeLEnclos = new ArrayList<Nid>();
+            for(Nid unNid : this.listeNids){
+                if(unNid.getEnclos().getIdEnclos() == unEnclos.getIdEnclos()){
+                    listeNidsDeLEnclos.add(unNid);
                 }
             }
             
-            for(Cage uneCage : listeCagesDeLEnclos){
+            for(Nid unNid : listeNidsDeLEnclos){
                 
-                List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
+                List<Ponte> listesPontesDuNid = new ArrayList<Ponte>();
                 for(Ponte unePonte : this.listePontes){
-                    if(unePonte.getCage().getIdCage() == uneCage.getIdCage()){
-                        listesPontesDeLaCage.add(unePonte);
+                    if(unePonte.getNid().getIdNid() == unNid.getIdNid()){
+                        listesPontesDuNid.add(unePonte);
                     }
                 }        
                 
-                for(Ponte unePonte : listesPontesDeLaCage){
+                for(Ponte unePonte : listesPontesDuNid){
                     if(unePonte.isOeufCollecte()==false && unePonte.isPresenceOeuf()==true){ //Oeuf non collecté
                         nbOeufs++;
                     }
@@ -401,37 +397,37 @@ public class PageVisualisationController implements Initializable {
         
         
         
-        List<Cage> listeCagesDeLEnclos = new ArrayList<>();
+        List<Nid> listeNidsDeLEnclos = new ArrayList<>();
         if(enclosSelectionne!=null){ //Sécurité, ne doit jamais arrivé
-            for(Cage uneCage : this.listeCages){ //Remplissage de la liste de cages
-                if(uneCage.getEnclos().getIdEnclos() == enclosSelectionne.getIdEnclos()){
-                    listeCagesDeLEnclos.add(uneCage);
+            for(Nid unNid : this.listeNids){ //Remplissage de la liste de nids
+                if(unNid.getEnclos().getIdEnclos() == enclosSelectionne.getIdEnclos()){
+                    listeNidsDeLEnclos.add(unNid);
                 }
             }
         }
 
-        for(Cage uneCage : listeCagesDeLEnclos){
+        for(Nid unNid : listeNidsDeLEnclos){
 
-            int numCage = uneCage.getNumCage();
+            int numNid = unNid.getNumNid();
 
             int nbOeufsNonRecolte=0;
             
-            List<Ponte> listesPontesDeLaCage = new ArrayList<Ponte>();
+            List<Ponte> listesPontesDuNid = new ArrayList<Ponte>();
             for(Ponte unePonte : this.listePontes){
-                if(unePonte.getCage().getIdCage() == uneCage.getIdCage()){
-                    listesPontesDeLaCage.add(unePonte);
+                if(unePonte.getNid().getIdNid() == unNid.getIdNid()){
+                    listesPontesDuNid.add(unePonte);
                 }
             }        
 
-            for(Ponte unePonte : listesPontesDeLaCage){
+            for(Ponte unePonte : listesPontesDuNid){
                 if(unePonte.isOeufCollecte()==false && unePonte.isPresenceOeuf()==true){
                     nbOeufsNonRecolte++;
                 }
             }
             
-            VisualisationTableau2 unElement = new VisualisationTableau2(numCage, nbOeufsNonRecolte);
+            VisualisationTableau2 unElement = new VisualisationTableau2(numNid, nbOeufsNonRecolte);
             
-            int zone = uneCage.getZone();
+            int zone = unNid.getZone();
             switch(zone){
                 case 1:
                     listeVisualisationTableau2_zone1.add(unElement);
@@ -507,7 +503,7 @@ public class PageVisualisationController implements Initializable {
     }
 
     /**
-     * Fonction qui permet d'activer ou de désactiver les tableaux contenant les cages
+     * Fonction qui permet d'activer ou de désactiver les tableaux contenant les nids
      */
     public void whichTableau2Affiche(){
         //Zone 1

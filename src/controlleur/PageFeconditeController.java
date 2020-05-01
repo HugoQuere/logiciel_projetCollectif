@@ -28,7 +28,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import modele.dao.BatimentDao;
-import modele.dao.CageDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
@@ -39,6 +38,7 @@ import modele.entite.Enclos;
 import modele.entite.Palmipede;
 import modele.entiteAffichage.PalmipedeTableau;
 import modele.entite.Ponte;
+import modele.dao.NidDao;
 
 
 
@@ -67,7 +67,7 @@ public class PageFeconditeController implements Initializable {
     private ObservableList<PalmipedeTableau> listePalmipedesTableau;
     
     private final BatimentDao monBatimentDAO;
-    private final CageDao maCageDAO;
+    private final NidDao monNidDAO;
     private final EnclosDao monEnclosDAO;
     private final PalmipedeDao monPalmipedeDAO;
     private final PonteDao maPonteDAO;
@@ -78,7 +78,7 @@ public class PageFeconditeController implements Initializable {
         DaoFactory myFactory = DbFactoryDao.getInstance();
         
         this.monBatimentDAO = myFactory.getBatimentDao();
-        this.maCageDAO = myFactory.getCageDao();
+        this.monNidDAO = myFactory.getNidDao();
         this.monEnclosDAO = myFactory.getEnclosDao();
         this.monPalmipedeDAO = myFactory.getPalmipedeDao();
         this.maPonteDAO = myFactory.getPonteDao();

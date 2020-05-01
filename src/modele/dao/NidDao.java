@@ -9,26 +9,26 @@ import java.util.List;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
-import modele.entite.Cage;
+import modele.entite.Nid;
 import modele.entite.Enclos;
 
 /**
  *
  * @author hugo
  */
-public interface CageDao {
+public interface NidDao {
     
-    Cage find(int idCage);
+    Nid find(int idNid);
     
-    void insert(Cage uneCage) throws ErreurSauvegardeException;
+    void insert(Nid unNid) throws ErreurSauvegardeException;
 
-    List<Cage> findAll();
+    List<Nid> findAll();
     
-    List<Cage> findByEnclos(Enclos unEnclos);
+    List<Nid> findByEnclos(Enclos unEnclos);
 
-    void update(Cage uneCage) throws ErreurMiseAjourException;
+    void update(Nid unNid) throws ErreurMiseAjourException;
 
-    void delete(Cage uneCage) throws ErreurSuppressionException;
+    void delete(Nid unNid) throws ErreurSuppressionException;
     
     void deleteByEnclos(Enclos unEnclos) throws ErreurSuppressionException;
     

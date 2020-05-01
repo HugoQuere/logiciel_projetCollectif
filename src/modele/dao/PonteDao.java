@@ -10,7 +10,7 @@ import java.util.List;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
-import modele.entite.Cage;
+import modele.entite.Nid;
 import modele.entite.Palmipede;
 import modele.entite.Ponte;
 
@@ -32,7 +32,7 @@ public interface PonteDao {
     
     List<Ponte> findByPalmipedeAndPeriod(Palmipede unPalmipede, LocalDate dateDebut, LocalDate dateFin);
     
-    List<Ponte> findByCage(Cage uneCage);
+    List<Ponte> findByNid(Nid unNid);
 
     void update(Ponte unePonte) throws ErreurMiseAjourException;
 
@@ -40,6 +40,6 @@ public interface PonteDao {
     
     void deleteByPalmipede(Palmipede unPalmipede) throws ErreurSuppressionException;
     
-    void deleteByCage(Cage uneCage) throws ErreurSuppressionException;
+    void deleteByNid(Nid unNid) throws ErreurSuppressionException;
     
 }

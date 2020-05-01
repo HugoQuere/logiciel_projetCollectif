@@ -15,15 +15,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import modele.dao.CageDao;
 import modele.dao.PalmipedeDao;
 import modele.dao.PonteDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
-import modele.entite.Cage;
+import modele.entite.Nid;
 import modele.entite.Palmipede;
 import modele.entite.Ponte;
+import modele.dao.NidDao;
 
 /**
  *
@@ -31,12 +31,12 @@ import modele.entite.Ponte;
  */
 public class PonteDbDao extends DbDao implements PonteDao{
 
-    private final CageDao cageDao;
+    private final NidDao nidDao;
     private final PalmipedeDao palmipedeDao;
     
     public PonteDbDao(Properties props) {
         super(props);
-        this.cageDao = DbFactoryDao.getInstance().getCageDao();
+        this.nidDao = DbFactoryDao.getInstance().getNidDao();
         this.palmipedeDao = DbFactoryDao.getInstance().getPalmipedeDao();
     }
 
@@ -45,18 +45,18 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         Ponte laPonte = null;
         try {
-            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, oeufCollecte from PONTE where idPonte=" + idPonte;
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, oeufCollecte from PONTE where idPonte=" + idPonte;
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 Palmipede lePalmipede = this.palmipedeDao.find(rs.getInt("idPalmipede"));
-                Cage laCage = this.cageDao.find(rs.getInt("idCage"));
+                Nid leNid = this.nidDao.find(rs.getInt("idNid"));
                 Date datePonte = rs.getDate("datePonte");
                 boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                 boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                laPonte = new Ponte(idPonte, lePalmipede, laCage, datePonte, precenseOeuf, oeufCollecte);
+                laPonte = new Ponte(idPonte, lePalmipede, leNid, datePonte, precenseOeuf, oeufCollecte);
             }
             rs.close();
             stmt.close();
@@ -73,12 +73,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         Connection con = null;
         try {
-            String sql = "insert into PONTE (idPalmipede, idCage, datePonte, precenseOeuf, oeufCollecte) values (?,?,?,?,?)";
+            String sql = "insert into PONTE (idPalmipede, idNid, datePonte, precenseOeuf, oeufCollecte) values (?,?,?,?,?)";
             con = this.getConnection();
             con.setAutoCommit(false);
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, unePonte.getPalmipede().getIdPalmipede());
-            pstmt.setInt(2, unePonte.getCage().getIdCage());
+            pstmt.setInt(2, unePonte.getNid().getIdNid());
             pstmt.setDate(3, (java.sql.Date) unePonte.getDatePonte());
             pstmt.setBoolean(4, unePonte.isPresenceOeuf());
             pstmt.setBoolean(5, unePonte.isOeufCollecte());
@@ -112,17 +112,17 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idCage=?";
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            List<Cage> lesCages = this.cageDao.findAll();
+            List<Nid> lesNids = this.nidDao.findAll();
             List<Palmipede> lesPalmipedes = this.palmipedeDao.findAll();
             for (Palmipede unPalmipede : lesPalmipedes) {
-                for (Cage uneCage : lesCages){
+                for (Nid unNid : lesNids){
                     pstmt.clearParameters();
                     pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                    pstmt.setInt(2, uneCage.getIdCage());
+                    pstmt.setInt(2, unNid.getIdNid());
                     ResultSet rs = pstmt.executeQuery();
                     while (rs.next()) {
                         int idPonte = rs.getInt("idPonte");
@@ -130,7 +130,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
                         boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                         boolean oeufCollecte = rs.getBoolean("OeufCollecte");
                       
-                        Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                        Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
                         lesPontes.add(unePonte);
                     }
                     rs.close();
@@ -150,9 +150,9 @@ public class PonteDbDao extends DbDao implements PonteDao{
     public List<Ponte> findByPeriod(LocalDate dateDebut, LocalDate dateFin){
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte "
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte "
                         + "from PONTE "
-                        + "where idCage=? and datePonte>? and datePonte<?";
+                        + "where idNid=? and datePonte>=? and datePonte<=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -160,10 +160,10 @@ public class PonteDbDao extends DbDao implements PonteDao{
             Date dateDebutConvert = Date.valueOf(dateDebut);
             Date dateFinConvert = Date.valueOf(dateFin);
             
-            List<Cage> lesCages = this.cageDao.findAll();
-            for (Cage uneCage : lesCages){
+            List<Nid> lesNids = this.nidDao.findAll();
+            for (Nid unNid : lesNids){
                 pstmt.clearParameters();
-                pstmt.setInt(1, uneCage.getIdCage());
+                pstmt.setInt(1, unNid.getIdNid());
                 pstmt.setDate(2, dateDebutConvert);
                 pstmt.setDate(3, dateFinConvert);
                 
@@ -175,7 +175,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();
@@ -194,15 +194,15 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idCage=?";
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            List<Cage> lesCages = this.cageDao.findAll();
-            for (Cage uneCage : lesCages){
+            List<Nid> lesNids = this.nidDao.findAll();
+            for (Nid unNid : lesNids){
                 pstmt.clearParameters();
                 pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                pstmt.setInt(2, uneCage.getIdCage());
+                pstmt.setInt(2, unNid.getIdNid());
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int idPonte = rs.getInt("idPonte");
@@ -210,7 +210,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();
@@ -229,9 +229,9 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte "
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte "
                         + "from PONTE "
-                        + "where idPalmipede=? and idCage=? and datePonte>? and datePonte<?";
+                        + "where idPalmipede=? and idNid=? and datePonte>? and datePonte<?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -239,11 +239,11 @@ public class PonteDbDao extends DbDao implements PonteDao{
             Date dateDebutConvert = Date.valueOf(dateDebut);
             Date dateFinConvert = Date.valueOf(dateFin);
             
-            List<Cage> lesCages = this.cageDao.findAll();
-            for (Cage uneCage : lesCages){
+            List<Nid> lesNids = this.nidDao.findAll();
+            for (Nid unNid : lesNids){
                 pstmt.clearParameters();
                 pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                pstmt.setInt(2, uneCage.getIdCage());
+                pstmt.setInt(2, unNid.getIdNid());
                 pstmt.setDate(3, dateDebutConvert);
                 pstmt.setDate(4, dateFinConvert);
                 
@@ -254,7 +254,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();
@@ -268,11 +268,11 @@ public class PonteDbDao extends DbDao implements PonteDao{
     }
 
     @Override
-    public List<Ponte> findByCage(Cage uneCage){
+    public List<Ponte> findByNid(Nid unNid){
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idCage, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idCage=?";
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -280,7 +280,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
             for (Palmipede unPalmipede : lesPalmipedes) {
                 pstmt.clearParameters();
                 pstmt.setInt(1, unPalmipede.getIdPalmipede());
-                pstmt.setInt(2, uneCage.getIdCage());
+                pstmt.setInt(2, unNid.getIdNid());
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int idPonte = rs.getInt("idPonte");
@@ -288,7 +288,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, uneCage, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();
@@ -307,11 +307,11 @@ public class PonteDbDao extends DbDao implements PonteDao{
     public void update(Ponte unePonte) throws ErreurMiseAjourException {
         
         try {
-            String sql = "update PONTE set idPalmipede=?, idCage=?, datePonte=?, precenseOeuf=?, oeufCollecte=? where idPonte=?";
+            String sql = "update PONTE set idPalmipede=?, idNid=?, datePonte=?, precenseOeuf=?, oeufCollecte=? where idPonte=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, unePonte.getPalmipede().getIdPalmipede());
-            pstmt.setInt(2, unePonte.getCage().getIdCage());
+            pstmt.setInt(2, unePonte.getNid().getIdNid());
             pstmt.setDate(3, unePonte.getDatePonte());
             pstmt.setBoolean(4, unePonte.isPresenceOeuf());
             pstmt.setBoolean(5, unePonte.isOeufCollecte());
@@ -378,25 +378,25 @@ public class PonteDbDao extends DbDao implements PonteDao{
     }
 
     @Override
-    public void deleteByCage(Cage uneCage) throws ErreurSuppressionException {
+    public void deleteByNid(Nid unNid) throws ErreurSuppressionException {
         
-        List<Ponte> listePontes = this.findByCage(uneCage);
+        List<Ponte> listePontes = this.findByNid(unNid);
         if(listePontes.size()>0){
             try {
-                String sql = "delete from PONTE where idCage=" + uneCage.getIdCage();
+                String sql = "delete from PONTE where idNid=" + unNid.getIdNid();
                 Connection con = this.getConnection();
                 Statement stmt = con.createStatement();
                 int result = stmt.executeUpdate(sql);
                 if (result == 0) {
                     stmt.close();
                     con.close();
-                    throw new ErreurSuppressionException("Les pontes de la cage" + uneCage + " n'ont pas pu être supprimés");
+                    throw new ErreurSuppressionException("Les pontes du nid" + unNid + " n'ont pas pu être supprimés");
                 }
                 stmt.close();
                 con.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                throw new ErreurSuppressionException("Les pontes de la cage" + uneCage + " n'ont pas pu être supprimés");
+                throw new ErreurSuppressionException("Les pontes du nid" + unNid + " n'ont pas pu être supprimés");
             }
         }
     }

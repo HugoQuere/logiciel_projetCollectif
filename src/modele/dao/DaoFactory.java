@@ -13,7 +13,7 @@ public interface DaoFactory {
     
     public BatimentDao getBatimentDao();
     
-    public CageDao getCageDao();
+    public NidDao getNidDao();
     
     public EnclosDao getEnclosDao();
     

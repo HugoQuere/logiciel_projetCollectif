@@ -11,20 +11,20 @@ package modele.entiteAffichage;
  */
 public class VisualisationTableau2 {
     
-    private int numCage;
+    private int numNid;
     private int nbOeufs;
 
-    public VisualisationTableau2(int numCage, int nbOeufs) {
-        this.numCage = numCage;
+    public VisualisationTableau2(int numNid, int nbOeufs) {
+        this.numNid = numNid;
         this.nbOeufs = nbOeufs;
     }
 
-    public int getNumCage() {
-        return numCage;
+    public int getNumNid() {
+        return numNid;
     }
 
-    public void setNumCage(int numCage) {
-        this.numCage = numCage;
+    public void setNumNid(int numNid) {
+        this.numNid = numNid;
     }
 
     public int getNbOeufs() {
@@ -34,5 +34,7 @@ public class VisualisationTableau2 {
     public void setNbOeufs(int nbOeufs) {
         this.nbOeufs = nbOeufs;
     }
+
+    
     
 }

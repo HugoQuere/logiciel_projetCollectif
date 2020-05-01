@@ -9,34 +9,34 @@ package modele.entite;
  *
  * @author hugo
  */
-public class Cage {
+public class Nid {
     
-    private int idCage;
-    private int numCage;
+    private int idNid;
+    private int numNid;
     private Enclos enclos;
     private int zone;
 
-    public Cage(int idCage, int numCage, Enclos enclos, int zone) {
-        this.idCage = idCage;
-        this.numCage = numCage;
+    public Nid(int idNid, int numNid, Enclos enclos, int zone) {
+        this.idNid = idNid;
+        this.numNid = numNid;
         this.enclos = enclos;
         this.zone = zone;
     }
 
-    public int getIdCage() {
-        return idCage;
+    public int getIdNid() {
+        return idNid;
     }
 
-    public void setIdCage(int idCage) {
-        this.idCage = idCage;
+    public void setIdNid(int idNid) {
+        this.idNid = idNid;
     }
 
-    public int getNumCage() {
-        return numCage;
+    public int getNumNid() {
+        return numNid;
     }
 
-    public void setNumCage(int numCage) {
-        this.numCage = numCage;
+    public void setNumNid(int numNid) {
+        this.numNid = numNid;
     }
 
     public Enclos getEnclos() {
@@ -56,6 +56,5 @@ public class Cage {
     }
 
     
-   
     
 }

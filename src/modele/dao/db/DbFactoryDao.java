@@ -10,11 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import modele.dao.BatimentDao;
-import modele.dao.CageDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
 import modele.dao.PonteDao;
+import modele.dao.NidDao;
 
 /**
  *
@@ -64,8 +64,8 @@ public class DbFactoryDao implements DaoFactory{
     }
 
     @Override
-    public CageDao getCageDao() {
-        return new CageDbDao(props);
+    public NidDao getNidDao() {
+        return new NidDbDao(props);
     }
 
     @Override
