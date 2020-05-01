@@ -24,11 +24,15 @@ CREATE TABLE PONTE(
     idPalmipede int  NOT NULL,
     idNid      int  NOT NULL,
     datePonte   date NOT NULL,
+    heureDebutPonte time NOT NULL,
+    heureFinPonte   time NOT NULL,
     PrecenseOeuf boolean NOT NULL,
     OeufCollecte boolean NOT NULL,
 
     PRIMARY KEY(idPonte),
     FOREIGN KEY(idPalmipede) REFERENCES PALMIPEDE(idPalmipede),
-    FOREIGN KEY(idNid) REFERENCES NID(idNid)
+    FOREIGN KEY(idNid) REFERENCES NID(idNid),
+
+    CONSTRAINT CHK_Heure CHECK (heureDebutPonte<heureFinPonte)  /* on vérifie que la heure de début de ponte et bien inférieur à celle de fin de ponte */
 
 );

@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         Ponte laPonte = null;
         try {
-            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, oeufCollecte from PONTE where idPonte=" + idPonte;
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, oeufCollecte from PONTE where idPonte=" + idPonte;
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -53,10 +54,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
                 Palmipede lePalmipede = this.palmipedeDao.find(rs.getInt("idPalmipede"));
                 Nid leNid = this.nidDao.find(rs.getInt("idNid"));
                 Date datePonte = rs.getDate("datePonte");
+                Time heureDebutPonte = rs.getTime("heureDebutPonte");
+                Time heureFinPonte = rs.getTime("heureFinPonte");
                 boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                 boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                laPonte = new Ponte(idPonte, lePalmipede, leNid, datePonte, precenseOeuf, oeufCollecte);
+                laPonte = new Ponte(idPonte, lePalmipede, leNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, oeufCollecte);
             }
             rs.close();
             stmt.close();
@@ -112,7 +115,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -127,10 +130,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
                     while (rs.next()) {
                         int idPonte = rs.getInt("idPonte");
                         Date datePonte = rs.getDate("datePonte");
+                        Time heureDebutPonte = rs.getTime("heureDebutPonte");
+                        Time heureFinPonte = rs.getTime("heureFinPonte");
                         boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                         boolean oeufCollecte = rs.getBoolean("OeufCollecte");
                       
-                        Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
+                        Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, oeufCollecte);
                         lesPontes.add(unePonte);
                     }
                     rs.close();
@@ -150,7 +155,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
     public List<Ponte> findByPeriod(LocalDate dateDebut, LocalDate dateFin){
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte "
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, OeufCollecte "
                         + "from PONTE "
                         + "where idNid=? and datePonte>=? and datePonte<=?";
             Connection con = this.getConnection();
@@ -172,10 +177,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
                     int idPonte = rs.getInt("idPonte");
                     Palmipede unPalmipede = this.palmipedeDao.find(rs.getInt("idPalmipede"));
                     Date datePonte = rs.getDate("datePonte");
+                    Time heureDebutPonte = rs.getTime("heureDebutPonte");
+                    Time heureFinPonte = rs.getTime("heureFinPonte");
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();
@@ -194,7 +201,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -207,10 +214,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
                 while (rs.next()) {
                     int idPonte = rs.getInt("idPonte");
                     Date datePonte = rs.getDate("datePonte");
+                    Time heureDebutPonte = rs.getTime("heureDebutPonte");
+                    Time heureFinPonte = rs.getTime("heureFinPonte");
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();
@@ -229,7 +238,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte "
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, OeufCollecte "
                         + "from PONTE "
                         + "where idPalmipede=? and idNid=? and datePonte>? and datePonte<?";
             Connection con = this.getConnection();
@@ -251,10 +260,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
                 while (rs.next()) {
                     int idPonte = rs.getInt("idPonte");
                     Date datePonte = rs.getDate("datePonte");
+                    Time heureDebutPonte = rs.getTime("heureDebutPonte");
+                    Time heureFinPonte = rs.getTime("heureFinPonte");
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();
@@ -272,7 +283,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
         
         List<Ponte> lesPontes = new ArrayList<>();
         try {
-            String sql = "select idPonte, idPalmipede, idNid, datePonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
+            String sql = "select idPonte, idPalmipede, idNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, OeufCollecte from PONTE where idPalmipede=? and idNid=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
@@ -285,10 +296,12 @@ public class PonteDbDao extends DbDao implements PonteDao{
                 while (rs.next()) {
                     int idPonte = rs.getInt("idPonte");
                     Date datePonte = rs.getDate("datePonte");
+                    Time heureDebutPonte = rs.getTime("heureDebutPonte");
+                    Time heureFinPonte = rs.getTime("heureFinPonte");
                     boolean precenseOeuf = rs.getBoolean("precenseOeuf");
                     boolean oeufCollecte = rs.getBoolean("OeufCollecte");
 
-                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, precenseOeuf, oeufCollecte);
+                    Ponte unePonte = new Ponte(idPonte, unPalmipede, unNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, oeufCollecte);
                     lesPontes.add(unePonte);
                 }
                 rs.close();

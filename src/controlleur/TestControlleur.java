@@ -6,6 +6,7 @@
 package controlleur;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
@@ -88,8 +89,17 @@ public class TestControlleur {
             Palmipede unPalmipede = new Palmipede(0, 999, dateEntree, dateSortie, unEnclos);
             this.monPalmipedeDAO.insert(unPalmipede);
             
+            long now = System.currentTimeMillis();
+            Time dateDebutPonte = new Time(now);
+            try {
+                wait(5);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            now = System.currentTimeMillis();
+            Time dateFinPonte = new Time(now);
             Date datePonte =new java.sql.Date(millis); 
-            Ponte unePonte = new Ponte(0, unPalmipede, unNid, datePonte, true, true);
+            Ponte unePonte = new Ponte(0, unPalmipede, unNid, datePonte, dateDebutPonte, dateFinPonte, true, true);
             this.maPonteDAO.insert(unePonte);
             
         } catch (ErreurSauvegardeException ex) {

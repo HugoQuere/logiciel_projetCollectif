@@ -6,6 +6,7 @@
 package modele.entite;
 
 import java.sql.Date;
+import java.sql.Time;
 
 
 /**
@@ -18,14 +19,18 @@ public class Ponte {
     private Palmipede palmipede;
     private Nid nid;
     private Date datePonte;
+    private Time heureDebutPonte;
+    private Time heureFinPonte;
     private boolean presenceOeuf;
     private boolean oeufCollecte;
 
-    public Ponte(int idPonte, Palmipede palmipede, Nid nid, Date datePonte, boolean presenceOeuf, boolean oeufCollecte) {
+    public Ponte(int idPonte, Palmipede palmipede, Nid nid, Date datePonte, Time heureDebutPonte, Time heureFinPonte, boolean presenceOeuf, boolean oeufCollecte) {
         this.idPonte = idPonte;
         this.palmipede = palmipede;
         this.nid = nid;
         this.datePonte = datePonte;
+        this.heureDebutPonte = heureDebutPonte;
+        this.heureFinPonte = heureFinPonte;
         this.presenceOeuf = presenceOeuf;
         this.oeufCollecte = oeufCollecte;
     }
@@ -60,6 +65,22 @@ public class Ponte {
 
     public void setDatePonte(Date datePonte) {
         this.datePonte = datePonte;
+    }
+
+    public Time getHeureDebutPonte() {
+        return heureDebutPonte;
+    }
+
+    public void setHeureDebutPonte(Time heureDebutPonte) {
+        this.heureDebutPonte = heureDebutPonte;
+    }
+
+    public Time getHeureFinPonte() {
+        return heureFinPonte;
+    }
+
+    public void setHeureFinPonte(Time heureFinPonte) {
+        this.heureFinPonte = heureFinPonte;
     }
 
     public boolean isPresenceOeuf() {
