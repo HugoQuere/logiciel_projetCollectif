@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlleur.PageFeconditeController">
@@ -37,20 +36,14 @@
       </HBox>
       <TableView fx:id="tableauFecondite" layoutX="60.0" layoutY="178.0" prefHeight="572.0" prefWidth="1096.0">
         <columns>
-          <TableColumn fx:id="RFID_Collumn" prefWidth="156.0" text="RFID Palmipède" />
-            <TableColumn fx:id="Batiment_Collumn" prefWidth="144.0" text="Bâtiment" />
-            <TableColumn fx:id="Enclos_Collumn" prefWidth="150.0" text="Enclos" />
-            <TableColumn fx:id="NbPontes_Collumn" prefWidth="149.0" text="Pontes" />
-            <TableColumn fx:id="DateArrive_Collumn" prefWidth="165.0" text="Date arrivée" />
-            <TableColumn fx:id="DateSortie_Collumn" prefWidth="167.0" text="Date départ" />
+          <TableColumn fx:id="RFID_Collumn" prefWidth="200.0" text="RFID Palmipède" />
+            <TableColumn fx:id="Batiment_Collumn" prefWidth="173.0" text="Bâtiment" />
+            <TableColumn fx:id="Enclos_Collumn" prefWidth="173.0" text="Enclos" />
+            <TableColumn fx:id="NbPontes_Collumn" prefWidth="148.0" text="Pontes" />
+            <TableColumn fx:id="DateArrive_Collumn" prefWidth="200.0" text="Date arrivée" />
+            <TableColumn fx:id="DateSortie_Collumn" prefWidth="200.0" text="Date départ" />
         </columns>
       </TableView>
-      <VBox layoutX="922.0" layoutY="93.0" prefHeight="70.0" prefWidth="233.0" spacing="10.0">
-         <children>
-            <Button mnemonicParsing="false" prefWidth="150.0" text="Ajouter palmipède" />
-            <Button mnemonicParsing="false" prefWidth="150.0" text="Supprimer palmipiède" />
-         </children>
-      </VBox>
       <DatePicker fx:id="DatePickerDebut" layoutX="60.0" layoutY="115.0" onAction="#changementPeriodeDatePicker" promptText="Date début" />
       <DatePicker fx:id="DatePickerFin" layoutX="279.0" layoutY="116.0" onAction="#changementPeriodeDatePicker" promptText="Date fin" />
       <Button fx:id="refreshBouton" layoutX="503.0" layoutY="115.0" mnemonicParsing="false" onAction="#refreshButtonPushed" text="Refresh " />

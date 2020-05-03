@@ -74,10 +74,9 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
                               <Button mnemonicParsing="false" text="Rafraîchir affichage" />
-                              <Button mnemonicParsing="false" text="Box pleins" />
                            </children>
                         </HBox>
                      </children>
@@ -87,37 +86,37 @@
                      <children>
                         <TableView prefHeight="550.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
+                            <TableColumn prefWidth="75.0" text="Nid" />
                             <TableColumn prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
                         <TableView prefHeight="610.0" prefWidth="152.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
+                            <TableColumn prefWidth="75.0" text="Nid" />
                             <TableColumn prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
                         <TableView prefHeight="610.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
+                            <TableColumn prefWidth="75.0" text="Nid" />
                             <TableColumn prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
                         <TableView prefHeight="610.0" prefWidth="152.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
+                            <TableColumn prefWidth="75.0" text="Nid" />
                             <TableColumn prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
                         <TableView prefHeight="610.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
+                            <TableColumn prefWidth="75.0" text="Nid" />
                             <TableColumn prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
                         <TableView prefHeight="610.0" prefWidth="151.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Cage" />
+                            <TableColumn prefWidth="75.0" text="Nid" />
                             <TableColumn prefWidth="75.0" text="Oeufs" />
                           </columns>
                         </TableView>
