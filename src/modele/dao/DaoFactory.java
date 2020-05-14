@@ -21,4 +21,6 @@ public interface DaoFactory {
     
     public PonteDao getPonteDao();
     
+    public CategorieProblemeDao getCategorieProblemeDao();
+    
 }

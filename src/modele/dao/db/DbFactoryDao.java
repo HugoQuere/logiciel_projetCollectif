@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import modele.dao.BatimentDao;
+import modele.dao.CategorieProblemeDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
@@ -81,6 +82,11 @@ public class DbFactoryDao implements DaoFactory{
     @Override
     public PonteDao getPonteDao() {
         return new PonteDbDao(props);
+    }
+
+    @Override
+    public CategorieProblemeDao getCategorieProblemeDao() {
+        return new CategorieProblemeDbDao(props);
     }
     
 }

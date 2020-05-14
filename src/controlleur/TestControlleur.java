@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modele.dao.BatimentDao;
+import modele.dao.CategorieProblemeDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
@@ -26,6 +27,7 @@ import modele.entite.Enclos;
 import modele.entite.Palmipede;
 import modele.entite.Ponte;
 import modele.dao.NidDao;
+import modele.entite.CategorieProbleme;
 
 /**
  *
@@ -37,6 +39,7 @@ public class TestControlleur {
     private final EnclosDao monEnclosDAO;
     private final PalmipedeDao monPalmipedeDAO;
     private final PonteDao maPonteDAO;
+    private final CategorieProblemeDao monCategorieProblemeDao;
 
     public TestControlleur() {
         
@@ -47,15 +50,16 @@ public class TestControlleur {
         this.monEnclosDAO = myFactory.getEnclosDao();
         this.monPalmipedeDAO = myFactory.getPalmipedeDao();
         this.maPonteDAO = myFactory.getPonteDao();
+        this.monCategorieProblemeDao = myFactory.getCategorieProblemeDao();
         
         //testFind();
         //testInsert();
         //testFindAll();
         //testUpdate();
-        //testSuppression();
+        testSuppression();
         
         //pontesfindByPalmipedeAndPeriod();
-        testFindByPalmipedeAndPeriod();
+        //testFindByPalmipedeAndPeriod();
     }
     
     private void testFind(){
@@ -65,7 +69,7 @@ public class TestControlleur {
         System.out.println("Nom Enclos : "+this.monEnclosDAO.find(3).getNomEnclos()+" , dans le batiment: "+this.monEnclosDAO.find(3).getBatiment().getNomBatiment());
         System.out.println("RFID palmipede : "+this.monPalmipedeDAO.find(2).getNumRFID()+" , entree le: "+ this.monPalmipedeDAO.find(2).getDateEntree().toString() + ", vit dans l'enclos: "+ this.monPalmipedeDAO.find(2).getEnclos().getNomEnclos());
         System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la nid: "+ this.maPonteDAO.find(4).getNid().getIdNid());
-        
+        System.out.println("Type de probleme: "+this.monCategorieProblemeDao.find(3).getTypeProbleme());
         
     }
     
@@ -101,6 +105,9 @@ public class TestControlleur {
             Date datePonte =new java.sql.Date(millis); 
             Ponte unePonte = new Ponte(0, unPalmipede, unNid, datePonte, dateDebutPonte, dateFinPonte, true, true);
             this.maPonteDAO.insert(unePonte);
+            
+            CategorieProbleme uneCategorieProbleme = new CategorieProbleme(4, "test categorie");
+            this.monCategorieProblemeDao.insert(uneCategorieProbleme);
             
         } catch (ErreurSauvegardeException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
@@ -159,6 +166,15 @@ public class TestControlleur {
         if(mesPontes.size()==0){
             System.out.println("Liste de nids vides\n");
         }
+        
+        List<CategorieProbleme> mesCategoriesProbleme=this.monCategorieProblemeDao.findAll();
+        for(int i=0; i<mesCategoriesProbleme.size(); i++){
+            CategorieProbleme uneCategorie = mesCategoriesProbleme.get(i);
+            System.out.println("Type de probleme : "+uneCategorie.getTypeProbleme());
+        }
+        if(mesCategoriesProbleme.size()==0){
+            System.out.println("Liste de categorie probleme vide\n");
+        }
     }
     
     
@@ -187,6 +203,11 @@ public class TestControlleur {
             Ponte unePonte = this.maPonteDAO.find(4);
             unePonte.setNid(unNid);
             this.maPonteDAO.update(unePonte);
+            
+            CategorieProbleme uneCategorieProbleme = this.monCategorieProblemeDao.find(2);
+            uneCategorieProbleme.setTypeProbleme("TestUpdate");
+            this.monCategorieProblemeDao.update(uneCategorieProbleme);
+            
             
         } catch (ErreurMiseAjourException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
@@ -219,6 +240,12 @@ public class TestControlleur {
             }
         }*/
         
+        CategorieProbleme uneCategorie = new CategorieProbleme(4, "test categorie");
+        try {
+            this.monCategorieProblemeDao.delete(uneCategorie);
+        } catch (ErreurSuppressionException ex) {
+            Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void pontesfindByPalmipedeAndPeriod(){
