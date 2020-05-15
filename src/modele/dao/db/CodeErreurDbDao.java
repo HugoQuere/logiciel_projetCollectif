@@ -51,7 +51,7 @@ public class CodeErreurDbDao extends DbDao implements CodeErreurDao {
 
     @Override
     public void insert(CodeErreur unCodeErreur) throws ErreurSauvegardeException {
-        //Sécurité pour vérifier que le type de probleme n'existe pas déja dans la liste des batiments
+        //Sécurité pour vérifier que le code erreur n'existe pas déja dans la liste des code erreur
         List<CodeErreur> listeCodeErreur  = this.findAll();
         for(CodeErreur codeErreur : listeCodeErreur){
             if(codeErreur.getDescription().equals(unCodeErreur.getDescription())){
