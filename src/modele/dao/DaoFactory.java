@@ -23,4 +23,6 @@ public interface DaoFactory {
     
     public CategorieProblemeDao getCategorieProblemeDao();
     
+    public CodeErreurDao getCodeErreurDao();
+    
 }

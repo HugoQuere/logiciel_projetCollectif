@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Properties;
 import modele.dao.BatimentDao;
 import modele.dao.CategorieProblemeDao;
+import modele.dao.CodeErreurDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
@@ -88,5 +89,11 @@ public class DbFactoryDao implements DaoFactory{
     public CategorieProblemeDao getCategorieProblemeDao() {
         return new CategorieProblemeDbDao(props);
     }
+
+    @Override
+    public CodeErreurDao getCodeErreurDao() {
+        return new CodeErreurDbDao(props);
+    }
+    
     
 }

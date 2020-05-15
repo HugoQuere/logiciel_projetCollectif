@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import modele.dao.BatimentDao;
 import modele.dao.CategorieProblemeDao;
+import modele.dao.CodeErreurDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
@@ -28,6 +29,7 @@ import modele.entite.Palmipede;
 import modele.entite.Ponte;
 import modele.dao.NidDao;
 import modele.entite.CategorieProbleme;
+import modele.entite.CodeErreur;
 
 /**
  *
@@ -40,6 +42,7 @@ public class TestControlleur {
     private final PalmipedeDao monPalmipedeDAO;
     private final PonteDao maPonteDAO;
     private final CategorieProblemeDao monCategorieProblemeDao;
+    private final CodeErreurDao monCodeErreurDao;
 
     public TestControlleur() {
         
@@ -51,6 +54,7 @@ public class TestControlleur {
         this.monPalmipedeDAO = myFactory.getPalmipedeDao();
         this.maPonteDAO = myFactory.getPonteDao();
         this.monCategorieProblemeDao = myFactory.getCategorieProblemeDao();
+        this.monCodeErreurDao = myFactory.getCodeErreurDao();
         
         //testFind();
         //testInsert();
@@ -70,6 +74,7 @@ public class TestControlleur {
         System.out.println("RFID palmipede : "+this.monPalmipedeDAO.find(2).getNumRFID()+" , entree le: "+ this.monPalmipedeDAO.find(2).getDateEntree().toString() + ", vit dans l'enclos: "+ this.monPalmipedeDAO.find(2).getEnclos().getNomEnclos());
         System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la nid: "+ this.maPonteDAO.find(4).getNid().getIdNid());
         System.out.println("Type de probleme: "+this.monCategorieProblemeDao.find(3).getTypeProbleme());
+        System.out.println("Code erreur: "+this.monCodeErreurDao.find(2).getDescription());
         
     }
     
@@ -108,6 +113,9 @@ public class TestControlleur {
             
             CategorieProbleme uneCategorieProbleme = new CategorieProbleme(4, "test categorie");
             this.monCategorieProblemeDao.insert(uneCategorieProbleme);
+            
+            CodeErreur unCodeErreur = new CodeErreur(6, "test code erreur", 3);
+            this.monCodeErreurDao.insert(unCodeErreur);
             
         } catch (ErreurSauvegardeException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
@@ -175,6 +183,15 @@ public class TestControlleur {
         if(mesCategoriesProbleme.size()==0){
             System.out.println("Liste de categorie probleme vide\n");
         }
+        
+        List<CodeErreur> mesCodeErreur=this.monCodeErreurDao.findAll();
+        for(int i=0; i<mesCodeErreur.size(); i++){
+            CodeErreur unCodeErreur = mesCodeErreur.get(i);
+            System.out.println("Code erreur : "+unCodeErreur.getDescription());
+        }
+        if(mesCodeErreur.size()==0){
+            System.out.println("Liste de code erreur vide\n");
+        }
     }
     
     
@@ -208,6 +225,10 @@ public class TestControlleur {
             uneCategorieProbleme.setTypeProbleme("TestUpdate");
             this.monCategorieProblemeDao.update(uneCategorieProbleme);
             
+            CodeErreur unCodeErreur = this.monCodeErreurDao.find(6);
+            unCodeErreur.setDescription("TestUpdate");
+            this.monCodeErreurDao.update(unCodeErreur);
+            
             
         } catch (ErreurMiseAjourException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
@@ -221,14 +242,14 @@ public class TestControlleur {
     private void testSuppression(){
         //Devrait théoriquement tout supprimé de toutes les tables
         
-        List<Batiment> listeBatiment = this.monBatimentDAO.findAll();
+        /*List<Batiment> listeBatiment = this.monBatimentDAO.findAll();
         for(Batiment unBatiment : listeBatiment){
             try {
                 this.monBatimentDAO.delete(unBatiment);
             } catch (ErreurSuppressionException ex) {
                 Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
 
         /*
         List<Palmipede> listePalmipede = this.monPalmipedeDAO.findAll();
@@ -240,9 +261,16 @@ public class TestControlleur {
             }
         }*/
         
-        CategorieProbleme uneCategorie = new CategorieProbleme(4, "test categorie");
+        /*CategorieProbleme uneCategorie = new CategorieProbleme(4, "test categorie");
         try {
             this.monCategorieProblemeDao.delete(uneCategorie);
+        } catch (ErreurSuppressionException ex) {
+            Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+        CodeErreur unCodeErreur = new CodeErreur(6, "TestUpdate",3);
+        try {
+            this.monCodeErreurDao.delete(unCodeErreur);
         } catch (ErreurSuppressionException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
         }
