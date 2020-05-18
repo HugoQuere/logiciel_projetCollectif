@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.ProblemeDao;
+import modele.dao.ProblemePalmipedeDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
@@ -24,7 +25,7 @@ import modele.entite.ProblemePalmipede;
  *
  * @author d-dja
  */
-public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
+public class ProblemePalmipedeDbDao extends DbDao implements ProblemePalmipedeDao{
 
     public ProblemePalmipedeDbDao(Properties props) {
         super(props);

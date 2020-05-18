@@ -66,7 +66,7 @@ public class TestControlleur {
         //testInsert();
         //testFindAll();
         //testUpdate();
-        testSuppression();
+        //testSuppression();
         
         //pontesfindByPalmipedeAndPeriod();
         //testFindByPalmipedeAndPeriod();

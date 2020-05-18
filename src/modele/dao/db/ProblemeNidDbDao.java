@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import modele.dao.ProblemeDao;
+import modele.dao.ProblemeNidDao;
 import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
@@ -24,7 +25,7 @@ import modele.entite.ProblemeNid;
  *
  * @author d-dja
  */
-public class ProblemeNidDbDao extends DbDao implements ProblemeDao {
+public class ProblemeNidDbDao extends DbDao implements ProblemeNidDao {
 
     public ProblemeNidDbDao(Properties props) {
         super(props);
@@ -156,6 +157,11 @@ public class ProblemeNidDbDao extends DbDao implements ProblemeDao {
             ex.printStackTrace();
             throw new ErreurSuppressionException("Le probleme " + unProbleme + " n'a pas pu être supprimé");
         }
+    }
+
+    @Override
+    public ProblemeNid findByNid(int idProbleme) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     
