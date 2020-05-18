@@ -28,8 +28,12 @@ import modele.entite.Enclos;
 import modele.entite.Palmipede;
 import modele.entite.Ponte;
 import modele.dao.NidDao;
+import modele.dao.ProblemeDao;
+import modele.dao.db.ProblemePalmipedeDbDao;
 import modele.entite.CategorieProbleme;
 import modele.entite.CodeErreur;
+import modele.entite.Probleme;
+import modele.entite.ProblemePalmipede;
 
 /**
  *
@@ -43,6 +47,7 @@ public class TestControlleur {
     private final PonteDao maPonteDAO;
     private final CategorieProblemeDao monCategorieProblemeDao;
     private final CodeErreurDao monCodeErreurDao;
+    private final ProblemeDao monProblemePalmipedeDao;
 
     public TestControlleur() {
         
@@ -55,6 +60,7 @@ public class TestControlleur {
         this.maPonteDAO = myFactory.getPonteDao();
         this.monCategorieProblemeDao = myFactory.getCategorieProblemeDao();
         this.monCodeErreurDao = myFactory.getCodeErreurDao();
+        this.monProblemePalmipedeDao = myFactory.getProblemePalmipedeDao();
         
         //testFind();
         //testInsert();
@@ -75,6 +81,7 @@ public class TestControlleur {
         System.out.println("Date ponte : "+this.maPonteDAO.find(4).getDatePonte().toString()+" , pondu par: "+ this.maPonteDAO.find(4).getPalmipede().getIdPalmipede() + ", dans la nid: "+ this.maPonteDAO.find(4).getNid().getIdNid());
         System.out.println("Type de probleme: "+this.monCategorieProblemeDao.find(3).getTypeProbleme());
         System.out.println("Code erreur: "+this.monCodeErreurDao.find(2).getDescription());
+        System.out.println("Commentaire probleme: "+this.monProblemePalmipedeDao.find(2).getCommentaire());
         
     }
     
@@ -107,7 +114,7 @@ public class TestControlleur {
             }
             now = System.currentTimeMillis();
             Time dateFinPonte = new Time(now);
-            Date datePonte =new java.sql.Date(millis); 
+            Date datePonte =new java.sql.Date(millis);  
             Ponte unePonte = new Ponte(0, unPalmipede, unNid, datePonte, dateDebutPonte, dateFinPonte, true, true);
             this.maPonteDAO.insert(unePonte);
             
@@ -116,6 +123,9 @@ public class TestControlleur {
             
             CodeErreur unCodeErreur = new CodeErreur(6, "test code erreur", 3);
             this.monCodeErreurDao.insert(unCodeErreur);
+            
+            ProblemePalmipede monProblemePalmipede = new ProblemePalmipede(1, 1, 2, "Ce palmipede semble etre coince", dateEntree, dateSortie);
+            this.monProblemePalmipedeDao.insert(monProblemePalmipede);
             
         } catch (ErreurSauvegardeException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,6 +202,15 @@ public class TestControlleur {
         if(mesCodeErreur.size()==0){
             System.out.println("Liste de code erreur vide\n");
         }
+        
+        List<Probleme> mesProblemesPalmipedes =this.monProblemePalmipedeDao.findAll();
+        for(int i=0; i<mesProblemesPalmipedes.size(); i++){
+            Probleme unProblemePalmipede = mesProblemesPalmipedes.get(i);
+            System.out.println("Commentaire probleme : "+unProblemePalmipede.getCommentaire());
+        }
+        if(mesProblemesPalmipedes.size()==0){
+            System.out.println("Liste de probleme palmipede vide\n");
+        }
     }
     
     
@@ -228,6 +247,10 @@ public class TestControlleur {
             CodeErreur unCodeErreur = this.monCodeErreurDao.find(6);
             unCodeErreur.setDescription("TestUpdate");
             this.monCodeErreurDao.update(unCodeErreur);
+            
+            Probleme unProblemePalmipede = this.monProblemePalmipedeDao.find(101);
+            unProblemePalmipede.setCommentaire("TestUpdate");
+            this.monProblemePalmipedeDao.update(unProblemePalmipede);
             
             
         } catch (ErreurMiseAjourException ex) {
@@ -266,11 +289,18 @@ public class TestControlleur {
             this.monCategorieProblemeDao.delete(uneCategorie);
         } catch (ErreurSuppressionException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
         
         CodeErreur unCodeErreur = new CodeErreur(6, "TestUpdate",3);
         try {
             this.monCodeErreurDao.delete(unCodeErreur);
+        } catch (ErreurSuppressionException ex) {
+            Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        
+        Probleme unProblemePalmipede = new ProblemePalmipede(101,1,2,"TestUpdate",null,null);
+        try {
+            this.monProblemePalmipedeDao.delete(unProblemePalmipede);
         } catch (ErreurSuppressionException ex) {
             Logger.getLogger(TestControlleur.class.getName()).log(Level.SEVERE, null, ex);
         }

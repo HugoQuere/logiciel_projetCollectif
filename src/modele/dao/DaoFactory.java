@@ -25,4 +25,10 @@ public interface DaoFactory {
     
     public CodeErreurDao getCodeErreurDao();
     
+    public ProblemeDao getProblemePalmipedeDao();
+    
+    public ProblemeDao getProblemeNidDao();
+    
+    public ProblemeDao getProblemeSystemeDao();
+    
 }

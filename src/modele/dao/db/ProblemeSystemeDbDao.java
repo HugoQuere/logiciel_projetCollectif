@@ -18,15 +18,16 @@ import modele.dao.exception.ErreurMiseAjourException;
 import modele.dao.exception.ErreurSauvegardeException;
 import modele.dao.exception.ErreurSuppressionException;
 import modele.entite.Probleme;
-import modele.entite.ProblemePalmipede;
+import modele.entite.ProblemeNid;
+import modele.entite.ProblemeSysteme;
 
 /**
  *
  * @author d-dja
  */
-public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
+public class ProblemeSystemeDbDao extends DbDao implements ProblemeDao {
 
-    public ProblemePalmipedeDbDao(Properties props) {
+    public ProblemeSystemeDbDao(Properties props) {
         super(props);
     }
 
@@ -36,10 +37,10 @@ public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
         try {
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
-            String sql = "select * from PROBLEMEPALMIPEDE where idProblemePalmipede=" + idProbleme;
+            String sql = "select * from PROBLEMESYSTEME where idProblemeSysteme=" + idProbleme;
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                result = new ProblemePalmipede(idProbleme, rs.getInt("idPalmipede"), rs.getInt("idCategorieProbleme"), rs.getString("commentaire"), rs.getDate("dateCreation"), rs.getDate("dateResolution"));
+                result = new ProblemeSysteme(idProbleme, rs.getInt("idCategorieProbleme"), rs.getString("commentaire"), rs.getDate("dateCreation"), rs.getDate("dateResolution"));
             }
             rs.close();
             stmt.close();
@@ -65,11 +66,11 @@ public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
             con = this.getConnection();
             con.setAutoCommit(false);
             Statement stmt = con.createStatement();
-            String sql = "insert into PROBLEMEPALMIPEDE (idPalmipede, idCategorieProbleme,commentaire,dateCreation,dateResolution) values ("+
-                    ((ProblemePalmipede)unProbleme).getIdPalmipede()+","+unProbleme.getIdCategorie()+",'" +unProbleme.getCommentaire()+ "','"+unProbleme.getDateCreation()+"','"+unProbleme.getDateResolution()+"')";
+            String sql = "insert into PROBLEMESYSTEME (idCategorieProbleme,commentaire,dateCreation,dateResolution) values ("+
+                    unProbleme.getIdCategorie()+",'" +unProbleme.getCommentaire()+ "','"+unProbleme.getDateCreation()+"','"+unProbleme.getDateResolution()+"')";
             int nbInsert = stmt.executeUpdate(sql);
             if (nbInsert == 1) {
-                sql = "select MAX(idProblemePalmipede) from PROBLEMEPALMIPEDE";
+                sql = "select MAX(idProblemeSysteme) from PROBLEMESYSTEME";
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next()) {
                     unProbleme.setIdProbleme(rs.getInt(1));
@@ -97,10 +98,10 @@ public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
         try {
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
-            String sql = "select * from PROBLEMEPALMIPEDE";
+            String sql = "select * from PROBLEMESYSTEME";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                lesProblemes.add(new ProblemePalmipede(rs.getInt("idProblemePalmipede"), rs.getInt("idPalmipede"), rs.getInt("idCategorieProbleme"), rs.getString("commentaire"), rs.getDate("dateCreation"), rs.getDate("dateResolution") ));
+                lesProblemes.add(new ProblemeSysteme(rs.getInt("idProblemeSysteme"), rs.getInt("idCategorieProbleme"), rs.getString("commentaire"), rs.getDate("dateCreation"), rs.getDate("dateResolution") ));
             }
             rs.close();
             stmt.close();
@@ -115,15 +116,14 @@ public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
     @Override
     public void update(Probleme unProbleme) throws ErreurMiseAjourException {
         try {
-            String sql = "update PROBLEMEPALMIPEDE set idPalmipede=?,idCategorieProbleme=?,commentaire=?,dateCreation=?,dateResolution=? where idProblemePalmipede=?";
+            String sql = "update PROBLEMESYSTEME set idCategorieProbleme=?,commentaire=?,dateCreation=?,dateResolution=? where idProblemeSysteme=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, ((ProblemePalmipede)unProbleme).getIdPalmipede());
-            pstmt.setInt(2, unProbleme.getIdCategorie());
-            pstmt.setString(3, unProbleme.getCommentaire());
-            pstmt.setDate(4, unProbleme.getDateCreation());
-            pstmt.setDate(5, unProbleme.getDateResolution());
-            pstmt.setInt(6, unProbleme.getIdProbleme());
+            pstmt.setInt(1, unProbleme.getIdCategorie());
+            pstmt.setString(2, unProbleme.getCommentaire());
+            pstmt.setDate(3, unProbleme.getDateCreation());
+            pstmt.setDate(4, unProbleme.getDateResolution());
+            pstmt.setInt(5, unProbleme.getIdProbleme());
             int result = pstmt.executeUpdate();
             if (result == 0) {
                 pstmt.close();
@@ -141,7 +141,7 @@ public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
     @Override
     public void delete(Probleme unProbleme) throws ErreurSuppressionException {
         try {            
-            String sql = "delete from PROBLEMEPALMIPEDE where idProblemePalmipede=" + unProbleme.getIdProbleme();
+            String sql = "delete from PROBLEMESYSTEME where idProblemeSysteme=" + unProbleme.getIdProbleme();
             Connection con = this.getConnection();
             Statement stmt = con.createStatement();
             int result = stmt.executeUpdate(sql);
@@ -157,5 +157,6 @@ public class ProblemePalmipedeDbDao extends DbDao implements ProblemeDao{
             throw new ErreurSuppressionException("Le probleme " + unProbleme + " n'a pas pu être supprimé");
         }
     }
+
     
 }
