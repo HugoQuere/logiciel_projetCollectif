@@ -10,11 +10,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import modele.dao.BatimentDao;
+import modele.dao.CategorieProblemeDao;
+import modele.dao.CodeErreurDao;
 import modele.dao.DaoFactory;
 import modele.dao.EnclosDao;
 import modele.dao.PalmipedeDao;
 import modele.dao.PonteDao;
 import modele.dao.NidDao;
+import modele.dao.ProblemeDao;
 
 /**
  *
@@ -82,5 +85,31 @@ public class DbFactoryDao implements DaoFactory{
     public PonteDao getPonteDao() {
         return new PonteDbDao(props);
     }
+
+    @Override
+    public CategorieProblemeDao getCategorieProblemeDao() {
+        return new CategorieProblemeDbDao(props);
+    }
+
+    @Override
+    public CodeErreurDao getCodeErreurDao() {
+        return new CodeErreurDbDao(props);
+    }
+
+    @Override
+    public ProblemeDao getProblemePalmipedeDao() {
+        return new ProblemePalmipedeDbDao(props);
+    }
+
+    @Override
+    public ProblemeDao getProblemeNidDao() {
+        return new ProblemeNidDbDao(props);
+    }
+
+    @Override
+    public ProblemeDao getProblemeSystemeDao() {
+        return new ProblemeSystemeDbDao(props);
+    }
+    
     
 }

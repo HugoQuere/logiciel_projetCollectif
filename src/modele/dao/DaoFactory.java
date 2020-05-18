@@ -21,4 +21,14 @@ public interface DaoFactory {
     
     public PonteDao getPonteDao();
     
+    public CategorieProblemeDao getCategorieProblemeDao();
+    
+    public CodeErreurDao getCodeErreurDao();
+    
+    public ProblemeDao getProblemePalmipedeDao();
+    
+    public ProblemeDao getProblemeNidDao();
+    
+    public ProblemeDao getProblemeSystemeDao();
+    
 }
