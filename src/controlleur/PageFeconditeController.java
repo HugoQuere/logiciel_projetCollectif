@@ -53,8 +53,7 @@ public class PageFeconditeController implements Initializable {
     @FXML private TableColumn<PalmipedeTableau, String> Batiment_Collumn;
     @FXML private TableColumn<PalmipedeTableau, String> Enclos_Collumn;
     @FXML private TableColumn<PalmipedeTableau, Integer> NbPontes_Collumn;
-    @FXML private TableColumn<PalmipedeTableau, Date> DateArrive_Collumn;
-    @FXML private TableColumn<PalmipedeTableau, Date> DateSortie_Collumn;
+
     
     @FXML private DatePicker DatePickerDebut;
     @FXML private DatePicker DatePickerFin;
@@ -133,8 +132,6 @@ public class PageFeconditeController implements Initializable {
         Batiment_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, String>("nomBatiment"));
         Enclos_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, String>("nomEnclos"));        
         NbPontes_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, Integer>("nbPontes"));
-        DateArrive_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, Date>("dateEntree"));
-        DateSortie_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, Date>("dateSortie"));
            
         
         remplissageTableauPalmipedeInternes();

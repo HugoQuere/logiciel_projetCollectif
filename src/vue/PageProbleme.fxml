@@ -13,7 +13,7 @@
    <children>
       <HBox prefHeight="70.0" prefWidth="1200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#Page1ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Fécondité">
+            <Button mnemonicParsing="false" onAction="#Page1ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Pontes">
                <font>
                   <Font size="24.0" />
                </font>
@@ -34,7 +34,7 @@
          <children>
             <VBox prefHeight="650.0" prefWidth="240.0" spacing="20.0">
                <children>
-                  <Label prefHeight="100.0" text="Cages pleines">
+                  <Label prefHeight="100.0" text="Nids pleins">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
@@ -64,7 +64,7 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="240.0" spacing="20.0">
                <children>
-                  <Label prefHeight="100.0" prefWidth="240.0" text="Cages nécessitant une maintenance" wrapText="true">
+                  <Label prefHeight="100.0" prefWidth="240.0" text="Nids nécessitant une maintenance" wrapText="true">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>

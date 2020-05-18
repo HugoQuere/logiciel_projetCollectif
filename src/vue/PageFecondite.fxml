@@ -14,7 +14,7 @@
     <children>
       <HBox prefHeight="70.0" prefWidth="1200.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="400.0" text="Fécondité">
+            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="400.0" text="Pontes">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -36,17 +36,17 @@
       </HBox>
       <TableView fx:id="tableauFecondite" layoutX="60.0" layoutY="178.0" prefHeight="572.0" prefWidth="1096.0">
         <columns>
-          <TableColumn fx:id="RFID_Collumn" prefWidth="200.0" text="RFID Palmipède" />
-            <TableColumn fx:id="Batiment_Collumn" prefWidth="173.0" text="Bâtiment" />
-            <TableColumn fx:id="Enclos_Collumn" prefWidth="173.0" text="Enclos" />
-            <TableColumn fx:id="NbPontes_Collumn" prefWidth="148.0" text="Pontes" />
-            <TableColumn fx:id="DateArrive_Collumn" prefWidth="200.0" text="Date arrivée" />
-            <TableColumn fx:id="DateSortie_Collumn" prefWidth="200.0" text="Date départ" />
+          <TableColumn fx:id="RFID_Collumn" prefWidth="182.0" text="RFID Palmipède" />
+            <TableColumn fx:id="Batiment_Collumn" prefWidth="182.0" text="Bâtiment" />
+            <TableColumn fx:id="Enclos_Collumn" prefWidth="182.0" text="Enclos" />
+            <TableColumn fx:id="NbPontes_Collumn" prefWidth="182.0" text="Pontes" />
+            <TableColumn prefWidth="182.0" text="Pontes / jour" />
+            <TableColumn prefWidth="184.0" text="Tps présence dans nid / ponte" />
         </columns>
       </TableView>
       <DatePicker fx:id="DatePickerDebut" layoutX="60.0" layoutY="115.0" onAction="#changementPeriodeDatePicker" promptText="Date début" />
       <DatePicker fx:id="DatePickerFin" layoutX="279.0" layoutY="116.0" onAction="#changementPeriodeDatePicker" promptText="Date fin" />
-      <Button fx:id="refreshBouton" layoutX="503.0" layoutY="115.0" mnemonicParsing="false" onAction="#refreshButtonPushed" text="Refresh " />
+      <Button fx:id="refreshBouton" layoutX="503.0" layoutY="115.0" mnemonicParsing="false" onAction="#refreshButtonPushed" text="Rafraîchir" />
       <Label fx:id="refreshLabel" layoutX="600.0" layoutY="120.0" prefHeight="18.0" prefWidth="174.0" text="Mis à jour à : " />
     </children>
 </AnchorPane>
