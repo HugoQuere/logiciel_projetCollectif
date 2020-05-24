@@ -36,7 +36,7 @@ import modele.dao.db.DbFactoryDao;
 import modele.entite.Batiment;
 import modele.entite.Enclos;
 import modele.entite.Palmipede;
-import modele.entiteAffichage.PalmipedeTableau;
+import modele.entiteAffichage.PagePontesTableau;
 import modele.entite.Ponte;
 import modele.dao.NidDao;
 
@@ -48,11 +48,13 @@ import modele.dao.NidDao;
 public class PagePontesController implements Initializable {
     
     
-    @FXML private TableView<PalmipedeTableau> tableauPontes;
-    @FXML private TableColumn<PalmipedeTableau, Integer> RFID_Collumn;
-    @FXML private TableColumn<PalmipedeTableau, String> Batiment_Collumn;
-    @FXML private TableColumn<PalmipedeTableau, String> Enclos_Collumn;
-    @FXML private TableColumn<PalmipedeTableau, Integer> NbPontes_Collumn;
+    @FXML private TableView<PagePontesTableau> tableauPontes;
+    @FXML private TableColumn<PagePontesTableau, Integer> RFID_Collumn;
+    @FXML private TableColumn<PagePontesTableau, String> Batiment_Collumn;
+    @FXML private TableColumn<PagePontesTableau, String> Enclos_Collumn;
+    @FXML private TableColumn<PagePontesTableau, Integer> NbPontes_Collumn;
+    @FXML private TableColumn<PagePontesTableau, Integer> NbPontesParJour_Collumn;
+    @FXML private TableColumn<PagePontesTableau, Integer> TempsPrecensePontes_Collumn;
 
     
     @FXML private DatePicker DatePickerDebut;
@@ -63,7 +65,7 @@ public class PagePontesController implements Initializable {
     
     
     
-    private ObservableList<PalmipedeTableau> listePalmipedesTableau;
+    private ObservableList<PagePontesTableau> listePalmipedesTableau;
     
     private final BatimentDao monBatimentDAO;
     private final NidDao monNidDAO;
@@ -129,10 +131,12 @@ public class PagePontesController implements Initializable {
         
         
         // ------------------------- Configuration du tableau de fécondité ----------------------------------------------
-        RFID_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, Integer>("numRFID"));
-        Batiment_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, String>("nomBatiment"));
-        Enclos_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, String>("nomEnclos"));        
-        NbPontes_Collumn.setCellValueFactory(new PropertyValueFactory<PalmipedeTableau, Integer>("nbPontes"));
+        RFID_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Integer>("numRFID"));
+        Batiment_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, String>("nomBatiment"));
+        Enclos_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, String>("nomEnclos"));        
+        NbPontes_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Integer>("nbPontes"));
+        NbPontesParJour_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Integer>("nbPontesParJour"));
+        TempsPrecensePontes_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Integer>("tempsPrecensePontes"));
            
         
         remplissageTableauPalmipedeInternes();
@@ -161,12 +165,15 @@ public class PagePontesController implements Initializable {
                 if(unePonte.isPresenceOeuf()){
                     nbPontes++;
                 }
+                
+                unePonte.getHeureFinPonte();
             }
             
-            Date dateEntree = unPalmipede.getDateEntree();
-            Date dateSortie = unPalmipede.getDateSortie();
+            int nbJourDePontes = Math.abs( DatePickerFin.getValue().getDayOfYear() - DatePickerDebut.getValue().getDayOfYear());
+            float nbPontesParJour = (float) nbPontes / (float) nbJourDePontes; //Nombre de pontes sur la période / le nombre de jour de la période
             
-            PalmipedeTableau unPalmipedeTableau = new PalmipedeTableau(numRFID, nomBatiment, nomEnclos, nbPontes, dateEntree, dateSortie);
+            
+            PagePontesTableau unPalmipedeTableau = new PagePontesTableau(numRFID, nomBatiment, nomEnclos, nbPontes, nbPontesParJour, 5);
             listePalmipedesTableau.add(unPalmipedeTableau);
         }
     }

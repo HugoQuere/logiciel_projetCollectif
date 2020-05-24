@@ -10,22 +10,22 @@ import java.sql.Date;
 /**
  * Classe uniquement utilisé pour le tableau de fécondité
  */
-public class PalmipedeTableau { 
+public class PagePontesTableau { 
 
     private int numRFID;
     private String nomBatiment;
     private String nomEnclos;
     private int nbPontes;
-    private Date dateEntree;
-    private Date dateSortie;
+    private float nbPontesParJour;
+    private int tempsPrecensePontes;
 
-    public PalmipedeTableau(int numRFID, String nomBatiment, String nomEnclos, int nbPontes, Date dateEntree, Date dateSortie) {
+    public PagePontesTableau(int numRFID, String nomBatiment, String nomEnclos, int nbPontes, float nbPontesParJour, int tempsPrecensePontes) {
         this.numRFID = numRFID;
         this.nomBatiment = nomBatiment;
         this.nomEnclos = nomEnclos;
         this.nbPontes = nbPontes;
-        this.dateEntree = dateEntree;
-        this.dateSortie = dateSortie;
+        this.nbPontesParJour = nbPontesParJour;
+        this.tempsPrecensePontes = tempsPrecensePontes;
     }
 
     public int getNumRFID() {
@@ -60,21 +60,22 @@ public class PalmipedeTableau {
         this.nbPontes = nbPontes;
     }
 
-    public Date getDateEntree() {
-        return dateEntree;
+    public float getNbPontesParJour() {
+        return nbPontesParJour;
     }
 
-    public void setDateEntree(Date dateEntree) {
-        this.dateEntree = dateEntree;
+    public void setNbPontesParJour(float nbPontesParJour) {
+        this.nbPontesParJour = nbPontesParJour;
     }
 
-    public Date getDateSortie() {
-        return dateSortie;
+    public int getTempsPrecensePontes() {
+        return tempsPrecensePontes;
     }
 
-    public void setDateSortie(Date dateSortie) {
-        this.dateSortie = dateSortie;
+    public void setTempsPrecensePontes(int tempsPrecensePontes) {
+        this.tempsPrecensePontes = tempsPrecensePontes;
     }
 
+    
     
 }

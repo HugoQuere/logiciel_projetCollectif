@@ -40,8 +40,8 @@
             <TableColumn fx:id="Batiment_Collumn" prefWidth="182.0" text="Bâtiment" />
             <TableColumn fx:id="Enclos_Collumn" prefWidth="182.0" text="Enclos" />
             <TableColumn fx:id="NbPontes_Collumn" prefWidth="182.0" text="Pontes" />
-            <TableColumn prefWidth="182.0" text="Pontes / jour" />
-            <TableColumn prefWidth="184.0" text="Tps présence dans nid / ponte" />
+            <TableColumn fx:id="NbPontesParJour_Collumn" prefWidth="182.0" text="Pontes / jour" />
+            <TableColumn fx:id="TempsPrecensePontes_Collumn" prefWidth="184.0" text="Tps présence dans nid / ponte" />
         </columns>
       </TableView>
       <DatePicker fx:id="DatePickerDebut" layoutX="60.0" layoutY="115.0" onAction="#changementPeriodeDatePicker" promptText="Date début" />
