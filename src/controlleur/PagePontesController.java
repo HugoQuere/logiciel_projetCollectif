@@ -45,10 +45,10 @@ import modele.dao.NidDao;
 /**
  *
  */
-public class PageFeconditeController implements Initializable {
+public class PagePontesController implements Initializable {
     
     
-    @FXML private TableView<PalmipedeTableau> tableauFecondite;
+    @FXML private TableView<PalmipedeTableau> tableauPontes;
     @FXML private TableColumn<PalmipedeTableau, Integer> RFID_Collumn;
     @FXML private TableColumn<PalmipedeTableau, String> Batiment_Collumn;
     @FXML private TableColumn<PalmipedeTableau, String> Enclos_Collumn;
@@ -72,7 +72,8 @@ public class PageFeconditeController implements Initializable {
     private final PonteDao maPonteDAO;
     
 
-    public PageFeconditeController() {
+    
+    public PagePontesController() {
         
         DaoFactory myFactory = DbFactoryDao.getInstance();
         
@@ -136,7 +137,7 @@ public class PageFeconditeController implements Initializable {
         
         remplissageTableauPalmipedeInternes();
         
-        tableauFecondite.setItems(listePalmipedesTableau);
+        tableauPontes.setItems(listePalmipedesTableau);
         // ------------------------- Fin Configuration du tableau de fécondité ------------------------------------------
         
     }

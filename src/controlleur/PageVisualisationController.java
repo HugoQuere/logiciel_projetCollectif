@@ -152,7 +152,7 @@ public class PageVisualisationController implements Initializable {
     @FXML
     public void page1ButtonPushed(ActionEvent event) throws IOException
     {
-        Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PageFecondite.fxml"));
+        Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PagePontes.fxml"));
         Scene tableViewScene = new Scene(tableViewParent);
         //Stage information
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();        
