@@ -240,7 +240,7 @@ public class PonteDbDao extends DbDao implements PonteDao{
         try {
             String sql = "select idPonte, idPalmipede, idNid, datePonte, heureDebutPonte, heureFinPonte, precenseOeuf, OeufCollecte "
                         + "from PONTE "
-                        + "where idPalmipede=? and idNid=? and datePonte>? and datePonte<?";
+                        + "where idPalmipede=? and idNid=? and datePonte>=? and datePonte<=?";
             Connection con = this.getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
 
