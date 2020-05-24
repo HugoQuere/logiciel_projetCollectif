@@ -6,6 +6,7 @@
 package modele.entiteAffichage;
 
 import java.sql.Date;
+import java.sql.Time;
 
 /**
  * Classe uniquement utilisé pour le tableau de fécondité
@@ -17,9 +18,9 @@ public class PagePontesTableau {
     private String nomEnclos;
     private int nbPontes;
     private float nbPontesParJour;
-    private int tempsPrecensePontes;
+    private Time tempsPrecensePontes;
 
-    public PagePontesTableau(int numRFID, String nomBatiment, String nomEnclos, int nbPontes, float nbPontesParJour, int tempsPrecensePontes) {
+    public PagePontesTableau(int numRFID, String nomBatiment, String nomEnclos, int nbPontes, float nbPontesParJour, Time tempsPrecensePontes) {
         this.numRFID = numRFID;
         this.nomBatiment = nomBatiment;
         this.nomEnclos = nomEnclos;
@@ -68,11 +69,11 @@ public class PagePontesTableau {
         this.nbPontesParJour = nbPontesParJour;
     }
 
-    public int getTempsPrecensePontes() {
+    public Time getTempsPrecensePontes() {
         return tempsPrecensePontes;
     }
 
-    public void setTempsPrecensePontes(int tempsPrecensePontes) {
+    public void setTempsPrecensePontes(Time tempsPrecensePontes) {
         this.tempsPrecensePontes = tempsPrecensePontes;
     }
 

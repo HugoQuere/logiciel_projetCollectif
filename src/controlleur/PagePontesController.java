@@ -2,15 +2,18 @@ package controlleur;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
+import java.sql.Time;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,7 +57,7 @@ public class PagePontesController implements Initializable {
     @FXML private TableColumn<PagePontesTableau, String> Enclos_Collumn;
     @FXML private TableColumn<PagePontesTableau, Integer> NbPontes_Collumn;
     @FXML private TableColumn<PagePontesTableau, Integer> NbPontesParJour_Collumn;
-    @FXML private TableColumn<PagePontesTableau, Integer> TempsPrecensePontes_Collumn;
+    @FXML private TableColumn<PagePontesTableau, Time> TempsPrecensePontes_Collumn;
 
     
     @FXML private DatePicker DatePickerDebut;
@@ -136,7 +139,7 @@ public class PagePontesController implements Initializable {
         Enclos_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, String>("nomEnclos"));        
         NbPontes_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Integer>("nbPontes"));
         NbPontesParJour_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Integer>("nbPontesParJour"));
-        TempsPrecensePontes_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Integer>("tempsPrecensePontes"));
+        TempsPrecensePontes_Collumn.setCellValueFactory(new PropertyValueFactory<PagePontesTableau, Time>("tempsPrecensePontes"));
            
         
         remplissageTableauPalmipedeInternes();
@@ -160,20 +163,40 @@ public class PagePontesController implements Initializable {
             String nomEnclos = unPalmipede.getEnclos().getNomEnclos();
             
             int nbPontes = 0;
+            long tempsPonteTotal = 0;
             List<Ponte> listePontes = this.maPonteDAO.findByPalmipedeAndPeriod(unPalmipede, DatePickerDebut.getValue(), DatePickerFin.getValue() );
             for(Ponte unePonte : listePontes){
                 if(unePonte.isPresenceOeuf()){
                     nbPontes++;
                 }
                 
-                unePonte.getHeureFinPonte();
+                tempsPonteTotal = tempsPonteTotal + Math.abs( unePonte.getHeureFinPonte().getTime() - unePonte.getHeureDebutPonte().getTime() );
             }
             
             int nbJourDePontes = Math.abs( DatePickerFin.getValue().getDayOfYear() - DatePickerDebut.getValue().getDayOfYear());
             float nbPontesParJour = (float) nbPontes / (float) nbJourDePontes; //Nombre de pontes sur la période / le nombre de jour de la période
             
             
-            PagePontesTableau unPalmipedeTableau = new PagePontesTableau(numRFID, nomBatiment, nomEnclos, nbPontes, nbPontesParJour, 5);
+            
+            //Calcul temps moyen pontes
+            long tempsPonteMoyen=0;
+            if(nbPontes!=0){
+                tempsPonteMoyen = tempsPonteTotal/nbPontes;
+            }
+            Time TimeTempsPonteMoyen = new Time(0);
+            
+            //Nécessitait de passer par cette structure pour permettre de gérer les fuseaux horaires (heure d'été/heure d'hiver)
+            SimpleDateFormat isoFormat = new SimpleDateFormat("HH:mm:ss");
+            isoFormat.setTimeZone(TimeZone.getTimeZone("CET"));
+            try {
+                Date date = isoFormat.parse("00:00:00");
+                TimeTempsPonteMoyen = new Time( date.getTime() + tempsPonteMoyen);
+            } catch (ParseException ex) {
+                Logger.getLogger(PagePontesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            PagePontesTableau unPalmipedeTableau = new PagePontesTableau(numRFID, nomBatiment, nomEnclos, nbPontes, nbPontesParJour, TimeTempsPonteMoyen);
             listePalmipedesTableau.add(unPalmipedeTableau);
         }
     }
