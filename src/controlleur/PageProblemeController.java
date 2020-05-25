@@ -89,7 +89,7 @@ public class PageProblemeController implements Initializable {
     
 
     @FXML
-    public void Page1ButtonPushed(ActionEvent event) throws IOException
+    public void PagePontesButtonPushed(ActionEvent event) throws IOException
     {
         Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PagePontes.fxml"));
         Scene tableViewScene = new Scene(tableViewParent);        
@@ -100,7 +100,7 @@ public class PageProblemeController implements Initializable {
     }
     
     @FXML
-    public void Page2ButtonPushed(ActionEvent event) throws IOException
+    public void PageVisualisationButtonPushed(ActionEvent event) throws IOException
     {
         Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PageVisualisation.fxml"));
         Scene tableViewScene = new Scene(tableViewParent);        
@@ -109,7 +109,17 @@ public class PageProblemeController implements Initializable {
         window.setScene(tableViewScene);
         window.show();
     }
-         
+    
+    @FXML
+    private void PageSystemeButtonPushed(ActionEvent event) throws IOException {
+        Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PageSysteme.fxml"));
+        Scene tableViewScene = new Scene(tableViewParent);
+        //Stage information
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        window.setScene(tableViewScene);
+        window.show();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //NID
@@ -142,5 +152,6 @@ public class PageProblemeController implements Initializable {
         
         tableauProblemeSysteme.setItems(listeProblemeSystemeTableau);
     }    
+
     
 }

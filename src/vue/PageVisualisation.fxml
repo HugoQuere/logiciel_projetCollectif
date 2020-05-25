@@ -15,17 +15,22 @@
    <children>
       <HBox prefHeight="70.0" prefWidth="1200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#page1ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Pontes">
+            <Button mnemonicParsing="false" onAction="#PagePontesButtonPushed" prefHeight="70.0" prefWidth="300.0" text="Pontes">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="400.0" text="Visualisation">
+            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="300.0" text="Visualisation">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#page3ButtonPushed" prefHeight="70.0" prefWidth="400.0" text="Problèmes">
+            <Button mnemonicParsing="false" onAction="#PageProblemesButtonPushed" prefHeight="70.0" prefWidth="300.0" text="Problèmes">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#PageSystemeButtonPushed" prefHeight="70.0" prefWidth="300.0" text="Système">
                <font>
                   <Font size="24.0" />
                </font>

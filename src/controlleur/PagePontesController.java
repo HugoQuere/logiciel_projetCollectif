@@ -91,13 +91,7 @@ public class PagePontesController implements Initializable {
         this.listePalmipedesTableau = FXCollections.observableArrayList();
     }
         
-    
-    
-    
-    
-    
-    
-    
+       
     //Switching to page Visualisation
     @FXML
     public void PageVisualisationButtonPushed(ActionEvent event) throws IOException
@@ -112,7 +106,7 @@ public class PagePontesController implements Initializable {
     
     //Switching to page Probleme
     @FXML
-     public void PageProblemeButtonPushed(ActionEvent event) throws IOException
+     public void PageProblemesButtonPushed(ActionEvent event) throws IOException
     {
         Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PageProbleme.fxml"));
         Scene tableViewScene = new Scene(tableViewParent);
@@ -121,6 +115,16 @@ public class PagePontesController implements Initializable {
         window.setScene(tableViewScene);
         window.show();
     }
+     
+    @FXML
+    private void PageSystemeButtonPushed(ActionEvent event) throws IOException {
+        Parent tableViewParent = FXMLLoader.load(getClass().getResource("/vue/PageSysteme.fxml"));
+        Scene tableViewScene = new Scene(tableViewParent);
+        //Stage information
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        window.setScene(tableViewScene);
+        window.show();
+    } 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -238,4 +242,4 @@ public class PagePontesController implements Initializable {
         refreshLabel.setText("Mis à jour à: "+ format.format(calendar.getTime()));
     }
 
-}
+  }
