@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import popups.Popup01;
 
 /**
  * FXML Controller class
@@ -61,12 +62,15 @@ public class PageSystemeController implements Initializable {
         Scene tableViewScene = new Scene(tableViewParent);
         //Stage information
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        //stage.setTitle("ça a marché");
         window.setScene(tableViewScene);
         window.show();
     }
 
     @FXML
-    private void openPopup(ActionEvent event) {
+    private void openPopup(ActionEvent event) throws IOException {
+        Popup01 frame = new Popup01();
+        frame.show();
     }
     
 }
