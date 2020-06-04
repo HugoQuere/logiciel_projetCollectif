@@ -5,16 +5,29 @@
  */
 package popups;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import modele.dao.BatimentDao;
+import modele.dao.DaoFactory;
+import modele.dao.db.DbFactoryDao;
+import modele.dao.exception.ErreurSauvegardeException;
+import modele.entite.Batiment;
+
 /**
  *
  * @author Henri
  */
 public class Popup01 extends javax.swing.JFrame {
 
+    private final BatimentDao monBatimentDAO;
+    
     /**
      * Creates new form NewJFrame
      */
     public Popup01() {
+        DaoFactory myFactory = DbFactoryDao.getInstance();
+        this.monBatimentDAO = myFactory.getBatimentDao();
+        
         initComponents();
     }
 
@@ -28,7 +41,11 @@ public class Popup01 extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        SaisieNomBatiment = new javax.swing.JTextPane();
+        jLabel2 = new javax.swing.JLabel();
+        boutonEnregister = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -42,30 +59,64 @@ public class Popup01 extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("ça a marché");
+        jScrollPane1.setViewportView(SaisieNomBatiment);
+        SaisieNomBatiment.getAccessibleContext().setAccessibleName("");
+
+        jLabel2.setText("Nom Batiment : ");
+
+        boutonEnregister.setText("Enregister");
+        boutonEnregister.setActionCommand("clickBoutonEnregistrer");
+        boutonEnregister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boutonEnregisterActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel3.setText("Enregistrement nouveau batiment");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(33, 33, 33))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(163, 163, 163)
-                .addComponent(jLabel1)
-                .addContainerGap(179, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(0, 23, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(boutonEnregister)))))
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(131, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(94, 94, 94)
+                .addGap(32, 32, 32)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(1, 1, 1))
+                    .addComponent(boutonEnregister))
+                .addGap(85, 85, 85)
                 .addComponent(jButton1)
                 .addGap(29, 29, 29))
         );
+
+        boutonEnregister.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -73,6 +124,26 @@ public class Popup01 extends javax.swing.JFrame {
     private void closeButton(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButton
         this.dispose();
     }//GEN-LAST:event_closeButton
+
+    private void boutonEnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonEnregisterActionPerformed
+        System.out.println("Valeur écrite: "+this.SaisieNomBatiment.getText());
+        
+        String nomBatiment = this.SaisieNomBatiment.getText();
+        if(nomBatiment.length()!=0){ //Si il y a un nom
+            try {
+                Batiment unBatiment = new Batiment(25, nomBatiment); //Id n'a pas d'importance comme généré automatiquement en base
+                this.monBatimentDAO.insert(unBatiment);
+                
+                Thread.sleep(5000); //5s d'attente
+                this.dispose();
+                
+            } catch (ErreurSauvegardeException ex) {
+                Logger.getLogger(Popup01.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Popup01.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_boutonEnregisterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -101,6 +172,8 @@ public class Popup01 extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        
+        
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -111,7 +184,11 @@ public class Popup01 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextPane SaisieNomBatiment;
+    private javax.swing.JButton boutonEnregister;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,15 +7,25 @@ package controlleur;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.util.Duration;
 import popups.Popup01;
 
 /**
@@ -24,6 +34,7 @@ import popups.Popup01;
  * @author Henri
  */
 public class PageSystemeController implements Initializable {
+
 
     /**
      * Initializes the controller class.
@@ -71,6 +82,5 @@ public class PageSystemeController implements Initializable {
     private void openPopup(ActionEvent event) throws IOException {
         Popup01 frame = new Popup01();
         frame.show();
-    }
-    
+    } 
 }
